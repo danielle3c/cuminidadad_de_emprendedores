@@ -6,7 +6,7 @@
     body { font-family: sans-serif; background: #f8fafc; padding: 20px; }
     table { width: 100%; border-collapse: collapse; background: white; }
     th, td { padding: 12px; border: 1px solid #e2e8f0; text-align: left; }
-    th { background: #1e293b; color: white; }
+    th { background: #43b02a; color: white; }
     .accion { font-weight: bold; color: #43b02a; }
 </style>
 </head>

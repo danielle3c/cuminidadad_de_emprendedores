@@ -6,14 +6,14 @@
     <title>Panel de Control - Comunidad</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .nav-bar { background: #1e293b; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 25px; }
+        .nav-bar { background: #43b02a; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 25px; }
         .nav-bar a { color: white; text-decoration: none; margin: 0 15px; font-weight: 500; }
         .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         
         /* Estilo para el mensaje de error */
         .error-msg { 
             background: #fee2e2; 
-            color: #991b1b; 
+            color: #43b02a; 
             padding: 15px; 
             border-radius: 8px; 
             border: 1px solid #fecaca; 
@@ -24,7 +24,7 @@
 
         .result-card { border: 1px solid #e2e8f0; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 6px solid #2563eb; }
         input[type="text"] { width: 60%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; }
-        .btn-search { padding: 12px 25px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        .btn-search { padding: 12px 25px; background: #43b02a; color: white; border: none; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>

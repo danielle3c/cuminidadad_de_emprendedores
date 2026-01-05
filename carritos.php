@@ -8,7 +8,7 @@
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .box { background: white; padding: 25px; border-radius: 12px; max-width: 600px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { background: #6366f1; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button { background: #43b02a; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -34,7 +34,7 @@
     if(isset($_POST['save_car'])){
         $ide = $_POST['emp_id']; $nom = $_POST['nombre_c']; $des = $_POST['desc']; $equ = $_POST['equip'];
         $sql = "INSERT INTO carritos (nombre_carrito, descripcion, equipamiento, emprendedores_idemprendedores, created_at) VALUES ('$nom', '$des', '$equ', '$ide', NOW())";
-        if(mysqli_query($conexion, $sql)) echo "<p style='color:green;'>✅ Carrito registrado correctamente.</p>";
+        if(mysqli_query($conexion, $sql)) echo "<p style='color:green;'>Carrito registrado correctamente.</p>";
     }
     ?>
 </div>

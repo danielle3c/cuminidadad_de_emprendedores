@@ -20,7 +20,7 @@
     if(isset($_POST['reg_c'])){
         $ide = $_POST['id_emp']; $nom = $_POST['nom_c']; $equ = $_POST['equipo'];
         $sql = "INSERT INTO carritos (nombre_carrito, equipamiento, emprendedores_idemprendedores, created_at) VALUES ('$nom', '$equ', '$ide', NOW())";
-        if(mysqli_query($conexion, $sql)) echo "✅ Carrito registrado.";
+        if(mysqli_query($conexion, $sql)) echo "Carrito registrado.";
     }
     ?>
 </body>

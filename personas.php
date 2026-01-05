@@ -8,7 +8,7 @@
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .form-container { background: white; padding: 25px; border-radius: 12px; max-width: 500px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { background: #2563eb; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
+        button { background: #2563eb; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
         label { font-weight: bold; color: #444; }
     </style>
 </head>
@@ -17,6 +17,9 @@
 <div class="form-container">
     <h2>👤 Registro de Persona</h2>
     <form method="POST">
+        <label>RUT / Documento:</label>
+        <input type="text" name="rut" placeholder="Ej: 12.345.678-9" required>
+
         <label>Nombres:</label>
         <input type="text" name="nombres" placeholder="Ej: Juan Pedro" required>
         
@@ -47,7 +50,7 @@
 
     <?php
     if(isset($_POST['guardar'])){
-        // Recogemos los datos del formulario
+        $rut = mysqli_real_escape_string($conexion, $_POST['rut']);
         $nom = mysqli_real_escape_string($conexion, $_POST['nombres']);
         $ape = mysqli_real_escape_string($conexion, $_POST['apellidos']);
         $gen = $_POST['genero'];
@@ -56,14 +59,19 @@
         $ema = mysqli_real_escape_string($conexion, $_POST['email']);
         $dir = mysqli_real_escape_string($conexion, $_POST['direccion']);
 
-        // SQL corregido con nombres exactos de tu tabla 'personas'
-        $sql = "INSERT INTO personas (nombres, apellidos, fecha_nacimiento, genero, telefono, direccion, email, created_at, estado) 
-                VALUES ('$nom', '$ape', '$fec', '$gen', '$tel', '$dir', '$ema', NOW(), 1)";
+        // Insertamos incluyendo el nuevo campo RUT
+        $sql = "INSERT INTO personas (rut, nombres, apellidos, fecha_nacimiento, genero, telefono, direccion, email, created_at, estado) 
+                VALUES ('$rut', '$nom', '$ape', '$fec', '$gen', '$tel', '$dir', '$ema', NOW(), 1)";
 
         if(mysqli_query($conexion, $sql)){
-            echo "<p style='color:green; text-align:center; margin-top:15px;'>✅ Persona registrada correctamente.</p>";
+            echo "<p style='color:green; text-align:center; margin-top:15px;'>✅ Persona registrada con RUT: $rut</p>";
         } else {
-            echo "<p style='color:red;'>❌ Error al guardar: " . mysqli_error($conexion) . "</p>";
+            // Si el RUT ya existe, MySQL dará un error por el campo UNIQUE
+            if(mysqli_errno($conexion) == 1062) {
+                echo "<p style='color:red;'>❌ Error: Ese RUT ya está registrado.</p>";
+            } else {
+                echo "<p style='color:red;'>❌ Error: " . mysqli_error($conexion) . "</p>";
+            }
         }
     }
     ?>

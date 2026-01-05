@@ -7,12 +7,12 @@
         body { font-family: sans-serif; background: #fff1f2; padding: 20px; }
         .box { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; border-top: 5px solid #e11d48; }
         input, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ddd; }
-        button { background: #e11d48; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; cursor: pointer; }
+        button { background: #43b02a; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h2>💵 Registrar Pago</h2>
+        <h2>Registrar Pago</h2>
         <form method="POST">
             <label>Crédito del Emprendedor:</label>
             <select name="id_credito" required>

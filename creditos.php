@@ -3,7 +3,7 @@
 <html>
 <head><title>Activar Crédito</title></head>
 <body style="font-family: sans-serif; padding: 20px;">
-    <h2>💰 Activación de Créditos</h2>
+    <h2>Activación de Créditos</h2>
     <form method="POST">
         <label>Seleccione Contrato Firmado:</label><br>
         <select name="id_contrato" required>
@@ -28,7 +28,7 @@
         $sql = "INSERT INTO creditos (monto_inicial, saldo_inicial, fecha_inicio, estado, dia_de_pago, cuota_mensual, Contratos_idContratos, emprendedores_idemprendedores, created_at) 
                 VALUES ('$monto', '$monto', NOW(), 1, '$dia', '$cuo', '$con', '$emp_id', NOW())";
         
-        if(mysqli_query($conexion, $sql)) echo "✅ Crédito activado y saldo cargado.";
+        if(mysqli_query($conexion, $sql)) echo " Crédito activado y saldo cargado.";
     }
     ?>
 </body>

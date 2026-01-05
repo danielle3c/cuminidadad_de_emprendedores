@@ -3,7 +3,7 @@
 <html>
 <head><title>Registro de Carritos</title></head>
 <body style="font-family: sans-serif; padding: 20px;">
-    <h2>🛒 Asignación de Carritos</h2>
+    <h2>Asignación de Carritos</h2>
     <form method="POST">
         <select name="id_emp">
             <?php

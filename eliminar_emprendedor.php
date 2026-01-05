@@ -11,7 +11,7 @@ if (isset($_GET['id'])) {
         // Opcional: Registrar en la tabla de auditoría quien lo eliminó
         $desc = "Se eliminó lógicamente al emprendedor con ID: " . $id;
         mysqli_query($conexion, "INSERT INTO auditorias_sistemas (tabla_afectada, accion, descripcion, created_at) 
-                                 VALUES ('emprendedores', 'DELETE', '$desc', NOW())");
+                            VALUES ('emprendedores', 'DELETE', '$desc', NOW())");
         
         header("Location: index.php?msg=Eliminado correctamente");
     } else {

@@ -17,7 +17,7 @@
 <body>
     <a href="index.php">← Volver al Panel</a>
     <div class="box">
-        <h2>🎓 Registro de Talleres y Asistencia</h2>
+        <h2> Registro de Talleres y Asistencia</h2>
         
         <form method="POST" style="border-bottom: 2px solid #eee; padding-bottom: 20px;">
             <input type="text" name="nombre_taller" placeholder="Nombre del Taller" required style="width:70%; padding:8px;">

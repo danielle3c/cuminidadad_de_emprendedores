@@ -7,7 +7,7 @@
     table { width: 100%; border-collapse: collapse; background: white; }
     th, td { padding: 12px; border: 1px solid #e2e8f0; text-align: left; }
     th { background: #1e293b; color: white; }
-    .accion { font-weight: bold; color: #2563eb; }
+    .accion { font-weight: bold; color: #43b02a; }
 </style>
 </head>
 <body>

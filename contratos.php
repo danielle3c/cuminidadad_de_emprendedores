@@ -3,7 +3,7 @@
 <html>
 <head><title>Generar Contrato</title></head>
 <body style="font-family: sans-serif; padding: 20px;">
-    <h2>📝 Nuevo Contrato de Financiamiento</h2>
+    <h2>Nuevo Contrato de Financiamiento</h2>
     <form method="POST">
         <label>Emprendedor:</label><br>
         <select name="id_emprendedor" required>

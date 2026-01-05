@@ -8,14 +8,14 @@
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .form-container { background: white; padding: 25px; border-radius: 12px; max-width: 500px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { background: #2563eb; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button { background: #43b02a; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
         label { font-weight: bold; color: #444; }
     </style>
 </head>
 <body>
 
 <div class="form-container">
-    <h2>👤 Registro de Persona</h2>
+    <h2> Registro de Persona</h2>
     <form method="POST">
         <label>RUT / Documento:</label>
         <input type="text" name="rut" placeholder="Ej: 12.345.678-9" required>
@@ -68,9 +68,9 @@
         } else {
             // Si el RUT ya existe, MySQL dará un error por el campo UNIQUE
             if(mysqli_errno($conexion) == 1062) {
-                echo "<p style='color:red;'>❌ Error: Ese RUT ya está registrado.</p>";
+                echo "<p style='color:red;'> Error: Ese RUT ya está registrado.</p>";
             } else {
-                echo "<p style='color:red;'>❌ Error: " . mysqli_error($conexion) . "</p>";
+                echo "<p style='color:red;'> Error: " . mysqli_error($conexion) . "</p>";
             }
         }
     }

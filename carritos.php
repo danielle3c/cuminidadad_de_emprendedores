@@ -13,7 +13,7 @@
 </head>
 <body>
 <div class="box">
-    <h2>🛒 Registrar Carrito / Puesto</h2>
+    <h2>Registrar Carrito / Puesto</h2>
     <form method="POST">
         <label>Asignar a Emprendedor:</label>
         <select name="emp_id" required>

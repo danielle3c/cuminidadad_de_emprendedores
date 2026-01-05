@@ -11,7 +11,7 @@
 </style>
 </head>
 <body>
-    <h2>🕵️ Historial de Movimientos (Auditoría)</h2>
+    <h2> Historial de Movimientos (Auditoría)</h2>
     <table>
         <thead>
             <tr>

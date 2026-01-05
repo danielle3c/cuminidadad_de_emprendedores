@@ -1,10 +1,9 @@
 <?php
-// config.php
-// NO pongas "include" de este mismo archivo aquí.
+// config.php - ESTE ARCHIVO NO DEBE TENER INCLUDES
 
-$host = "localhost:8012"; // Tu puerto específico
+$host = "localhost:8012"; 
 $user = "root";
-$pass = ""; 
+$pass = "123456789"; 
 $db   = "comunidad_de_emprendedores";
 
 $conexion = mysqli_connect($host, $user, $pass, $db);

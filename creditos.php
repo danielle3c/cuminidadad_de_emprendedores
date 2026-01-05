@@ -33,14 +33,14 @@
         $chequeo = mysqli_query($conexion, "SELECT idcreditos FROM creditos WHERE emprendedores_idemprendedores = '$emp_id' AND saldo_inicial > 0 AND estado = 1");
 
         if(mysqli_num_rows($chequeo) > 0) {
-            echo "<p style='color:red; font-weight:bold;'>❌ Error: El emprendedor aún tiene un crédito activo con saldo pendiente. Debe saldarlo antes de activar uno nuevo.</p>";
+            echo "<p style='color:red; font-weight:bold;'>Error: El emprendedor aún tiene un crédito activo con saldo pendiente. Debe saldarlo antes de activar uno nuevo.</p>";
         } else {
             // 3. Si no tiene deudas activas, creamos el nuevo crédito
             $sql = "INSERT INTO creditos (monto_inicial, saldo_inicial, fecha_inicio, estado, dia_de_pago, cuota_mensual, Contratos_idContratos, emprendedores_idemprendedores, created_at) 
                     VALUES ('$monto', '$monto', NOW(), 1, '$dia', '$cuo', '$con', '$emp_id', NOW())";
             
             if(mysqli_query($conexion, $sql)) {
-                echo "<p style='color:green; font-weight:bold;'>✅ ¡Nuevo crédito activado! Este es un nuevo préstamo para el historial del emprendedor.</p>";
+                echo "<p style='color:green; font-weight:bold;'>¡Nuevo crédito activado! Este es un nuevo préstamo para el historial del emprendedor.</p>";
             }
         }
     }

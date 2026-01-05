@@ -43,7 +43,7 @@
             // 2. Restar saldo en la tabla creditos automáticamente
             mysqli_query($conexion, "UPDATE creditos SET saldo_inicial = saldo_inicial - $mon WHERE idcreditos = '$idc'");
             
-            echo "✅ Pago registrado y saldo actualizado.";
+            echo "Pago registrado y saldo actualizado.";
         }
         ?>
     </div>

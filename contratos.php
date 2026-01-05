@@ -22,7 +22,7 @@
         $ide = $_POST['id_emprendedor']; $monto = $_POST['monto_total']; $plazo = $_POST['plazo'];
         $sql = "INSERT INTO Contratos (fecha_firma, monto_total, plazo_meses, total_pagado, emprendedores_idemprendedores, created_at, estado) 
                 VALUES (CURDATE(), '$monto', '$plazo', 0, '$ide', NOW(), 1)";
-        if(mysqli_query($conexion, $sql)) echo "✅ Contrato generado con éxito.";
+        if(mysqli_query($conexion, $sql)) echo "Contrato generado con éxito.";
     }
     ?>
 </body>

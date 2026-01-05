@@ -11,7 +11,7 @@ if (isset($_GET['id'])) {
         // Registrar la acción en la tabla de auditoría que tienes en tu SQL
         $descripcion = "Eliminación lógica del emprendedor ID: " . $id;
         mysqli_query($conexion, "INSERT INTO auditorias_sistemas (tabla_afectada, accion, descripcion, created_at) 
-                                 VALUES ('emprendedores', 'DELETE', '$descripcion', NOW())");
+                                VALUES ('emprendedores', 'DELETE', '$descripcion', NOW())");
         
         header("Location: index.php?msg=emprendedor_eliminado");
     } else {

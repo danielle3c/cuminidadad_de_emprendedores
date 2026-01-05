@@ -27,6 +27,6 @@ if(isset($_POST['btn_e'])){
     $sql = "INSERT INTO emprendedores (personas_idpersonas, tipo_negocio, rubro, producto_principal, limite_credito, fecha_registro, created_at) 
             VALUES ('$idp', '$tipo', '$rubro', '$prod', '$lim', NOW(), NOW())";
 
-    if(mysqli_query($conexion, $sql)) echo "✅ Emprendedor registrado";
+    if(mysqli_query($conexion, $sql)) echo "Emprendedor registrado";
 }
 ?>

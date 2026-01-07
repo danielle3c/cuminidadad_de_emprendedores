@@ -1,8 +1,13 @@
 <?php
-session_start();
 include 'config.php';
 
-if (isset($_POST['ingresar'])) {
+if (isset($_SESSION['usuario_id'])) {
+    header("Location: index.php");
+    exit();
+}
+
+$error = "";
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ingresar'])) {
     $user = mysqli_real_escape_string($conexion, $_POST['username']);
     $pass = $_POST['password'];
 
@@ -10,11 +15,11 @@ if (isset($_POST['ingresar'])) {
     $res = mysqli_query($conexion, $sql);
 
     if ($f = mysqli_fetch_assoc($res)) {
-        // Verificamos la contraseña (asumiendo que usaste password_hash al crearlos)
         if (password_verify($pass, $f['password'])) {
             $_SESSION['usuario_id'] = $f['idUsuarios'];
-            $_SESSION['nombre'] = $f['username'];
+            $_SESSION['username'] = $f['username'];
             header("Location: index.php");
+            exit();
         } else {
             $error = "Contraseña incorrecta.";
         }
@@ -26,23 +31,31 @@ if (isset($_POST['ingresar'])) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Acceso al Sistema</title>
+    <meta charset="UTF-8">
+    <title>Acceso - Comunidad</title>
     <style>
-        body { font-family: sans-serif; background: #43b02a; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 300px; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #43b02a; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background: #43b02a; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 320px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn-in { width: 100%; padding: 12px; background: #43b02a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .footer-links { margin-top: 20px; font-size: 0.9em; border-top: 1px solid #eee; padding-top: 15px; }
+        .btn-reg { color: #43b02a; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <h2 style="text-align:center; color: #333;">Comunidad Login</h2>
-        <?php if(isset($error)) echo "<p style='color:red; font-size:0.8em;'>$error</p>"; ?>
+    <div class="login-card">
+        <h2>🔒 Comunidad</h2>
+        <?php if($error) echo "<p style='color:red;'>$error</p>"; ?>
         <form method="POST">
             <input type="text" name="username" placeholder="Usuario" required>
             <input type="password" name="password" placeholder="Contraseña" required>
-            <button type="submit" name="ingresar">Entrar al Sistema</button>
+            <button type="submit" name="ingresar" class="btn-in">Entrar</button>
         </form>
+        
+        <div class="footer-links">
+            ¿Eres nuevo trabajador?<br>
+            <a href="registro.php" class="btn-reg">Crear cuenta aquí</a>
+        </div>
     </div>
 </body>
 </html>

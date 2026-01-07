@@ -105,12 +105,12 @@ $cfg = mysqli_fetch_assoc($res_conf);
                 VALUES ('$rut', '$nom', '$ape', '$fec', '$gen', '$tel', '$dir', '$ema', NOW(), 1)";
 
         if(mysqli_query($conexion, $sql)){
-            echo "<div class='alert alert-success'>✨ ¡Éxito! $nom ha sido registrado correctamente.</div>";
+            echo "<div class='alert alert-success'>¡Éxito! $nom ha sido registrado correctamente.</div>";
         } else {
             if(mysqli_errno($conexion) == 1062) {
-                echo "<div class='alert alert-error'>⚠️ El RUT <b>$rut</b> ya se encuentra en nuestra base de datos.</div>";
+                echo "<div class='alert alert-error'>El RUT <b>$rut</b> ya se encuentra en nuestra base de datos.</div>";
             } else {
-                echo "<div class='alert alert-error'>❌ Error crítico: " . mysqli_error($conexion) . "</div>";
+                echo "<div class='alert alert-error'> Error crítico: " . mysqli_error($conexion) . "</div>";
             }
         }
     }

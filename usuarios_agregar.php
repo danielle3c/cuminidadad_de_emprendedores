@@ -6,6 +6,7 @@ $mensaje = "";
 if (isset($_POST['crear_usuario'])) {
     $persona_id = mysqli_real_escape_string($conexion, $_POST['persona_id']);
     $username   = mysqli_real_escape_string($conexion, $_POST['username']);
+    $email      = mysqli_real_escape_string($conexion, $_POST['email']); // NUEVO: Captura el email
     $password   = $_POST['password'];
     $estado     = $_POST['estado'];
 
@@ -23,11 +24,12 @@ if (isset($_POST['crear_usuario'])) {
         // Encriptar contraseña
         $pass_enc = password_hash($password, PASSWORD_DEFAULT);
         
-        $sql = "INSERT INTO Usuarios (username, password, estado, personas_idpersonas, created_at) 
-                VALUES ('$username', '$pass_enc', '$estado', '$persona_id', NOW())";
+        // ACTUALIZADO: Agregamos la columna 'email' en el INSERT
+        $sql = "INSERT INTO Usuarios (username, email, password, estado, personas_idpersonas, created_at) 
+                VALUES ('$username', '$email', '$pass_enc', '$estado', '$persona_id', NOW())";
 
         if (mysqli_query($conexion, $sql)) {
-            $mensaje = "<p style='color:green;'>✅ Usuario creado exitosamente.</p>";
+            $mensaje = "<p style='color:green;'>✅ Usuario creado exitosamente con correo institucional.</p>";
             header("Refresh:2; url=usuarios_lista.php");
         } else {
             $mensaje = "<p style='color:red;'>❌ Error al insertar: " . mysqli_error($conexion) . "</p>";
@@ -35,7 +37,7 @@ if (isset($_POST['crear_usuario'])) {
     }
 }
 
-// Obtener lista de personas que aún NO tienen usuario para el desplegable
+// Obtener lista de personas disponibles
 $personas_libres = mysqli_query($conexion, "SELECT p.idpersonas, p.nombres, p.apellidos 
                                             FROM personas p 
                                             LEFT JOIN Usuarios u ON p.idpersonas = u.personas_idpersonas 
@@ -84,6 +86,9 @@ $personas_libres = mysqli_query($conexion, "SELECT p.idpersonas, p.nombres, p.ap
         <label>Nombre de Usuario (Login):</label>
         <input type="text" name="username" placeholder="Ej: jperez" required>
 
+        <label>Correo Institucional (para recuperación):</label>
+        <input type="email" name="email" placeholder="ejemplo@institucion.cl" required>
+
         <label>Contraseña:</label>
         <input type="password" name="password" placeholder="********" required>
 
@@ -97,5 +102,5 @@ $personas_libres = mysqli_query($conexion, "SELECT p.idpersonas, p.nombres, p.ap
     </form>
 </div>
 
-</body>
+</body> 
 </html>

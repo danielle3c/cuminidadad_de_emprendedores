@@ -201,7 +201,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
                 <span>Emprendedores</span>
             </a>
             <a href="creditos.php" class="menu-card">
-                <img src="https://cdn-icons-png.flaticon.com/512/2845/2845928.png">
+                <img src="https://us.123rf.com/450wm/jemastock/jemastock1907/jemastock190760457/127255575-hand-holding-a-credit-card-and-money-coins-icon-cartoon-in-black-and-white-vector-illustration.jpg">
                 <span>Créditos</span>
             </a>
             <a href="cobranzas.php" class="menu-card">
@@ -209,7 +209,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
                 <span>Cobranzas</span>
             </a>
             <a href="carritos.php" class="menu-card">
-                <img src="https://cdn-icons-png.flaticon.com/512/1155/1155050.png">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBtrIBGVve-2r8Cy5iAXixSE0CsCTrnoDCgg&s">
                 <span>Carritos</span>
             </a>
             <a href="configuraciones.php" class="menu-card">

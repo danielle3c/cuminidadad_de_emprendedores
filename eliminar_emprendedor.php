@@ -1,21 +1,23 @@
-<?php 
-include 'config.php'; 
+<?php
+include 'config.php';
 
 if (isset($_GET['id'])) {
-    $id = mysqli_real_escape_string($conexion, $_GET['id']);
-    
-    // Marcamos como eliminado (deleted_at = 1) y desactivamos (estado = 0)
-    $sql = "UPDATE emprendedores SET deleted_at = 1, estado = 0 WHERE idemprendedores = '$id'";
-    
+    // 1. Limpiar el ID para evitar inyecciones SQL
+    $id_emprendedor = mysqli_real_escape_string($conexion, $_GET['id']);
+
+    // 2. Ejecutar el borrado lógico (ponemos deleted_at en 1 o la fecha actual)
+    // Asumiendo que tu tabla tiene la columna deleted_at
+    $sql = "UPDATE emprendedores SET deleted_at = 1 WHERE idemprendedores = '$id_emprendedor'";
+
     if (mysqli_query($conexion, $sql)) {
-        // Registrar la acción en la tabla de auditoría que tienes en tu SQL
-        $descripcion = "Eliminación lógica del emprendedor ID: " . $id;
-        mysqli_query($conexion, "INSERT INTO auditorias_sistemas (tabla_afectada, accion, descripcion, created_at) 
-                                VALUES ('emprendedores', 'DELETE', '$descripcion', NOW())");
-        
+        // 3. Redirigir al index con un mensaje de éxito
         header("Location: index.php?msg=emprendedor_eliminado");
+        exit();
     } else {
-        echo "Error al procesar la solicitud: " . mysqli_error($conexion);
+        echo "❌ Error al eliminar el negocio: " . mysqli_error($conexion);
     }
+} else {
+    header("Location: index.php");
+    exit();
 }
 ?>

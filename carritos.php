@@ -7,20 +7,22 @@ $cfg = mysqli_fetch_assoc($res_conf);
 $mensaje = "";
 
 if(isset($_POST['save_car'])){
-    // Ahora recibimos el nombre directamente del campo de texto
     $nombre_persona = mysqli_real_escape_string($conexion, $_POST['nombre_persona']); 
     $nom_carrito = mysqli_real_escape_string($conexion, $_POST['nombre_c']); 
     $des = mysqli_real_escape_string($conexion, $_POST['desc']); 
     $equ = mysqli_real_escape_string($conexion, $_POST['equip']);
     $ast = mysqli_real_escape_string($conexion, $_POST['asistencia']); 
+    
+    // Capturamos la fecha del formulario en lugar de usar NOW()
+    $fecha_registro = mysqli_real_escape_string($conexion, $_POST['fecha_reg']);
+    // Si necesitas hora exacta también, concatenamos la hora actual
+    $fecha_final = $fecha_registro . " " . date("H:i:s");
 
-    // Guardamos el nombre en la tabla carritos (asegúrate que tu tabla carritos tenga una columna para el nombre manual si no usas el ID)
-    // NOTA: Para máxima flexibilidad, guardaremos el nombre en 'nombre_responsable' 
     $sql = "INSERT INTO carritos (nombre_responsable, nombre_carrito, descripcion, equipamiento, asistencia, created_at) 
-            VALUES ('$nombre_persona', '$nom_carrito', '$des', '$equ', '$ast', NOW())";
+            VALUES ('$nombre_persona', '$nom_carrito', '$des', '$equ', '$ast', '$fecha_final')";
 
     if(mysqli_query($conexion, $sql)){
-        $mensaje = "<div class='alert success'>✅ ¡Registro Guardado! Persona: $nombre_persona</div>";
+        $mensaje = "<div class='alert success'>✅ Registro guardado con fecha: " . date("d/m/Y", strtotime($fecha_registro)) . "</div>";
     } else {
         $mensaje = "<div class='alert error'> ❌ Error: " . mysqli_error($conexion) . "</div>";
     }
@@ -32,7 +34,7 @@ if(isset($_POST['save_car'])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Flexible | <?php echo $cfg['nombre_sistema']; ?></title>
+    <title>Registro Histórico | <?php echo $cfg['nombre_sistema']; ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -42,10 +44,15 @@ if(isset($_POST['save_car'])){
         .box { background: var(--card); padding: 35px; border-radius: 20px; max-width: 650px; margin: auto; border: 1px solid var(--border); box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
         label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--primary); }
         input, textarea, select { width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid var(--border); border-radius: 10px; background: transparent; color: var(--text); font-size: 1rem; box-sizing: border-box; }
+        
+        /* Resalte para el campo de fecha */
+        .fecha-input { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); font-weight: bold; }
+
         .asistencia-container { display: flex; gap: 15px; margin-bottom: 20px; }
         .asistencia-btn { flex: 1; border: 2px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; font-weight: 700; transition: 0.3s; }
         .asistencia-btn input { display: none; }
         .asistencia-btn:has(input:checked) { background: var(--primary); color: white; border-color: var(--primary); }
+        
         .btn-save { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 1.1rem; }
         .alert { padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-weight: 600; }
         .success { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
@@ -55,25 +62,27 @@ if(isset($_POST['save_car'])){
 <body>
 
 <div class="box">
-    <h2 style="text-align: center; margin-top: 0;">🎪 Registro de Entrega</h2>
+    <h2 style="text-align: center; margin-top: 0;">🎪 Registro de Carritos</h2>
     
     <?php echo $mensaje; ?>
 
     <form method="POST">
+        <label><i class="fas fa-calendar-alt"></i> Fecha del Registro (Puedes poner fechas antiguas):</label>
+        <input type="date" name="fecha_reg" class="fecha-input" value="<?php echo date('Y-m-d'); ?>" required>
+
         <label><i class="fas fa-user-edit"></i> Nombre del Responsable:</label>
         <input type="text" name="nombre_persona" list="lista-personas" placeholder="Escriba el nombre completo..." required>
         <datalist id="lista-personas">
             <?php
-            // Traemos los nombres existentes solo como sugerencia
-            $query = "SELECT p.nombres, p.apellidos, e.rubro FROM emprendedores e JOIN personas p ON e.personas_idpersonas = p.idpersonas WHERE p.deleted_at IS NULL";
+            $query = "SELECT p.nombres, p.apellidos FROM emprendedores e JOIN personas p ON e.personas_idpersonas = p.idpersonas WHERE p.deleted_at IS NULL";
             $res = mysqli_query($conexion, $query);
             while($e = mysqli_fetch_assoc($res)) {
-                echo "<option value='{$e['nombres']} {$e['apellidos']}'>{$e['rubro']}</option>";
+                echo "<option value='{$e['nombres']} {$e['apellidos']}'>";
             }
             ?>
         </datalist>
 
-        <label><i class="fas fa-question-circle"></i> ¿Asistió hoy?</label>
+        <label><i class="fas fa-question-circle"></i> ¿Asistió ese día?</label>
         <div class="asistencia-container">
             <label class="asistencia-btn">
                 <input type="radio" name="asistencia" value="SÍ VINO" checked> ✅ SÍ VINO
@@ -83,8 +92,8 @@ if(isset($_POST['save_car'])){
             </label>
         </div>
 
-        <label><i class="fas fa-store"></i> Identificación del Carrito:</label>
-        <input type="text" name="nombre_c" placeholder="Ej: Puesto #05 o Carrito Azul" required>
+        <label><i class="fas fa-store"></i> ID del Carrito:</label>
+        <input type="text" name="nombre_c" placeholder="Ej: Carrito #01" required>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
             <div><label>Estado Estético:</label><textarea name="desc"></textarea></div>

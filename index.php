@@ -213,7 +213,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
                 <span>Carritos</span>
             </a>
             <a href="configuraciones.php" class="menu-card">
-                <img src="https://cdn-icons-png.flaticon.com/512/10471/10471676.png">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1CxbqWfsmEmU-nvwYI4ajTm0EtrzpEZb-zg&s">
                 <span>Ajustes</span>
             </a>
         </div>

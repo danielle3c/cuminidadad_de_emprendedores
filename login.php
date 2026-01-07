@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ingresar'])) {
             <input type="text" name="username" placeholder="Usuario" required>
             <input type="password" name="password" placeholder="Contraseña" required>
             <button type="submit" name="ingresar" class="btn-in">Entrar</button>
-            <a href="cambiar_clave.php" class="forgot-pass">¿Olvidaste o quieres cambiar tu contraseña?</a>
+            <a href="cambiar_clave.php" class="btn-link">¿Olvidaste o quieres cambiar tu contraseña?</a>
         </form>
         
         <div class="footer-links">

@@ -1,4 +1,12 @@
 <?php 
+// 1. Cargar la librería PHPMailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+
 include 'config.php'; 
 
 $mensaje = "";
@@ -6,20 +14,57 @@ $mensaje = "";
 if (isset($_POST['verificar_correo'])) {
     $correo = mysqli_real_escape_string($conexion, $_POST['correo']);
     
-    // Verificamos si existe ese correo institucional
-    $sql = "SELECT idUsuarios FROM Usuarios WHERE correo_institucional = '$correo' AND estado = 1";
+    // Verificar si el email existe en la BD
+    $sql = "SELECT username FROM Usuarios WHERE email = '$correo' AND estado = 1";
     $res = mysqli_query($conexion, $sql);
 
-    if (mysqli_num_rows($res) > 0) {
-        // AQUÍ iría la lógica de enviar el correo real. 
-        // Por ahora, simulamos que se envió:
-        $mensaje = "<p style='color:green; background:#dcfce7; padding:10px; border-radius:8px;'>
-                    ✅ Se ha enviado un código a tu correo institucional ($correo) para cambiar la clave.</p>";
+    if ($datos = mysqli_fetch_assoc($res)) {
+        $username = $datos['username'];
+        $mail = new PHPMailer(true);
+
+        try {
+            // --- CONFIGURACIÓN DEL SERVIDOR SMTP ---
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com'; 
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'tu-correo@gmail.com';       // TU GMAIL
+            $mail->Password   = 'abcd efgh ijkl mnop';       // TU CONTRASEÑA DE APP (16 letras)
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+
+            // --- CONFIGURACIÓN DEL MENSAJE ---
+            $mail->setFrom('tu-correo@gmail.com', 'Sistema Comunidad');
+            $mail->addAddress($correo); 
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Recuperacion de Contrasena - Comunidad';
+            $mail->Body    = "
+                <html>
+                <body style='font-family: sans-serif;'>
+                    <h2 style='color: #43b02a;'>Hola $username,</h2>
+                    <p>Has solicitado restablecer tu contraseña en el sistema de la Comunidad.</p>
+                    <p>Haz clic en el siguiente botón para continuar:</p>
+                    <a href='http://localhost/comunidad/reset_final.php?email=$correo' 
+                       style='background: #43b02a; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>
+                       Cambiar Contraseña
+                    </a>
+                    <p>Si no fuiste tú, ignora este correo.</p>
+                </body>
+                </html>";
+
+            $mail->send();
+            $mensaje = "<div style='color:green; background:#dcfce7; padding:15px; border-radius:8px;'>
+                        ✅ ¡Enviado! Revisa tu correo institucional.</div>";
+
+        } catch (Exception $e) {
+            $mensaje = "<p style='color:red;'>❌ Error al enviar el correo: {$mail->ErrorInfo}</p>";
+        }
     } else {
-        $mensaje = "<p style='color:red;'>❌ El correo no está registrado en nuestro sistema.</p>";
+        $mensaje = "<p style='color:red;'>❌ El correo no está registrado.</p>";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -37,11 +82,15 @@ if (isset($_POST['verificar_correo'])) {
     <div class="box">
         <h3>Recuperar Contraseña</h3>
         <?php echo $mensaje; ?>
+        
+        <?php if(!isset($_POST['verificar_correo']) || strpos($mensaje, '❌') !== false): ?>
         <form method="POST">
-            <p style="font-size: 0.9em; color: #666;">Ingresa tu correo institucional para recibir instrucciones.</p>
-            <input type="email" name="correo" placeholder="tu-correo@institucion.cl" required>
-            <button type="submit" name="verificar_correo" class="btn">Enviar instrucciones</button>
+            <p style="font-size: 0.9em; color: #666;">Ingresa tu correo institucional registrado.</p>
+            <input type="email" name="correo" placeholder="ejemplo@correo.cl" required>
+            <button type="submit" name="verificar_correo" class="btn">Enviar enlace</button>
         </form>
+        <?php endif; ?>
+        
         <a href="login.php">⬅️ Volver al Login</a>
     </div>
 </body>

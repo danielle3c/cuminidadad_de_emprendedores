@@ -1,16 +1,16 @@
 <?php 
 include 'config.php'; 
 
-// 1. Configuración y estadísticas
+// 1. Configuración general
 $res_conf = mysqli_query($conexion, "SELECT * FROM configuraciones WHERE id = 1");
 $cfg = mysqli_fetch_assoc($res_conf);
-$total_usuarios = mysqli_num_rows(mysqli_query($conexion, "SELECT idUsuarios FROM Usuarios WHERE deleted_at IS NULL"));
 ?>
 
 <!DOCTYPE html>
 <html lang="es" data-theme="<?php echo $cfg['tema_color']; ?>">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $cfg['nombre_sistema']; ?></title>
     <style>
         :root { 
@@ -29,13 +29,14 @@ $total_usuarios = mysqli_num_rows(mysqli_query($conexion, "SELECT idUsuarios FRO
         .container { max-width: 1100px; margin: auto; padding: 20px; }
 
         /* Alertas */
-        .alert { padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-weight: bold; }
-        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .alert { padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-weight: bold; border: 1px solid transparent; }
+        .alert-success { background: #dcfce7; color: #166534; border-color: #86efac; }
+        .alert-error { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
 
         /* Buscador */
         .search-box { background: var(--card); padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .search-box input { width: 50%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 16px; background: var(--bg); color: var(--text); }
-        .btn-search { padding: 12px 25px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .search-box input { width: 55%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 16px; background: var(--bg); color: var(--text); }
+        .btn-search { padding: 12px 25px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-left: 5px; }
 
         /* Dashboard Grid */
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
@@ -44,23 +45,23 @@ $total_usuarios = mysqli_num_rows(mysqli_query($conexion, "SELECT idUsuarios FRO
             text-decoration: none; color: inherit; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); background: var(--primary); color: white; }
-        .menu-card img { width: 50px; height: 50px; margin-bottom: 12px; }
-        .menu-card span { font-weight: bold; font-size: 0.9em; }
+        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); background: var(--primary); color: white !important; }
+        .menu-card img { width: 55px; height: 55px; margin-bottom: 12px; }
+        .menu-card span { font-weight: bold; font-size: 0.95em; }
 
         /* Resultados */
         .result-item { 
-            background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; 
-            display: flex; align-items: center; justify-content: space-between; gap: 20px; border-left: 5px solid var(--primary);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 12px; 
+            display: flex; align-items: center; justify-content: space-between; gap: 20px; border-left: 6px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .profile-pic { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; background: #ddd; border: 2px solid var(--primary); }
-        .info-user h3 { margin: 0; font-size: 1.1em; }
-        .info-user p { margin: 5px 0 0; font-size: 0.85em; opacity: 0.8; }
+        .profile-pic { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; background: #eee; border: 2px solid var(--primary); }
+        .info-user h3 { margin: 0; font-size: 1.15em; color: var(--primary); }
+        .info-user p { margin: 4px 0 0; font-size: 0.85em; opacity: 0.8; }
 
         /* Botones de Acción */
         .actions { display: flex; gap: 10px; }
-        .btn-action { padding: 8px 15px; border-radius: 8px; text-decoration: none; font-size: 0.85em; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
+        .btn-action { padding: 8px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85em; font-weight: bold; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
         .btn-edit { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
         .btn-edit:hover { background: #0369a1; color: white; }
         .btn-delete { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
@@ -72,19 +73,20 @@ $total_usuarios = mysqli_num_rows(mysqli_query($conexion, "SELECT idUsuarios FRO
 <div class="nav-bar">
     <a href="index.php">🏠 Inicio</a>
     <a href="personas.php">👤 Personas</a>
+    <a href="emprendedores.php">💼 Negocios</a>
     <a href="configuraciones.php">⚙️ Ajustes</a>
 </div>
 
 <div class="container">
-    <h1 style="text-align: center;">🚀 <?php echo $cfg['nombre_sistema']; ?></h1>
+    <h1 style="text-align: center; margin-bottom: 30px;">🚀 <?php echo $cfg['nombre_sistema']; ?></h1>
 
     <?php if (isset($_GET['status']) && $_GET['status'] == 'deleted'): ?>
-        <div class="alert alert-success">✅ Registro eliminado correctamente.</div>
+        <div class="alert alert-success">✅ El registro se eliminó (o marcó como borrado) correctamente.</div>
     <?php endif; ?>
 
     <div class="search-box">
         <form method="GET">
-            <input type="text" name="buscar" placeholder="Buscar personas o negocios..." value="<?php echo $_GET['buscar'] ?? ''; ?>" autofocus>
+            <input type="text" name="buscar" placeholder="Escribe nombre, apellido o RUT..." value="<?php echo $_GET['buscar'] ?? ''; ?>" autofocus>
             <button type="submit" class="btn-search">🔍 Buscar</button>
         </form>
     </div>
@@ -93,12 +95,18 @@ $total_usuarios = mysqli_num_rows(mysqli_query($conexion, "SELECT idUsuarios FRO
         <div id="resultados">
             <?php 
             $busqueda = mysqli_real_escape_string($conexion, $_GET['buscar']);
-            $sql = "SELECT p.*, e.idemprendedores FROM personas p 
+            
+            // Consulta mejorada sin filtros estrictos de borrado para depuración inicial
+            $sql = "SELECT p.*, e.idemprendedores 
+                    FROM personas p 
                     LEFT JOIN emprendedores e ON p.idpersonas = e.personas_idpersonas 
-                    WHERE (p.nombres LIKE '%$busqueda%' OR p.rut LIKE '%$busqueda%') AND p.deleted_at IS NULL";
+                    WHERE p.nombres LIKE '%$busqueda%' 
+                    OR p.apellidos LIKE '%$busqueda%' 
+                    OR p.rut LIKE '%$busqueda%'";
+            
             $res = mysqli_query($conexion, $sql);
 
-            if(mysqli_num_rows($res) > 0):
+            if($res && mysqli_num_rows($res) > 0):
                 while ($f = mysqli_fetch_assoc($res)) { 
                     $avatar = "https://ui-avatars.com/api/?name=".urlencode($f['nombres'])."&background=random&color=fff";
                 ?>
@@ -107,16 +115,19 @@ $total_usuarios = mysqli_num_rows(mysqli_query($conexion, "SELECT idUsuarios FRO
                             <img src="img/fotos/<?php echo $f['idpersonas']; ?>.jpg" class="profile-pic" onerror="this.src='<?php echo $avatar; ?>'">
                             <div class="info-user">
                                 <h3><?php echo $f['nombres'] . " " . $f['apellidos']; ?></h3>
-                                <p>RUT: <?php echo $f['rut']; ?> | <?php echo ($f['idemprendedores']) ? "💼 Emprendedor" : "👤 Natural"; ?></p>
+                                <p><b>RUT:</b> <?php echo $f['rut']; ?> | <b>Tipo:</b> <?php echo ($f['idemprendedores']) ? "💼 Negocio" : "👤 Particular"; ?></p>
                             </div>
                         </div>
                         <div class="actions">
-                            <a href="editar_persona.php?id=<?php echo $f['idpersonas']; ?>" class="btn-action btn-edit">✏️ Editar</a>
-                            <a href="eliminar_persona.php?id=<?php echo $f['idpersonas']; ?>" class="btn-action btn-delete" onclick="return confirm('¿Eliminar registro?')">🗑️ Borrar</a>
+                            <a href="editar_persona.php?id=<?php echo $f['idpersonas']; ?>" class="btn-action btn-edit">✏️ Modificar</a>
+                            <a href="eliminar_persona.php?id=<?php echo $f['idpersonas']; ?>" class="btn-action btn-delete" onclick="return confirm('¿Estás seguro de eliminar a esta persona?')">🗑️ Borrar</a>
                         </div>
                     </div>
                 <?php } 
-            else: echo "<p style='text-align:center;'>No se encontraron resultados.</p>"; endif; ?>
+            else: 
+                echo "<div class='alert alert-error'>❌ No se encontraron resultados para: <b>$busqueda</b></div>";
+            endif; ?>
+            <p style="text-align: center;"><a href="index.php" style="color: var(--primary);">← Volver al Dashboard</a></p>
         </div>
     <?php else: ?>
         <div class="dashboard-grid">

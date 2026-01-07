@@ -8,21 +8,21 @@ $mensaje = "";
 
 if(isset($_POST['save_car'])){
     $nombre_persona = mysqli_real_escape_string($conexion, $_POST['nombre_persona']); 
+    $telefono = mysqli_real_escape_string($conexion, $_POST['telefono']); // Nuevo campo
     $nom_carrito = mysqli_real_escape_string($conexion, $_POST['nombre_c']); 
     $des = mysqli_real_escape_string($conexion, $_POST['desc']); 
     $equ = mysqli_real_escape_string($conexion, $_POST['equip']);
     $ast = mysqli_real_escape_string($conexion, $_POST['asistencia']); 
     
-    // Capturamos la fecha del formulario en lugar de usar NOW()
     $fecha_registro = mysqli_real_escape_string($conexion, $_POST['fecha_reg']);
-    // Si necesitas hora exacta también, concatenamos la hora actual
     $fecha_final = $fecha_registro . " " . date("H:i:s");
 
-    $sql = "INSERT INTO carritos (nombre_responsable, nombre_carrito, descripcion, equipamiento, asistencia, created_at) 
-            VALUES ('$nombre_persona', '$nom_carrito', '$des', '$equ', '$ast', '$fecha_final')";
+    // NOTA: Asegúrate de que tu tabla 'carritos' tenga las columnas 'nombre_responsable' y 'telefono_responsable'
+    $sql = "INSERT INTO carritos (nombre_responsable, telefono_responsable, nombre_carrito, descripcion, equipamiento, asistencia, created_at) 
+            VALUES ('$nombre_persona', '$telefono', '$nom_carrito', '$des', '$equ', '$ast', '$fecha_final')";
 
     if(mysqli_query($conexion, $sql)){
-        $mensaje = "<div class='alert success'>✅ Registro guardado con fecha: " . date("d/m/Y", strtotime($fecha_registro)) . "</div>";
+        $mensaje = "<div class='alert success'>✅ Registro guardado correctamente para: $nombre_persona</div>";
     } else {
         $mensaje = "<div class='alert error'> ❌ Error: " . mysqli_error($conexion) . "</div>";
     }
@@ -34,7 +34,7 @@ if(isset($_POST['save_car'])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Histórico | <?php echo $cfg['nombre_sistema']; ?></title>
+    <title>Registro Carritos | <?php echo $cfg['nombre_sistema']; ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -45,9 +45,6 @@ if(isset($_POST['save_car'])){
         label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--primary); }
         input, textarea, select { width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid var(--border); border-radius: 10px; background: transparent; color: var(--text); font-size: 1rem; box-sizing: border-box; }
         
-        /* Resalte para el campo de fecha */
-        .fecha-input { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); font-weight: bold; }
-
         .asistencia-container { display: flex; gap: 15px; margin-bottom: 20px; }
         .asistencia-btn { flex: 1; border: 2px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; font-weight: 700; transition: 0.3s; }
         .asistencia-btn input { display: none; }
@@ -62,16 +59,25 @@ if(isset($_POST['save_car'])){
 <body>
 
 <div class="box">
-    <h2 style="text-align: center; margin-top: 0;">🎪 Registro de Carritos</h2>
+    <h2 style="text-align: center; margin-top: 0;"><i class="fas fa-shuttle-van"></i> Registro de Activos</h2>
     
     <?php echo $mensaje; ?>
 
     <form method="POST">
-        <label><i class="fas fa-calendar-alt"></i> Fecha del Registro (Puedes poner fechas antiguas):</label>
-        <input type="date" name="fecha_reg" class="fecha-input" value="<?php echo date('Y-m-d'); ?>" required>
+        <label><i class="fas fa-calendar-day"></i> Fecha del Registro:</label>
+        <input type="date" name="fecha_reg" value="<?php echo date('Y-m-d'); ?>" required>
 
-        <label><i class="fas fa-user-edit"></i> Nombre del Responsable:</label>
-        <input type="text" name="nombre_persona" list="lista-personas" placeholder="Escriba el nombre completo..." required>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <label><i class="fas fa-user"></i> Nombre Responsable:</label>
+                <input type="text" name="nombre_persona" list="lista-personas" placeholder="Nombre completo" required>
+            </div>
+            <div>
+                <label><i class="fas fa-phone"></i> Teléfono:</label>
+                <input type="tel" name="telefono" placeholder="Ej: 987654321">
+            </div>
+        </div>
+
         <datalist id="lista-personas">
             <?php
             $query = "SELECT p.nombres, p.apellidos FROM emprendedores e JOIN personas p ON e.personas_idpersonas = p.idpersonas WHERE p.deleted_at IS NULL";
@@ -82,7 +88,7 @@ if(isset($_POST['save_car'])){
             ?>
         </datalist>
 
-        <label><i class="fas fa-question-circle"></i> ¿Asistió ese día?</label>
+        <label><i class="fas fa-check-double"></i> ¿Asistió hoy?</label>
         <div class="asistencia-container">
             <label class="asistencia-btn">
                 <input type="radio" name="asistencia" value="SÍ VINO" checked> ✅ SÍ VINO
@@ -92,8 +98,8 @@ if(isset($_POST['save_car'])){
             </label>
         </div>
 
-        <label><i class="fas fa-store"></i> ID del Carrito:</label>
-        <input type="text" name="nombre_c" placeholder="Ej: Carrito #01" required>
+        <label><i class="fas fa-tag"></i> Identificación del Carrito:</label>
+        <input type="text" name="nombre_c" placeholder="Ej: Carrito Rojo #2" required>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
             <div><label>Estado Estético:</label><textarea name="desc"></textarea></div>
@@ -101,7 +107,7 @@ if(isset($_POST['save_car'])){
         </div>
 
         <button type="submit" name="save_car" class="btn-save">
-            <i class="fas fa-save"></i> Guardar Registro
+            <i class="fas fa-save"></i> Guardar Todo
         </button>
     </form>
 

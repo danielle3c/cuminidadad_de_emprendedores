@@ -67,7 +67,7 @@ if (isset($_POST['update_all'])) {
 <body>
 
 <div class="form-box">
-    <h2 style="text-align:center;">📝 Editar Perfil de Usuario</h2>
+    <h2 style="text-align:center;">Editar Perfil de Usuario</h2>
     
     <form method="POST">
         <div class="section-title">Información Personal</div>

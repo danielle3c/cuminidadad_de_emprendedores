@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ingresar'])) {
 </head>
 <body>
     <div class="login-card">
-        <h2>🔒 Comunidad</h2>
+        <h2>Comunidad</h2>
         <?php if($error) echo "<p style='color:red; font-size:0.9em;'>$error</p>"; ?>
         
         <form method="POST">
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ingresar'])) {
         
         <div class="footer-links">
             <p style="margin-bottom: 5px;">¿No tienes cuenta?</p>
-            <a href="usuarios_agregar.php" class="btn-link">✨ Crear nueva cuenta</a>
+            <a href="usuarios_agregar.php" class="btn-link">Crear nueva cuenta</a>
         </div>
     </div>
 </body>

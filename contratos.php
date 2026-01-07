@@ -84,9 +84,9 @@ if(isset($_POST['save_con'])){
                 <option value="">Seleccione al titular...</option>
                 <?php
                 $res = mysqli_query($conexion, "SELECT e.idemprendedores, p.nombres, p.apellidos, e.limite_credito 
-                                               FROM emprendedores e 
-                                               JOIN personas p ON e.personas_idpersonas = p.idpersonas 
-                                               WHERE p.deleted_at IS NULL");
+                                            FROM emprendedores e 
+                                            JOIN personas p ON e.personas_idpersonas = p.idpersonas 
+                                            WHERE p.deleted_at IS NULL");
                 while($e = mysqli_fetch_assoc($res)){
                     echo "<option value='{$e['idemprendedores']}'>{$e['nombres']} {$e['apellidos']} (Máx: \${$e['limite_credito']})</option>";
                 }
@@ -109,13 +109,13 @@ if(isset($_POST['save_con'])){
         </div>
 
         <button type="submit" name="save_con" class="btn-save">
-            💾 Firmar y Registrar Contrato
+            Firmar y Registrar Contrato
         </button>
     </form>
 
     <div class="footer">
-        <a href="index.php">🏠 Inicio</a>
-        <a href="contratos_lista.php">📑 Ver todos</a>
+        <a href="index.php">Inicio</a>
+        <a href="contratos_lista.php">Ver todos</a>
     </div>
 </div>
 

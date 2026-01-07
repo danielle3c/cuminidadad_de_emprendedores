@@ -85,9 +85,9 @@ if (isset($_POST['actualizar'])) {
 
         <label>Tema Visual:</label>
         <select name="tema_color">
-            <option value="light" <?php if($cfg['tema_color'] == 'light') echo 'selected'; ?>>☀️ Claro</option>
-            <option value="dark" <?php if($cfg['tema_color'] == 'dark') echo 'selected'; ?>>🌙 Oscuro</option>
-            <option value="blue" <?php if($cfg['tema_color'] == 'blue') echo 'selected'; ?>>🔹 Azul</option>
+            <option value="light" <?php if($cfg['tema_color'] == 'light') echo 'selected'; ?>>Claro</option>
+            <option value="dark" <?php if($cfg['tema_color'] == 'dark') echo 'selected'; ?>>Oscuro</option>
+            <option value="blue" <?php if($cfg['tema_color'] == 'blue') echo 'selected'; ?>>Azul</option>
         </select>
 
         <label>Idioma:</label>
@@ -100,8 +100,8 @@ if (isset($_POST['actualizar'])) {
     </form>
 
     <div class="nav-buttons">
-        <a href="index.php" class="btn-nav btn-home">🏠 Inicio</a>
-        <a href="usuarios_lista.php" class="btn-nav btn-users">👥 Usuarios</a>
+        <a href="index.php" class="btn-nav btn-home">Inicio</a>
+        <a href="usuarios_lista.php" class="btn-nav btn-users">Usuarios</a>
     </div>
 </div>
 

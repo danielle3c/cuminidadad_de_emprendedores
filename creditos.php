@@ -87,11 +87,11 @@ if(isset($_POST['activar'])){
             <?php
             // Solo mostramos contratos que NO tengan un crédito creado todavía
             $sql_pendientes = "SELECT c.idContratos, p.nombres, p.apellidos, c.monto_total 
-                               FROM Contratos c 
-                               JOIN emprendedores e ON c.emprendedores_idemprendedores = e.idemprendedores 
-                               JOIN personas p ON e.personas_idpersonas = p.idpersonas 
-                               LEFT JOIN creditos cr ON c.idContratos = cr.Contratos_idContratos 
-                               WHERE cr.idcreditos IS NULL";
+                            FROM Contratos c 
+                            JOIN emprendedores e ON c.emprendedores_idemprendedores = e.idemprendedores 
+                            JOIN personas p ON e.personas_idpersonas = p.idpersonas 
+                            LEFT JOIN creditos cr ON c.idContratos = cr.Contratos_idContratos 
+                            WHERE cr.idcreditos IS NULL";
             
             $res = mysqli_query($conexion, $sql_pendientes);
             while($c = mysqli_fetch_assoc($res)) {

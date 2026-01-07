@@ -35,7 +35,7 @@ if (isset($_POST['actualizar_usuario'])) {
         // Recargar datos actualizados
         header("Refresh:1; url=usuarios_lista.php");
     } else {
-        $mensaje = "<p style='color:red;'>❌ Error: " . mysqli_error($conexion) . "</p>";
+        $mensaje = "<p style='color:red;'>Error: " . mysqli_error($conexion) . "</p>";
     }
 }
 ?>
@@ -60,11 +60,11 @@ if (isset($_POST['actualizar_usuario'])) {
 <body>
 
 <div class="nav-bar">
-    <a href="usuarios_lista.php">⬅️ Volver a Usuarios</a>
+    <a href="usuarios_lista.php">Volver a Usuarios</a>
 </div>
 
 <div class="form-box">
-    <h2>⚙️ Editar Acceso de Usuario</h2>
+    <h2>Editar Acceso de Usuario</h2>
     <?php echo $mensaje; ?>
 
     <div class="info-p">
@@ -80,8 +80,8 @@ if (isset($_POST['actualizar_usuario'])) {
 
         <label>Estado de la Cuenta:</label>
         <select name="estado">
-            <option value="1" <?php if($u['estado'] == 1) echo 'selected'; ?>>✅ Activo (Puede entrar)</option>
-            <option value="0" <?php if($u['estado'] == 0) echo 'selected'; ?>>🚫 Inactivo (Acceso bloqueado)</option>
+            <option value="1" <?php if($u['estado'] == 1) echo 'selected'; ?>>Activo (Puede entrar)</option>
+            <option value="0" <?php if($u['estado'] == 0) echo 'selected'; ?>>Inactivo (Acceso bloqueado)</option>
         </select>
 
         <button type="submit" name="actualizar_usuario" class="btn-save">Guardar Cambios</button>

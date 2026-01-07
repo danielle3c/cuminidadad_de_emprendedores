@@ -84,7 +84,7 @@ if(isset($_POST['btn_e'])){
 <body>
 
 <div class="container">
-    <h2>💼 Nuevo Emprendedor</h2>
+    <h2>Nuevo Emprendedor</h2>
     
     <?php echo $mensaje; ?>
 
@@ -96,9 +96,9 @@ if(isset($_POST['btn_e'])){
                 <?php
                 // CONSULTA CORREGIDA: Se ajusta para detectar registros con deleted_at vacío o cero
                 $query = "SELECT idpersonas, nombres, apellidos, rut 
-                          FROM personas 
-                          WHERE (deleted_at IS NULL OR deleted_at = '' OR deleted_at = '0000-00-00 00:00:00') 
-                          ORDER BY nombres ASC";
+                        FROM personas 
+                        HERE (deleted_at IS NULL OR deleted_at = '' OR deleted_at = '0000-00-00 00:00:00') 
+                        ORDER BY nombres ASC";
                 
                 $res = mysqli_query($conexion, $query);
 
@@ -107,7 +107,7 @@ if(isset($_POST['btn_e'])){
                         echo "<option value='{$p['idpersonas']}'>{$p['nombres']} {$p['apellidos']} ({$p['rut']})</option>";
                     }
                 } else {
-                    echo "<option value=''>⚠️ No hay personas disponibles</option>";
+                    echo "<option value=''>No hay personas disponibles</option>";
                 }
                 ?>
             </select>
@@ -137,8 +137,8 @@ if(isset($_POST['btn_e'])){
     </form>
 
     <div class="footer-nav">
-        <a href="index.php" class="btn-nav btn-home">🏠 Inicio</a>
-        <a href="emprendedores.php" class="btn-nav">📋 Lista</a>
+        <a href="index.php" class="btn-nav btn-home">Inicio</a>
+        <a href="emprendedores.php" class="btn-nav">Lista</a>
     </div>
 </div>
 

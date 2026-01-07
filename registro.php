@@ -13,9 +13,9 @@ if (isset($_POST['registrar'])) {
     $check_u = mysqli_query($conexion, "SELECT idUsuarios FROM Usuarios WHERE username = '$user'");
 
     if (mysqli_num_rows($check_p) == 0) {
-        $error = "❌ El ID de persona no existe.";
+        $error = "El ID de persona no existe.";
     } elseif (mysqli_num_rows($check_u) > 0) {
-        $error = "❌ El nombre de usuario ya está en uso.";
+        $error = "El nombre de usuario ya está en uso.";
     } else {
         $sql = "INSERT INTO Usuarios (username, password, personas_idpersonas, estado, created_at) 
                 VALUES ('$user', '$pass', '$persona_id', 1, NOW())";

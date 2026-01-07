@@ -78,9 +78,9 @@ if(isset($_POST['save_car'])){
             <?php
             // Solo mostramos emprendedores activos
             $res = mysqli_query($conexion, "SELECT e.idemprendedores, p.nombres, p.apellidos 
-                                           FROM emprendedores e 
-                                           JOIN personas p ON e.personas_idpersonas = p.idpersonas 
-                                           WHERE p.deleted_at IS NULL");
+                                        FROM emprendedores e 
+                                        JOIN personas p ON e.personas_idpersonas = p.idpersonas 
+                                        WHERE p.deleted_at IS NULL");
             while($e = mysqli_fetch_assoc($res)) {
                 echo "<option value='{$e['idemprendedores']}'>{$e['nombres']} {$e['apellidos']}</option>";
             }
@@ -100,7 +100,7 @@ if(isset($_POST['save_car'])){
     </form>
 
     <div class="footer">
-        <a href="index.php">🏠 Volver al Inicio</a>
+        <a href="index.php">Volver al Inicio</a>
     </div>
 </div>
 

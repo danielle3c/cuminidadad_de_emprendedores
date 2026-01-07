@@ -88,7 +88,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
 <body>
 
 <div class="nav-bar">
-    <a href="index.php" class="nav-logo">🚀 <?php echo $cfg['nombre_sistema']; ?></a>
+    <a href="index.php" class="nav-logo"><?php echo $cfg['nombre_sistema']; ?></a>
     <div class="nav-links">
         <a href="personas.php">Personas</a>
         <a href="emprendedores.php">Negocios</a>
@@ -102,7 +102,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
         <h1>¿A quién buscamos hoy?</h1>
         <form method="GET" class="search-wrapper">
             <input type="text" name="buscar" placeholder="Nombre, apellido o RUT..." value="<?php echo $_GET['buscar'] ?? ''; ?>" autofocus autocomplete="off">
-            <button type="submit" class="btn-search-icon">🔍 Buscar</button>
+            <button type="submit" class="btn-search-icon">Buscar</button>
         </form>
     </div>
 
@@ -125,15 +125,15 @@ $cfg = mysqli_fetch_assoc($res_conf);
                                 <span class="badge <?php echo ($idp % 2 == 0) ? 'badge-success' : 'badge-success'; ?>">Cliente Verificado</span>
                                 <h2 style="margin:5px 0; font-size: 1.8rem;"><?php echo $p['nombres'] . " " . $p['apellidos']; ?></h2>
                                 <div style="display:flex; gap: 15px; font-size: 0.9rem; opacity: 0.7;">
-                                    <span>🆔 <?php echo $p['rut']; ?></span>
-                                    <span>📞 <?php echo $p['telefono'] ?? 'No registrado'; ?></span>
+                                    <span><?php echo $p['rut']; ?></span>
+                                    <span><?php echo $p['telefono'] ?? 'No registrado'; ?></span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="card-grid">
                             <div class="history-box">
-                                <h4>💼 Negocio</h4>
+                                <h4>Negocio</h4>
                                 <?php 
                                 $q_emp = mysqli_query($conexion, "SELECT * FROM emprendedores WHERE personas_idpersonas = $idp");
                                 if($emp = mysqli_fetch_assoc($q_emp)): $ide = $emp['idemprendedores'];
@@ -146,7 +146,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
                             </div>
 
                             <div class="history-box">
-                                <h4>💰 Créditos</h4>
+                                <h4>Créditos</h4>
                                 <?php 
                                 if(isset($ide)){
                                     $q_cre = mysqli_query($conexion, "SELECT SUM(saldo_inicial) as deuda FROM creditos WHERE emprendedores_idemprendedores = $ide AND estado = 1");
@@ -163,7 +163,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
                             </div>
 
                             <div class="history-box">
-                                <h4>🎪 Activos</h4>
+                                <h4>Activos</h4>
                                 <?php 
                                 if(isset($ide)){
                                     $q_car = mysqli_query($conexion, "SELECT COUNT(*) as total FROM carritos WHERE emprendedores_idemprendedores = $ide");
@@ -186,14 +186,14 @@ $cfg = mysqli_fetch_assoc($res_conf);
                 echo "<div style='text-align:center; padding: 40px;'>
                         <img src='https://cdn-icons-png.flaticon.com/512/6134/6134065.png' width='80' style='opacity:0.2'>
                         <p style='opacity:0.5'>No encontramos a nadie con ese nombre o RUT.</p>
-                      </div>";
+                </div>";
             endif; ?>
         </div>
     <?php else: ?>
         
         <div class="dashboard-grid">
             <a href="personas.php" class="menu-card">
-                <img src="https://cdn-icons-png.flaticon.com/512/681/681494.png">
+                <img src="https://cdn-icons-png.flaticon.com/512/5225/5225015.png">
                 <span>Personas</span>
             </a>
             <a href="emprendedores.php" class="menu-card">

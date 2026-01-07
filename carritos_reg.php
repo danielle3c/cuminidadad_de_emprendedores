@@ -77,8 +77,8 @@ if(isset($_POST['reg_c'])){
             <option value="">-- Seleccionar Emprendedor --</option>
             <?php
             $res = mysqli_query($conexion, "SELECT e.idemprendedores, p.nombres, p.apellidos 
-                                           FROM emprendedores e 
-                                           JOIN personas p ON e.personas_idpersonas = p.idpersonas");
+                                        FROM emprendedores e 
+                                        JOIN personas p ON e.personas_idpersonas = p.idpersonas");
             while($e = mysqli_fetch_assoc($res)) {
                 echo "<option value='{$e['idemprendedores']}'>{$e['nombres']} {$e['apellidos']}</option>";
             }
@@ -91,11 +91,11 @@ if(isset($_POST['reg_c'])){
         <label>Inventario de Equipamiento:</label>
         <textarea name="equipo" placeholder="Ej: 1 Cocina industrial, 2 tanques de gas, 1 extintor..."></textarea>
         
-        <button type="submit" name="reg_c">💾 Registrar Carrito</button>
+        <button type="submit" name="reg_c">Registrar Carrito</button>
     </form>
 
     <div class="footer">
-        <a href="index.php">🏠 Volver al Inicio</a>
+        <a href="index.php">Volver al Inicio</a>
     </div>
 </div>
 

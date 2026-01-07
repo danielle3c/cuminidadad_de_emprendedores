@@ -17,7 +17,7 @@
     <h2>👥 Usuarios del Sistema</h2>
 
     <?php if(isset($_GET['status']) && $_GET['status'] == 'deleted'): ?>
-        <div class="status-msg">✅ Usuario eliminado correctamente (Borrado lógico).</div>
+        <div class="status-msg">Usuario eliminado correctamente (Borrado lógico).</div>
     <?php endif; ?>
 
     <table class="user-table">
@@ -54,9 +54,9 @@
                     </td>
                     <td>
                         <a href="eliminar_usuario.php?id=<?php echo $id; ?>" 
-                           class="btn-delete" 
-                           onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
-                           Eliminar
+                        class="btn-delete" 
+                        onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
+                        Eliminar
                         </a>
                     </td>
                 </tr>

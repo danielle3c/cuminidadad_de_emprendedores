@@ -58,11 +58,11 @@ if (isset($_POST['crear_usuario'])) {
 <body>
 
 <div class="nav-bar">
-    <a href="usuarios_lista.php">⬅️ Volver a Lista</a>
+    <a href="usuarios_lista.php">Volver a Lista</a>
 </div>
 
 <div class="form-box">
-    <h2>👥 Registro de Usuario</h2>
+    <h2>Registro de Usuario</h2>
     <?php echo $mensaje; ?>
 
     <form method="POST">

@@ -64,7 +64,7 @@
                 VALUES ('$rut', '$nom', '$ape', '$fec', '$gen', '$tel', '$dir', '$ema', NOW(), 1)";
 
         if(mysqli_query($conexion, $sql)){
-            echo "<p style='color:green; text-align:center; margin-top:15px;'>✅ Persona registrada con RUT: $rut</p>";
+            echo "<p style='color:green; text-align:center; margin-top:15px;'>Persona registrada con RUT: $rut</p>";
         } else {
             // Si el RUT ya existe, MySQL dará un error por el campo UNIQUE
             if(mysqli_errno($conexion) == 1062) {

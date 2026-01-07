@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
         header("Location: index.php?msg=emprendedor_eliminado");
         exit();
     } else {
-        echo "❌ Error al eliminar el negocio: " . mysqli_error($conexion);
+        echo "Error al eliminar el negocio: " . mysqli_error($conexion);
     }
 } else {
     header("Location: index.php");

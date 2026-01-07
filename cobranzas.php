@@ -101,16 +101,16 @@ if(isset($_POST['pay'])){
 
         <label>Método de Pago:</label>
         <select name="tipo_pago">
-            <option value="Efectivo">💵 Efectivo</option>
-            <option value="Transferencia">📱 Transferencia</option>
-            <option value="Depósito">🏢 Depósito Bancario</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Transferencia">Transferencia</option>
+            <option value="Depósito">Depósito Bancario</option>
         </select>
 
-        <button type="submit" name="pay">💸 Confirmar Recibo</button>
+        <button type="submit" name="pay">Confirmar Recibo</button>
     </form>
 
     <div class="footer">
-        <a href="index.php">🏠 Volver al Inicio</a>
+        <a href="index.php">Volver al Inicio</a>
     </div>
 </div>
 

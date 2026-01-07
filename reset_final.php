@@ -17,10 +17,10 @@ if (isset($_POST['actualizar'])) {
     $pass2 = $_POST['confirma_pass'];
 
     if ($pass1 !== $pass2) {
-        $mensaje = "❌ Las contraseñas no coinciden.";
+        $mensaje = "Las contraseñas no coinciden.";
         $error = true;
     } elseif (strlen($pass1) < 6) {
-        $mensaje = "❌ La contraseña debe tener al menos 6 caracteres.";
+        $mensaje = "La contraseña debe tener al menos 6 caracteres.";
         $error = true;
     } else {
         // Encriptamos la nueva clave
@@ -29,11 +29,11 @@ if (isset($_POST['actualizar'])) {
         $sql = "UPDATE Usuarios SET password = '$nueva_pass_encriptada' WHERE correo_institucional = '$email_recibido'";
         
         if (mysqli_query($conexion, $sql)) {
-            $mensaje = "✅ Contraseña actualizada con éxito. Redirigiendo al login...";
+            $mensaje = "Contraseña actualizada con éxito. Redirigiendo al login...";
             $error = false;
             header("Refresh:3; url=login.php");
         } else {
-            $mensaje = "❌ Error al actualizar en la base de datos.";
+            $mensaje = "Error al actualizar en la base de datos.";
             $error = true;
         }
     }

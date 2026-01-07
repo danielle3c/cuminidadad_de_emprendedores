@@ -63,14 +63,14 @@ if (isset($_POST['verificar_correo'])) {
 
             $mail->send();
             $mensaje = "<div style='color:green; background:#dcfce7; padding:15px; border-radius:8px; margin-bottom:20px;'>
-                        ✅ ¡Enviado! Revisa tu correo institucional ($correo).</div>";
+                        ¡Enviado! Revisa tu correo institucional ($correo).</div>";
 
         } catch (Exception $e) {
             $mensaje = "<div style='color:red; background:#fee2e2; padding:15px; border-radius:8px;'>
-                        ❌ Error al enviar: {$mail->ErrorInfo}</div>";
+                        Error al enviar: {$mail->ErrorInfo}</div>";
         }
     } else {
-        $mensaje = "<p style='color:red;'>❌ El correo no está registrado en el sistema.</p>";
+        $mensaje = "<p style='color:red;'> El correo no está registrado en el sistema.</p>";
     }
 }
 ?>
@@ -95,7 +95,7 @@ if (isset($_POST['verificar_correo'])) {
         
         <?php echo $mensaje; ?>
         
-        <?php if(!isset($_POST['verificar_correo']) || strpos($mensaje, '❌') !== false): ?>
+        <?php if(!isset($_POST['verificar_correo']) || strpos($mensaje, 'no exsite') !== false): ?>
         <form method="POST">
             <p style="font-size: 0.9em; color: #666;">Ingresa tu correo para recibir un enlace de recuperación.</p>
             <input type="email" name="correo" placeholder="tu-correo@empresa.cl" required>

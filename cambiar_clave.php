@@ -1,5 +1,5 @@
 <?php 
-// 1. Cargar la librería PHPMailer
+// 1. Cargar la librería PHPMailer (Asegúrate que la carpeta PHPMailer existe)
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -27,10 +27,19 @@ if (isset($_POST['verificar_correo'])) {
             $mail->isSMTP();
             $mail->Host       = 'smtp.gmail.com'; 
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'tu-correo@gmail.com';       // TU GMAIL
-            $mail->Password   = 'abcd efgh ijkl mnop';       // TU CONTRASEÑA DE APP (16 letras)
+            $mail->Username   = 'sofidany.figueroa@gmail.com';      // CAMBIA POR TU GMAIL
+            $mail->Password   = 'rgge ibmq dqjk kiub';      // CAMBIA POR TUS 16 LETRAS DE GOOGLE
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
+
+            // --- PARCHE PARA ERRORES DE CERTIFICADO EN XAMPP ---
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );
 
             // --- CONFIGURACIÓN DEL MENSAJE ---
             $mail->setFrom('tu-correo@gmail.com', 'Sistema Comunidad');
@@ -43,24 +52,25 @@ if (isset($_POST['verificar_correo'])) {
                 <body style='font-family: sans-serif;'>
                     <h2 style='color: #43b02a;'>Hola $username,</h2>
                     <p>Has solicitado restablecer tu contraseña en el sistema de la Comunidad.</p>
-                    <p>Haz clic en el siguiente botón para continuar:</p>
+                    <p>Haz clic en el botón para crear una nueva clave:</p>
                     <a href='http://localhost/comunidad/reset_final.php?email=$correo' 
-                       style='background: #43b02a; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>
-                       Cambiar Contraseña
+                       style='background: #43b02a; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; display: inline-block;'>
+                       Cambiar mi Contraseña
                     </a>
-                    <p>Si no fuiste tú, ignora este correo.</p>
+                    <p>Si no fuiste tú, puedes ignorar este correo de forma segura.</p>
                 </body>
                 </html>";
 
             $mail->send();
-            $mensaje = "<div style='color:green; background:#dcfce7; padding:15px; border-radius:8px;'>
-                        ✅ ¡Enviado! Revisa tu correo institucional.</div>";
+            $mensaje = "<div style='color:green; background:#dcfce7; padding:15px; border-radius:8px; margin-bottom:20px;'>
+                        ✅ ¡Enviado! Revisa tu correo institucional ($correo).</div>";
 
         } catch (Exception $e) {
-            $mensaje = "<p style='color:red;'>❌ Error al enviar el correo: {$mail->ErrorInfo}</p>";
+            $mensaje = "<div style='color:red; background:#fee2e2; padding:15px; border-radius:8px;'>
+                        ❌ Error al enviar: {$mail->ErrorInfo}</div>";
         }
     } else {
-        $mensaje = "<p style='color:red;'>❌ El correo no está registrado.</p>";
+        $mensaje = "<p style='color:red;'>❌ El correo no está registrado en el sistema.</p>";
     }
 }
 ?>
@@ -75,18 +85,20 @@ if (isset($_POST['verificar_correo'])) {
         .box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 350px; text-align: center; }
         input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
         .btn { background: #43b02a; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #369122; }
         a { color: #43b02a; text-decoration: none; font-size: 0.9em; display: block; margin-top: 15px; }
     </style>
 </head>
 <body>
     <div class="box">
         <h3>Recuperar Contraseña</h3>
+        
         <?php echo $mensaje; ?>
         
         <?php if(!isset($_POST['verificar_correo']) || strpos($mensaje, '❌') !== false): ?>
         <form method="POST">
-            <p style="font-size: 0.9em; color: #666;">Ingresa tu correo institucional registrado.</p>
-            <input type="email" name="correo" placeholder="ejemplo@correo.cl" required>
+            <p style="font-size: 0.9em; color: #666;">Ingresa tu correo para recibir un enlace de recuperación.</p>
+            <input type="email" name="correo" placeholder="tu-correo@empresa.cl" required>
             <button type="submit" name="verificar_correo" class="btn">Enviar enlace</button>
         </form>
         <?php endif; ?>

@@ -38,30 +38,39 @@ if (isset($_POST['actualizar'])) {
 <html lang="es" data-theme="<?php echo $cfg['tema_color']; ?>">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Configuración</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - <?php echo $cfg['nombre_sistema']; ?></title>
     <style>
-        /* Variables de Color Dinámicas */
-        :root { --bg: #f4f7f6; --text: #333; --card: #fff; --primary: #43b02a; }
-        [data-theme="dark"] { --bg: #1a1a1a; --text: #f0f0f0; --card: #2d2d2d; --primary: #2ecc71; }
-        [data-theme="blue"] { --bg: #e0e6ed; --text: #1a2a3a; --card: #fff; --primary: #0056b3; }
+        :root { --bg: #f4f7f6; --text: #333; --card: #fff; --primary: #43b02a; --secondary: #6c757d; }
+        [data-theme="dark"] { --bg: #1a1a1a; --text: #f0f0f0; --card: #2d2d2d; --primary: #2ecc71; --secondary: #495057; }
+        [data-theme="blue"] { --bg: #e0e6ed; --text: #1a2a3a; --card: #fff; --primary: #0056b3; --secondary: #5a6268; }
 
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; padding: 20px; }
         .container { max-width: 600px; margin: auto; background: var(--card); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         
-        h2 { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        h2 { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-top: 0; }
         label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9em; }
         input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; background: var(--card); color: var(--text); }
         
-        .btn-save { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 25px; font-size: 1em; }
-        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
-        .success { background: #dcfce7; color: #166534; }
-        .error { background: #fee2e2; color: #991b1b; }
+        .btn-save { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 25px; font-size: 1em; transition: 0.2s; }
+        .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .nav-buttons { display: flex; gap: 10px; margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
+        .btn-nav { flex: 1; text-align: center; padding: 12px; text-decoration: none; border-radius: 8px; font-size: 0.9em; font-weight: bold; color: white !important; transition: 0.2s; }
+        .btn-home { background: #333; }
+        .btn-users { background: var(--secondary); }
+        .btn-nav:hover { opacity: 0.8; }
+
+        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold; }
+        .success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>⚙️ Configuración del Sistema</h2>
+    
     <?php echo $mensaje; ?>
 
     <form method="POST">
@@ -89,7 +98,11 @@ if (isset($_POST['actualizar'])) {
 
         <button type="submit" name="actualizar" class="btn-save">Guardar Cambios</button>
     </form>
-    <p style="text-align: center;"><a href="usuarios_lista.php" style="color: var(--primary); text-decoration: none;">⬅️ Volver al Panel</a></p>
+
+    <div class="nav-buttons">
+        <a href="index.php" class="btn-nav btn-home">🏠 Inicio</a>
+        <a href="usuarios_lista.php" class="btn-nav btn-users">👥 Usuarios</a>
+    </div>
 </div>
 
 </body>

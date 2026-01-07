@@ -52,10 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ingresar'])) {
             <button type="submit" name="ingresar" class="btn-in">Entrar</button>
         </form>
         
-        <div class="footer-links">
-            ¿Eres nuevo trabajador?<br>
-            <a href="registro.php" class="btn-reg">Crear cuenta aquí</a>
-        </div>
-    </div>
+        <div style="margin-top: 20px; text-align: center;">
+    <p>¿No tienes cuenta?</p>
+    <a href="usuarios_agregar.php" style="color: #43b02a; font-weight: bold; text-decoration: none;">
+        ✨ Crear nueva cuenta de usuario
+    </a>
+</div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php 
 include 'config.php'; 
 
-// 1. Cargar configuración del sistema (Tema y Nombre)
+// 1. Cargar configuración del sistema
 $res_conf = mysqli_query($conexion, "SELECT * FROM configuraciones WHERE id = 1");
 $cfg = mysqli_fetch_assoc($res_conf);
 
@@ -9,24 +9,25 @@ $mensaje = "";
 
 // 2. Lógica para guardar el registro
 if(isset($_POST['save_car'])){
-    // Limpiamos los datos para evitar errores
     $nombre_persona = mysqli_real_escape_string($conexion, $_POST['nombre_persona']); 
     $telefono       = mysqli_real_escape_string($conexion, $_POST['telefono']); 
     $nom_carrito    = mysqli_real_escape_string($conexion, $_POST['nombre_c']); 
     $des            = mysqli_real_escape_string($conexion, $_POST['desc']); 
     $equ            = mysqli_real_escape_string($conexion, $_POST['equip']);
     $ast            = mysqli_real_escape_string($conexion, $_POST['asistencia']); 
-    $fecha_reg      = mysqli_real_escape_string($conexion, $_POST['fecha_reg']);
     
-    // Unimos la fecha del formulario con la hora actual del servidor
-    $fecha_final = $fecha_reg . " " . date("H:i:s");
+    // CAPTURA DE FECHA Y HORA DEL FORMULARIO
+    $fecha_reg      = mysqli_real_escape_string($conexion, $_POST['fecha_reg']);
+    $hora_reg       = mysqli_real_escape_string($conexion, $_POST['hora_reg']);
+    
+    // Unimos ambos valores para la base de datos
+    $fecha_final    = $fecha_reg . " " . $hora_reg . ":00";
 
-    // Insertamos en la nueva tabla que creaste
     $sql = "INSERT INTO carritos (nombre_responsable, telefono_responsable, nombre_carrito, descripcion, equipamiento, asistencia, created_at) 
             VALUES ('$nombre_persona', '$telefono', '$nom_carrito', '$des', '$equ', '$ast', '$fecha_final')";
 
     if(mysqli_query($conexion, $sql)){
-        $mensaje = "<div class='alert success'>✅ Registro guardado con éxito para <b>$nombre_persona</b></div>";
+        $mensaje = "<div class='alert success'>✅ Registro guardado con éxito a las $hora_reg</div>";
     } else {
         $mensaje = "<div class='alert error'> ❌ Error: " . mysqli_error($conexion) . "</div>";
     }
@@ -81,8 +82,16 @@ if(isset($_POST['save_car'])){
     <?php echo $mensaje; ?>
 
     <form method="POST">
-        <label><i class="fas fa-calendar-alt"></i> Fecha del Registro:</label>
-        <input type="date" name="fecha_reg" value="<?php echo date('Y-m-d'); ?>" required>
+        <div class="grid-2">
+            <div>
+                <label><i class="fas fa-calendar-alt"></i> Fecha:</label>
+                <input type="date" name="fecha_reg" value="<?php echo date('Y-m-d'); ?>" required>
+            </div>
+            <div>
+                <label><i class="fas fa-clock"></i> Hora:</label>
+                <input type="time" name="hora_reg" id="hora_actual" value="<?php echo date('H:i'); ?>" required>
+            </div>
+        </div>
 
         <div class="grid-2">
             <div>
@@ -106,7 +115,7 @@ if(isset($_POST['save_car'])){
         </div>
 
         <label><i class="fas fa-store"></i> Identificación del Carrito:</label>
-        <input type="text" name="nombre_c" placeholder="Ej: Carrito #05 o Puesto Central" required>
+        <input type="text" name="nombre_c" placeholder="Ej: Carrito #05" required>
 
         <div class="grid-2">
             <div>
@@ -129,6 +138,19 @@ if(isset($_POST['save_car'])){
         <a href="lista_carritos.php">Ver Historial <i class="fas fa-history"></i></a>
     </div>
 </div>
+
+<script>
+    // Esto pone la hora actual si el usuario no ha tocado el campo todavía
+    function actualizarHora() {
+        const ahora = new Date();
+        const horas = String(ahora.getHours()).padStart(2, '0');
+        const minutos = String(ahora.getMinutes()).padStart(2, '0');
+        document.getElementById('hora_actual').value = `${horas}:${minutos}`;
+    }
+
+    // Si quieres que la hora se quede estática al cargar, borra la línea de abajo.
+    // actualizarHora(); 
+</script>
 
 </body>
 </html>

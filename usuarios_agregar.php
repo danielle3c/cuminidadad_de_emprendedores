@@ -75,7 +75,6 @@ $personas_libres = mysqli_query($conexion, "SELECT p.idpersonas, p.nombres, p.ap
     <form method="POST">
         <label>Seleccionar Persona:</label>
         <select name="persona_id" required>
-            <option value="">-- Seleccione una persona --</option>
             <?php while($p = mysqli_fetch_assoc($personas_libres)): ?>
                 <option value="<?php echo $p['idpersonas']; ?>">
                     <?php echo $p['nombres'] . " " . $p['apellidos'] . " (ID: " . $p['idpersonas'] . ")"; ?>

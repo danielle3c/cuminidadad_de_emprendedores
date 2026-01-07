@@ -193,11 +193,11 @@ $cfg = mysqli_fetch_assoc($res_conf);
         
         <div class="dashboard-grid">
             <a href="personas.php" class="menu-card">
-                <img src="https://cdn-icons-png.flaticon.com/512/5225/5225015.png">
+                <img src="https://cdn-icons-png.flaticon.com/512/565/565431.png">
                 <span>Personas</span>
             </a>
             <a href="emprendedores.php" class="menu-card">
-                <img src="https://cdn-icons-png.flaticon.com/512/10432/10432130.png">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuJ1uCVa4C3jwQcNTc0ZLaGdIw02xg6S2Xbg&s">
                 <span>Emprendedores</span>
             </a>
             <a href="creditos.php" class="menu-card">

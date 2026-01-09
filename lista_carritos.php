@@ -31,13 +31,18 @@ $stats = mysqli_fetch_assoc($res_asistencia);
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 15px; margin: 0; }
         .container { max-width: 1000px; margin: auto; }
         
-        /* Estilos de la tabla y tarjetas */
+        /* Encabezado */
+        .header-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 10px; }
+        .btn-nav { text-decoration: none; color: var(--text); background: var(--card); padding: 10px 15px; border-radius: 12px; border: 1px solid var(--border); font-size: 0.9rem; font-weight: bold; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .btn-nav:hover { background: var(--bg); border-color: var(--primary); }
+        .btn-primary { background: var(--primary); color: white; border: none; }
+
+        /* Tabla */
         .card-table { background: var(--card); border-radius: 15px; border: 1px solid var(--border); overflow-x: auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { background: #f8fafc; padding: 12px; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b; border-bottom: 1px solid var(--border); }
+        th { background: rgba(0,0,0,0.02); padding: 12px; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b; border-bottom: 1px solid var(--border); }
         td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.9rem; vertical-align: middle; }
 
-        /* Etiquetas de tiempo (Entrada / Salida) */
         .tiempo-wrapper { display: flex; flex-direction: column; gap: 5px; }
         .tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 6px; font-weight: bold; font-size: 0.75rem; width: fit-content; }
         .tag-entrada { background: rgba(67, 176, 42, 0.1); color: var(--primary); }
@@ -50,22 +55,30 @@ $stats = mysqli_fetch_assoc($res_asistencia);
 
         .search-container { margin-bottom: 20px; display: flex; gap: 8px; }
         .search-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); }
-        .btn-search { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; }
-
+        
         @media (max-width: 600px) { .hide-mobile { display: none; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div style="text-align: center; margin-bottom: 25px;">
-        <h2 style="margin: 0;"><i class="fas fa-list-check"></i> Registro de Carritos</h2>
-        <a href="carritos.php" style="color: var(--secondary); text-decoration: none; font-weight: bold; font-size: 0.9rem;">+ Nuevo Registro</a>
+    <div class="header-nav">
+        <a href="index.php" class="btn-nav">
+            <i class="fas fa-home"></i> <span class="hide-mobile">Inicio</span>
+        </a>
+        
+        <h2 style="margin: 0; font-size: 1.2rem; text-align: center;">
+            <i class="fas fa-list-check"></i> Registros
+        </h2>
+
+        <a href="carritos.php" class="btn-nav" style="background: var(--secondary); color: white; border: none;">
+            <i class="fas fa-plus"></i> <span class="hide-mobile">Nuevo</span>
+        </a>
     </div>
 
     <form method="GET" class="search-container">
         <input type="text" name="buscar" class="search-input" placeholder="Buscar responsable o carrito..." value="<?php echo htmlspecialchars($buscar); ?>">
-        <button type="submit" class="btn-search"><i class="fas fa-search"></i></button>
+        <button type="submit" class="btn-nav btn-primary"><i class="fas fa-search"></i></button>
     </form>
 
     <div class="card-table">
@@ -93,20 +106,18 @@ $stats = mysqli_fetch_assoc($res_asistencia);
                     <tr>
                         <td>
                             <div class="tiempo-wrapper">
-                                <span style="font-weight: 800; color: var(--text);">
+                                <span style="font-weight: 800;">
                                     <i class="far fa-calendar-alt"></i> <?php echo $fecha_dt->format('d/m/Y'); ?>
                                 </span>
                                 <div class="tag tag-entrada">
-                                    <i class="fas fa-sign-in-alt"></i> EN: <?php echo $fecha_dt->format('H:i'); ?>
+                                    <i class="fas fa-sign-in-alt"></i> <?php echo $fecha_dt->format('H:i'); ?>
                                 </div>
                                 <?php if(!empty($row['hora_salida'])): ?>
                                     <div class="tag tag-salida">
-                                        <i class="fas fa-sign-out-alt"></i> SAL: <?php echo date('H:i', strtotime($row['hora_salida'])); ?>
+                                        <i class="fas fa-sign-out-alt"></i> <?php echo date('H:i', strtotime($row['hora_salida'])); ?>
                                     </div>
                                 <?php else: ?>
-                                    <div class="tag tag-vacio">
-                                        <i class="fas fa-clock"></i> SAL: --:--
-                                    </div>
+                                    <div class="tag tag-vacio">SAL: --:--</div>
                                 <?php endif; ?>
                             </div>
                         </td>
@@ -115,21 +126,23 @@ $stats = mysqli_fetch_assoc($res_asistencia);
                             <div style="font-size: 0.75rem; opacity: 0.6;"><i class="fas fa-phone"></i> <?php echo $row['telefono_responsable']; ?></div>
                         </td>
                         <td class="hide-mobile">
-                            <span style="background: #f1f5f9; padding: 4px 8px; border-radius: 5px; font-weight: 600;">
+                            <span style="background: var(--bg); padding: 4px 8px; border-radius: 5px; font-weight: 600;">
                                 <?php echo htmlspecialchars($row['nombre_carrito']); ?>
                             </span>
                         </td>
                         <td><span class="badge <?php echo $clase_ast; ?>"><?php echo $row['asistencia']; ?></span></td>
                         <td>
-                            <div style="display: flex; gap: 10px;">
+                            <div style="display: flex; gap: 15px;">
                                 <a href="editar_carrito.php?id=<?php echo $row['id']; ?>" style="color: var(--secondary);"><i class="fas fa-edit"></i></a>
-                                <a href="eliminar.php?id=<?php echo $row['id']; ?>" style="color: #ef4444;" onclick="return confirm('¿Eliminar?')"><i class="fas fa-trash"></i></a>
+                                <a href="eliminar.php?id=<?php echo $row['id']; ?>" style="color: #ef4444;" onclick="return confirm('¿Eliminar este registro?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>
                     <?php } 
                 } else {
-                    echo "<tr><td colspan='5' style='text-align:center; padding:20px;'>No hay registros</td></tr>";
+                    echo "<tr><td colspan='5' style='text-align:center; padding:30px; opacity:0.5;'>No hay registros</td></tr>";
                 } ?>
             </tbody>
         </table>

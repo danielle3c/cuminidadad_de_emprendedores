@@ -27,7 +27,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
 
         /* SIDEBAR PC */
         .sidebar { width: 280px; background: var(--sidebar); color: white; display: flex; flex-direction: column; padding: 30px 20px; box-sizing: border-box; }
-        .sidebar-brand { font-size: 1.6rem; font-weight: 800; margin-bottom: 50px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; color: var(--primary); }
+        .sidebar-brand { font-size: 1.4rem; font-weight: 800; margin-bottom: 50px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; color: var(--primary); line-height: 1.2; }
         
         .nav-link { 
             display: flex; align-items: center; gap: 15px; padding: 16px 20px; 
@@ -40,7 +40,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
         /* CONTENIDO PRINCIPAL */
         .main-content { flex: 1; overflow-y: auto; padding: 40px; position: relative; }
 
-        /* BANNER Y BUSCADOR */
+        /* HEADER Y BUSCADOR */
         .header-section { margin-bottom: 40px; }
         .header-section h1 { font-size: 2.2rem; font-weight: 800; margin: 0; letter-spacing: -1px; }
         
@@ -58,6 +58,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
             background: var(--primary); color: white; border: none; padding: 12px 35px; 
             border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s;
         }
+        .btn-search:hover { filter: brightness(1.1); transform: scale(1.02); }
 
         /* RESULTADOS EN GRID */
         .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-top: 20px; }
@@ -73,26 +74,29 @@ $cfg = mysqli_fetch_assoc($res_conf);
         .card-top { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .avatar { width: 65px; height: 65px; border-radius: 18px; object-fit: cover; }
         
-        .badge { font-size: 0.65rem; padding: 4px 10px; border-radius: 8px; font-weight: 800; }
+        .badge { font-size: 0.65rem; padding: 4px 10px; border-radius: 8px; font-weight: 800; text-transform: uppercase; }
         .badge-base { background: #e2e8f0; color: #475569; }
-        .badge-carrito { background: #dcfce7; color: #15803d; }
+        .badge-carrito { background: #fef9c3; color: #854d0e; }
 
-        .stats-row { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--border); }
+        .stats-row { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--border); margin-bottom: 15px; }
         .stat-box { text-align: center; }
         .stat-num { display: block; font-weight: 800; font-size: 1.2rem; }
         .stat-label { font-size: 0.7rem; color: var(--secondary-text); font-weight: 700; }
 
-        .btn-trayectoria { 
-            display: block; width: 100%; text-align: center; margin-top: 20px; 
-            padding: 12px; background: var(--sidebar); color: white; 
-            text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 0.85rem;
+        .btn-action { 
+            display: block; width: 100%; text-align: center; margin-top: 10px; 
+            padding: 12px; text-decoration: none; border-radius: 12px; 
+            font-weight: 700; font-size: 0.85rem; transition: 0.2s;
         }
+        .btn-trayectoria { background: var(--sidebar); color: white; }
+        .btn-formalizar { background: var(--primary); color: white; border: none; cursor: pointer; }
+        .btn-formalizar:hover { filter: brightness(1.1); }
     </style>
 </head>
 <body>
 
 <aside class="sidebar">
-    <div class="sidebar-brand"></i>Cooporacíon de Fomento la Granja</div>
+    <div class="sidebar-brand">Corporación de Fomento La Granja</div>
     <nav>
         <a href="index.php" class="nav-link active"><i class="fas fa-search"></i> Buscador</a>
         <a href="personas.php" class="nav-link"><i class="fas fa-users"></i> Personas</a>
@@ -106,7 +110,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
 <main class="main-content">
     <div class="header-section">
         <h1>Centro de Auditoría</h1>
-        <p style="color: var(--secondary-text);">Busca responsables en el sistema para analizar su comportamiento y registros.</p>
+        <p style="color: var(--secondary-text);">Gestión unificada de clientes formales y registros de carritos.</p>
         
         <form method="GET" class="search-container">
             <i class="fas fa-search" style="margin-left: 20px; color: var(--secondary-text);"></i>
@@ -120,7 +124,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
         if (isset($_GET['buscar']) && !empty(trim($_GET['buscar']))): 
             $busqueda = mysqli_real_escape_string($conexion, $_GET['buscar']);
             
-            // Buscador Inteligente: Une Personas y Carritos
+            // BUSCADOR INTELIGENTE: Une la tabla oficial con los registros informales de carritos
             $sql = "SELECT idpersonas as id, nombres, apellidos, rut, 'persona' as origen FROM personas 
                     WHERE nombres LIKE '%$busqueda%' OR apellidos LIKE '%$busqueda%' OR rut LIKE '%$busqueda%'
                     UNION
@@ -132,7 +136,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
             if(mysqli_num_rows($res) > 0):
                 while ($p = mysqli_fetch_assoc($res)): 
                     $nombre_p = mysqli_real_escape_string($conexion, $p['nombres']);
-                    // Cuenta cuántas veces ha venido al carrito
+                    // Conteo de asistencias reales
                     $q_visitas = mysqli_query($conexion, "SELECT COUNT(*) as t FROM carritos WHERE nombre_responsable LIKE '%$nombre_p%' AND asistencia = 'SÍ VINO'");
                     $visitas = mysqli_fetch_assoc($q_visitas)['t'];
             ?>
@@ -141,10 +145,10 @@ $cfg = mysqli_fetch_assoc($res_conf);
                         <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($p['nombres']); ?>&background=random&bold=true" class="avatar">
                         <div>
                             <span class="badge <?php echo ($p['origen'] == 'persona') ? 'badge-base' : 'badge-carrito'; ?>">
-                                <?php echo ($p['origen'] == 'persona') ? 'Persona Base' : 'Desde Carritos'; ?>
+                                <?php echo ($p['origen'] == 'persona') ? 'Cliente Formal' : 'Registro Informal'; ?>
                             </span>
                             <h3 style="margin: 5px 0; font-size: 1.1rem;"><?php echo htmlspecialchars($p['nombres']." ".$p['apellidos']); ?></h3>
-                            <small style="color: var(--secondary-text); font-weight: 600;"><i class="far fa-id-card"></i> <?php echo $p['rut'] ?: 'Sin ID'; ?></small>
+                            <small style="color: var(--secondary-text); font-weight: 600;"><i class="far fa-id-card"></i> <?php echo $p['rut'] ?: 'Sin ID Registrada'; ?></small>
                         </div>
                     </div>
                     
@@ -163,15 +167,21 @@ $cfg = mysqli_fetch_assoc($res_conf);
                         </div>
                     </div>
 
-                    <a href="ver_historial.php?nombre=<?php echo urlencode($p['nombres']); ?>&id=<?php echo $p['id']; ?>" class="btn-trayectoria">
-                        ANALIZAR TRAYECTORIA COMPLETA
+                    <a href="ver_historial.php?nombre=<?php echo urlencode($p['nombres']); ?>&id=<?php echo $p['id']; ?>" class="btn-action btn-trayectoria">
+                        <i class="fas fa-history"></i> VER TRAYECTORIA
                     </a>
+
+                    <?php if($p['origen'] == 'carrito'): ?>
+                        <a href="personas.php?formalizar_nombre=<?php echo urlencode($p['nombres']); ?>" class="btn-action btn-formalizar">
+                            <i class="fas fa-user-plus"></i> REGISTRAR PARA PRÉSTAMO
+                        </a>
+                    <?php endif; ?>
                 </div>
             <?php endwhile; 
             else: ?>
-                <div style="grid-column: 1 / -1; text-align:center; padding: 50px; opacity:0.5;">
-                    <i class="fas fa-folder-open fa-3x"></i>
-                    <p>No se encontraron resultados para su búsqueda.</p>
+                <div style="grid-column: 1 / -1; text-align:center; padding: 80px; opacity:0.3;">
+                    <i class="fas fa-search fa-4x"></i>
+                    <p style="font-size: 1.2rem; font-weight: 700; margin-top: 20px;">No se encontraron registros en ninguna de las bases de datos.</p>
                 </div>
             <?php endif; ?>
         <?php endif; ?>

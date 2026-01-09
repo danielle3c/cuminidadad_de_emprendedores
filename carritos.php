@@ -100,22 +100,22 @@ if(isset($_POST['save_car'])){
             </div>
             <div>
                 <label><i class="fas fa-phone"></i> Teléfono:</label>
-                <input type="tel" name="telefono" placeholder="Ej: 987654321">
+                <input type="tel" name="telefono" placeholder="Ej: 91234567890">
             </div>
         </div>
 
         <label><i class="fas fa-check-circle"></i> ¿Asistió hoy?</label>
         <div class="asistencia-container">
             <label class="asistencia-btn">
-                <input type="radio" name="asistencia" value="SÍ VINO" checked> ✅ SÍ VINO
+                <input type="radio" name="asistencia" value="SÍ VINO" checked>SÍ VINO
             </label>
             <label class="asistencia-btn">
-                <input type="radio" name="asistencia" value="NO VINO"> ❌ NO VINO
+                <input type="radio" name="asistencia" value="NO VINO">NO VINO
             </label>
         </div>
 
         <label><i class="fas fa-store"></i> Identificación del Carrito:</label>
-        <input type="text" name="nombre_c" placeholder="Ej: Carrito #05" required>
+        <input type="text" name="nombre_c" placeholder="Ej: Carrito de fomento" required>
 
         <div class="grid-2">
             <div>

@@ -96,7 +96,7 @@ if(isset($_POST['save_car'])){
             </div>
             <div>
                 <label><i class="fas fa-sign-out-alt"></i> Salida:</label>
-                <input type="time" name="hora_salida" value="<?php echo date('H:i', strtotime('+4 hours')); ?>">
+                <input type="time" name="hora_salida" value="<?php echo date('H:i', strtotime('+ hours')); ?>">
             </div>
         </div>
 

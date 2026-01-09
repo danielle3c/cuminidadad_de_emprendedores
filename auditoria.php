@@ -2,6 +2,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head><title>Auditoría del Sistema</title>
+session_start();
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: login.php");
+    exit();
+}
 <style>
     body { font-family: sans-serif; background: #f8fafc; padding: 20px; }
     table { width: 100%; border-collapse: collapse; background: white; }

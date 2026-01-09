@@ -1,116 +1,179 @@
 <?php 
+session_start();
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
 include 'config.php'; 
 
-// Obtener configuración para el tema visual
 $res_conf = mysqli_query($conexion, "SELECT * FROM configuraciones WHERE id = 1");
 $cfg = mysqli_fetch_assoc($res_conf);
 
+$lang = $cfg['idioma'];
+$moneda = $cfg['simbolo_moneda'];
+
+// Diccionario extendido
+$textos = [
+    'es' => [
+        'titulo' => 'Registrar Cobro',
+        'deudor' => 'Seleccionar Deudor',
+        'monto' => 'Monto',
+        'metodo' => 'Método',
+        'confirmar' => 'Confirmar Pago',
+        'volver' => 'Volver',
+        'historial' => 'Cobros de Hoy',
+        'cliente' => 'Cliente',
+        'fecha' => 'Hora'
+    ],
+    'en' => [
+        'titulo' => 'Register Payment',
+        'deudor' => 'Select Debtor',
+        'monto' => 'Amount',
+        'metodo' => 'Method',
+        'confirmar' => 'Confirm Payment',
+        'volver' => 'Back',
+        'historial' => "Today's Collections",
+        'cliente' => 'Customer',
+        'fecha' => 'Time'
+    ]
+];
+$t = $textos[$lang];
+
 $mensaje = "";
 
+// LÓGICA DE GUARDADO (Igual a la anterior)
 if(isset($_POST['pay'])){
     $idc = mysqli_real_escape_string($conexion, $_POST['id_credito']); 
     $mon = mysqli_real_escape_string($conexion, $_POST['monto_pago']); 
     $tip = mysqli_real_escape_string($conexion, $_POST['tipo_pago']);
     
-    // 1. Registrar el ingreso en la tabla cobranzas
     $ins = "INSERT INTO cobranzas (creditos_idcreditos, monto, tipo_pago, fecha_hora, created_at) 
             VALUES ('$idc', '$mon', '$tip', NOW(), NOW())";
     
     if(mysqli_query($conexion, $ins)){
-        // 2. Actualizar el saldo restando el pago
         mysqli_query($conexion, "UPDATE creditos SET saldo_inicial = saldo_inicial - $mon WHERE idcreditos = '$idc'");
-
-        // 3. Lógica de Cierre: Si el saldo llegó a 0 o menos, marcar como pagado (estado 2)
-        $check_saldo = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT saldo_inicial FROM creditos WHERE idcreditos = '$idc'"));
-        if($check_saldo['saldo_inicial'] <= 0){
+        $check = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT saldo_inicial FROM creditos WHERE idcreditos = '$idc'"));
+        
+        if($check['saldo_inicial'] <= 0){
             mysqli_query($conexion, "UPDATE creditos SET estado = 2 WHERE idcreditos = '$idc'");
-            $mensaje = "<div class='alert success'>✅ ¡Pago total recibido! El crédito ha sido finalizado.</div>";
+            $mensaje = "<div class='alert success'>✅ Pago Total Recibido</div>";
         } else {
-            $mensaje = "<div class='alert success'>💵 Pago registrado. Nuevo saldo: $" . number_format($check_saldo['saldo_inicial'], 2) . "</div>";
+            $mensaje = "<div class='alert success'>💵 Pago de $moneda".number_format($mon,2)." registrado.</div>";
         }
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="es" data-theme="<?php echo $cfg['tema_color']; ?>">
+<html lang="<?php echo $lang; ?>" data-theme="<?php echo $cfg['tema_color']; ?>">
 <head>
     <meta charset="UTF-8">
-    <title>Caja - <?php echo $cfg['nombre_sistema']; ?></title>
+    <title><?php echo $t['titulo']; ?></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #fdf2f2; --card: #ffffff; --text: #333; --primary: #e11d48; --btn: #43b02a; }
-        [data-theme="dark"] { --bg: #1a1a1a; --card: #2d2d2d; --text: #f0f0f0; --primary: #fb7185; --btn: #2ecc71; }
+        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #e11d48; --btn: #10b981; --border: #e2e8f0; }
+        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --primary: #fb7185; --btn: #059669; --border: #334155; }
         
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
-        .box { 
-            background: var(--card); padding: 30px; border-radius: 15px; 
-            max-width: 500px; margin: 40px auto; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-top: 6px solid var(--primary); 
-        }
-        h2 { text-align: center; margin-bottom: 25px; color: var(--primary); }
-        label { display: block; font-weight: bold; font-size: 0.85em; margin-bottom: 5px; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+        .container { max-width: 900px; margin: auto; display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; }
         
-        input, select { 
-            width: 100%; padding: 12px; margin-bottom: 20px; 
-            border-radius: 8px; border: 1px solid #ddd; 
-            background: var(--card); color: var(--text); box-sizing: border-box; 
-        }
+        .box { background: var(--card); padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); height: fit-content; }
+        h2, h3 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        
+        input, select { width: 100%; padding: 12px; margin: 10px 0 20px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); }
+        
+        button { background: var(--btn); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
-        button { 
-            background: var(--btn); color: white; border: none; 
-            padding: 15px; width: 100%; border-radius: 8px; 
-            cursor: pointer; font-weight: bold; font-size: 1.1em;
-            transition: 0.3s;
-        }
-        button:hover { filter: brightness(1.1); transform: scale(1.02); }
+        /* Estilos de la Tabla */
+        .history-box { background: var(--card); padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9em; }
+        th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border); color: var(--primary); }
+        td { padding: 12px; border-bottom: 1px solid var(--border); }
+        tr:hover { background: rgba(0,0,0,0.02); }
 
-        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold; }
-        .success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold; background: #dcfce7; color: #166534; }
         
-        .footer { text-align: center; margin-top: 20px; }
-        .footer a { color: var(--text); text-decoration: none; font-size: 0.9em; opacity: 0.7; }
+        @media (max-width: 768px) { .container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2>💰 Registrar Cobro</h2>
-    
-    <?php echo $mensaje; ?>
+<div class="container">
+    <div class="box">
+        <h2><i class="fas fa-cash-register"></i> <?php echo $t['titulo']; ?></h2>
+        <?php echo $mensaje; ?>
+        <form method="POST">
+            <label><?php echo $t['deudor']; ?>:</label>
+            <select name="id_credito" required>
+                <option value="">-- Seleccionar --</option>
+                <?php
+                $sql_c = "SELECT c.idcreditos, p.nombres, p.apellidos, c.saldo_inicial 
+                          FROM creditos c JOIN emprendedores e ON c.emprendedores_idemprendedores = e.idemprendedores 
+                          JOIN personas p ON e.personas_idpersonas = p.idpersonas WHERE c.estado = 1";
+                $res_c = mysqli_query($conexion, $sql_c);
+                while($c = mysqli_fetch_assoc($res_c)){
+                    echo "<option value='{$c['idcreditos']}'>{$c['nombres']} ({$moneda}{$c['saldo_inicial']})</option>";
+                }
+                ?>
+            </select>
 
-    <form method="POST">
-        <label>Seleccionar Deudor Activo:</label>
-        <select name="id_credito" required>
-            <option value="">-- Buscar Crédito --</option>
-            <?php
-            $sql = "SELECT c.idcreditos, p.nombres, p.apellidos, c.saldo_inicial 
-                    FROM creditos c 
-                    JOIN emprendedores e ON c.emprendedores_idemprendedores = e.idemprendedores 
-                    JOIN personas p ON e.personas_idpersonas = p.idpersonas 
-                    WHERE c.estado = 1"; // Solo créditos activos
-            $res = mysqli_query($conexion, $sql);
-            while($c = mysqli_fetch_assoc($res)){
-                echo "<option value='{$c['idcreditos']}'>{$c['nombres']} {$c['apellidos']} (Debe: $" . number_format($c['saldo_inicial'], 2) . ")</option>";
-            }
-            ?>
-        </select>
+            <label><?php echo $t['monto']; ?>:</label>
+            <input type="number" step="0.01" name="monto_pago" required>
 
-        <label>Monto del Pago ($):</label>
-        <input type="number" step="0.01" name="monto_pago" placeholder="0.00" required>
+            <label><?php echo $t['metodo']; ?>:</label>
+            <select name="tipo_pago">
+                <option value="Efectivo">Efectivo</option>
+                <option value="Transferencia">Transferencia</option>
+            </select>
 
-        <label>Método de Pago:</label>
-        <select name="tipo_pago">
-            <option value="Efectivo">Efectivo</option>
-            <option value="Transferencia">Transferencia</option>
-            <option value="Depósito">Depósito Bancario</option>
-        </select>
+            <button type="submit" name="pay"><i class="fas fa-check"></i> <?php echo $t['confirmar']; ?></button>
+        </form>
+        <div style="margin-top: 20px; text-align:center;">
+            <a href="index.php" style="text-decoration:none; color:var(--text); font-size:0.8em;"><i class="fas fa-arrow-left"></i> <?php echo $t['volver']; ?></a>
+        </div>
+    </div>
 
-        <button type="submit" name="pay">Confirmar Recibo</button>
-    </form>
-
-    <div class="footer">
-        <a href="index.php">Volver al Inicio</a>
+    <div class="history-box">
+        <h3><i class="fas fa-history"></i> <?php echo $t['historial']; ?></h3>
+        <table>
+            <thead>
+                <tr>
+                    <th><?php echo $t['fecha']; ?></th>
+                    <th><?php echo $t['cliente']; ?></th>
+                    <th><?php echo $t['monto']; ?></th>
+                    <th><?php echo $t['metodo']; ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Consultar cobros de HOY
+                $sql_h = "SELECT cob.monto, cob.tipo_pago, cob.fecha_hora, p.nombres 
+                          FROM cobranzas cob
+                          JOIN creditos cr ON cob.creditos_idcreditos = cr.idcreditos
+                          JOIN emprendedores e ON cr.emprendedores_idemprendedores = e.idemprendedores
+                          JOIN personas p ON e.personas_idpersonas = p.idpersonas
+                          WHERE DATE(cob.fecha_hora) = CURDATE()
+                          ORDER BY cob.fecha_hora DESC LIMIT 10";
+                $res_h = mysqli_query($conexion, $sql_h);
+                
+                if(mysqli_num_rows($res_h) > 0){
+                    while($h = mysqli_fetch_assoc($res_h)){
+                        $hora = date("H:i", strtotime($h['fecha_hora']));
+                        echo "<tr>
+                                <td>$hora</td>
+                                <td><b>{$h['nombres']}</b></td>
+                                <td>{$moneda}".number_format($h['monto'], 2)."</td>
+                                <td><small>{$h['tipo_pago']}</small></td>
+                              </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='4' style='text-align:center; opacity:0.5;'>No hay cobros registrados hoy</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
 </div>
 

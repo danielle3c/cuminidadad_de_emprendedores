@@ -197,22 +197,23 @@ $cfg = mysqli_fetch_assoc($res_conf);
                 <span>Personas</span>
             </a>
             <a href="emprendedores.php" class="menu-card">
-                <img src="https://www.flaticon.es/icono-gratis/tienda-al-por-menor_7733693?term=emprendimiento&page=1&position=11&origin=search&related_id=7733693">
+                <img src="https://thumbs.dreamstime.com/b/s%C3%ADmbolo-avatar-de-perfil-masculino-icono-emprendedor-con-bombilla-para-ideas-creativas-el-desarrollo-negocios-en-pictograma-glifo-152261996.jpg">
                 <span>Emprendedores</span>
             </a>
             <a href="creditos.php" class="menu-card">
-                <img src="https://us.123rf.com/450wm/jemastock/jemastock1907/jemastock190760457/127255575-hand-holding-a-credit-card-and-money-coins-icon-cartoon-in-black-and-white-vector-illustration.jpghttps://www.flaticon.es/icono-gratis/devolucion-de-dinero_2424670?term=credito&page=1&position=14&origin=search&related_id=2424670itos</span>
+                <img src="https://us.123rf.com/450wm/jemastock/jemastock1907/jemastock190760457/127255575-hand-holding-a-credit-card-and-money-coins-icon-cartoon-in-black-and-white-vector-illustration.jpg">
+                <span>Créditos</span>
             </a>
             <a href="cobranzas.php" class="menu-card">
                 <img src="https://cdn-icons-png.flaticon.com/512/1611/1611154.png">
                 <span>Cobranzas</span>
             </a>
             <a href="carritos.php" class="menu-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBtrIBGVve-2r8Cy5iAXixSE0CsCTrnoDCgg&s">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDfZnJWF_fUNzIcD2nZa-SklDug4gKq5Axuw&s">
                 <span>Carritos</span>
             </a>
             <a href="configuraciones.php" class="menu-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1CxbqWfsmEmU-nvwYI4ajTm0EtrzpEZb-zg&s">
+                <img src="https://cdn-icons-png.flaticon.com/512/6063/6063673.png">
                 <span>Ajustes</span>
             </a>
         </div>

@@ -92,7 +92,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
 <body>
 
 <aside class="sidebar">
-    <div class="sidebar-brand"><i class="fas fa-layer-group"></i>Cooporacíon de Fomento la Granja</div>
+    <div class="sidebar-brand"></i>Cooporacíon de Fomento la Granja</div>
     <nav>
         <a href="index.php" class="nav-link active"><i class="fas fa-search"></i> Buscador</a>
         <a href="personas.php" class="nav-link"><i class="fas fa-users"></i> Personas</a>

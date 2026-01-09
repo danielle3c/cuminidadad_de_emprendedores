@@ -86,7 +86,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
 <body>
 
 <div class="form-container">
-    <h2>👤 Registro de Persona</h2>
+    <h2>Registro de Persona</h2>
     <p class="subtitle">Complete los campos para ingresar al nuevo integrante.</p>
 
     <?php

@@ -88,7 +88,13 @@ if(isset($_POST['save_car'])){
                 <input type="date" name="fecha_reg" value="<?php echo date('Y-m-d'); ?>" required>
             </div>
             <div>
-                <label><i class="fas fa-clock"></i> Hora:</label>
+                <label><i class="fas fa-clock"></i> Hora ingreso:</label>
+                <input type="time" name="hora_reg" id="hora_actual" value="<?php echo date('H:i'); ?>" required>
+            </div>
+        </div>
+
+        <div class="grid-2">
+                            <label><i class="fas fa-clock"></i> Hora salida:</label>
                 <input type="time" name="hora_reg" id="hora_actual" value="<?php echo date('H:i'); ?>" required>
             </div>
         </div>

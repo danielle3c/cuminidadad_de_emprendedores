@@ -67,7 +67,7 @@ if(isset($_POST['reg_c'])){
 <body>
 
 <div class="box">
-    <h2>🎪 Asignación de Carritos</h2>
+    <h2>Asignación de Carritos</h2>
     
     <?php echo $mensaje; ?>
 

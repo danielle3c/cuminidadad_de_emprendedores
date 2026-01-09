@@ -197,7 +197,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
                 <span>Personas</span>
             </a>
             <a href="emprendedores.php" class="menu-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfxOVHt4iyKERXcNDW98eB-_E4QYdnIV2_7w&s">
+                <img src="https://www.panacamara.com/soyemprendedorcciap/wp-content/uploads/sites/40/2023/12/soyemprendedorcciapblanco-e1701742578976.png">
                 <span>Emprendedores</span>
             </a>
             <a href="creditos.php" class="menu-card">

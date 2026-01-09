@@ -197,11 +197,11 @@ $cfg = mysqli_fetch_assoc($res_conf);
                 <span>Personas</span>
             </a>
             <a href="emprendedores.php" class="menu-card">
-                <img src="https://thumbs.dreamstime.com/b/s%C3%ADmbolo-avatar-de-perfil-masculino-icono-emprendedor-con-bombilla-para-ideas-creativas-el-desarrollo-negocios-en-pictograma-glifo-152261996.jpg">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfxOVHt4iyKERXcNDW98eB-_E4QYdnIV2_7w&s">
                 <span>Emprendedores</span>
             </a>
             <a href="creditos.php" class="menu-card">
-                <img src="https://us.123rf.com/450wm/jemastock/jemastock1907/jemastock190760457/127255575-hand-holding-a-credit-card-and-money-coins-icon-cartoon-in-black-and-white-vector-illustration.jpg">
+                <img src="https://cdn-icons-png.flaticon.com/512/2424/2424527.png">
                 <span>Créditos</span>
             </a>
             <a href="cobranzas.php" class="menu-card">
@@ -209,7 +209,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
                 <span>Cobranzas</span>
             </a>
             <a href="carritos.php" class="menu-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDfZnJWF_fUNzIcD2nZa-SklDug4gKq5Axuw&s">
+                <img src="https://images.vexels.com/media/users/3/242821/isolated/preview/183eec6aea425e4345f315593eb097c3-transporte-graphicicon-30.png">
                 <span>Carritos</span>
             </a>
             <a href="configuraciones.php" class="menu-card">

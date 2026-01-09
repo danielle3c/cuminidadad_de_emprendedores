@@ -124,7 +124,7 @@ if(isset($_POST['save_car'])){
             </div>
             <div>
                 <label>Equipamiento:</label>
-                <textarea name="equip" rows="3" placeholder="Toldo, mesas, sillas..."></textarea>
+                <textarea name="equip" rows="3" placeholder="Pan, Empanadas, Queque, Jugo..."></textarea>
             </div>
         </div>
 

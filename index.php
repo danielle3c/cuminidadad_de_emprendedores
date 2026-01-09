@@ -197,12 +197,11 @@ $cfg = mysqli_fetch_assoc($res_conf);
                 <span>Personas</span>
             </a>
             <a href="emprendedores.php" class="menu-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuJ1uCVa4C3jwQcNTc0ZLaGdIw02xg6S2Xbg&s">
+                <img src="https://www.flaticon.es/icono-gratis/tienda-al-por-menor_7733693?term=emprendimiento&page=1&position=11&origin=search&related_id=7733693">
                 <span>Emprendedores</span>
             </a>
             <a href="creditos.php" class="menu-card">
-                <img src="https://us.123rf.com/450wm/jemastock/jemastock1907/jemastock190760457/127255575-hand-holding-a-credit-card-and-money-coins-icon-cartoon-in-black-and-white-vector-illustration.jpg">
-                <span>Créditos</span>
+                <img src="https://us.123rf.com/450wm/jemastock/jemastock1907/jemastock190760457/127255575-hand-holding-a-credit-card-and-money-coins-icon-cartoon-in-black-and-white-vector-illustration.jpghttps://www.flaticon.es/icono-gratis/devolucion-de-dinero_2424670?term=credito&page=1&position=14&origin=search&related_id=2424670itos</span>
             </a>
             <a href="cobranzas.php" class="menu-card">
                 <img src="https://cdn-icons-png.flaticon.com/512/1611/1611154.png">

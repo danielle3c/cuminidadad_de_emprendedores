@@ -5,9 +5,12 @@ $id = $_GET['id'];
 $res_query = mysqli_query($conexion, "SELECT * FROM carritos WHERE id = $id");
 $data = mysqli_fetch_assoc($res_query);
 
-// Separamos la fecha y la hora del valor guardado en la DB
+// Separamos la fecha y la hora del valor guardado en 'created_at' (Entrada)
 $fecha_db = date('Y-m-d', strtotime($data['created_at']));
 $hora_db  = date('H:i', strtotime($data['created_at']));
+
+// Obtenemos la hora de salida (si existe)
+$hora_salida_db = (!empty($data['hora_salida'])) ? date('H:i', strtotime($data['hora_salida'])) : "";
 
 if(isset($_POST['update_car'])){
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre_persona']); 
@@ -17,10 +20,14 @@ if(isset($_POST['update_car'])){
     $equip  = mysqli_real_escape_string($conexion, $_POST['equip']);
     $asist  = mysqli_real_escape_string($conexion, $_POST['asistencia']); 
     
-    // Capturamos la nueva fecha y hora editada
+    // Capturamos la nueva fecha y hora de entrada
     $n_fecha = $_POST['fecha_reg'];
     $n_hora  = $_POST['hora_reg'];
     $fecha_final = $n_fecha . " " . $n_hora . ":00";
+
+    // Capturamos la hora de salida
+    $n_hora_salida = $_POST['hora_salida'];
+    $hora_salida_val = (!empty($n_hora_salida)) ? "'$n_hora_salida'" : "NULL";
 
     $sql = "UPDATE carritos SET 
             nombre_responsable = '$nombre', 
@@ -29,7 +36,8 @@ if(isset($_POST['update_car'])){
             descripcion = '$desc', 
             equipamiento = '$equip', 
             asistencia = '$asist',
-            created_at = '$fecha_final' 
+            created_at = '$fecha_final',
+            hora_salida = $hora_salida_val 
             WHERE id = $id";
 
     if(mysqli_query($conexion, $sql)){
@@ -52,8 +60,10 @@ if(isset($_POST['update_car'])){
         label { display: block; font-weight: bold; font-size: 0.85rem; color: #43b02a; margin-bottom: 5px; text-transform: uppercase; }
         input, textarea, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 15px; }
         .btn-update { background: #43b02a; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; }
         .btn-update:hover { background: #369622; }
+        .tag-info { font-size: 0.7rem; color: #64748b; margin-top: -10px; margin-bottom: 10px; display: block; }
     </style>
 </head>
 <body>
@@ -62,16 +72,21 @@ if(isset($_POST['update_car'])){
     <h3><i class="fas fa-edit"></i> Modificar Registro</h3>
     <form method="POST">
         
-        <div class="grid-2">
+        <div class="grid-3">
             <div>
                 <label><i class="fas fa-calendar"></i> Fecha:</label>
                 <input type="date" name="fecha_reg" value="<?php echo $fecha_db; ?>" required>
             </div>
             <div>
-                <label><i class="fas fa-clock"></i> Hora:</label>
+                <label><i class="fas fa-sign-in-alt"></i> Entrada:</label>
                 <input type="time" name="hora_reg" value="<?php echo $hora_db; ?>" required>
             </div>
+            <div>
+                <label><i class="fas fa-sign-out-alt"></i> Salida:</label>
+                <input type="time" name="hora_salida" value="<?php echo $hora_salida_db; ?>">
+            </div>
         </div>
+        <span class="tag-info">* Puedes dejar la salida vacía si aún no se retira.</span>
 
         <div class="grid-2">
             <div>

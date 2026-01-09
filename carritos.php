@@ -16,18 +16,20 @@ if(isset($_POST['save_car'])){
     $equ            = mysqli_real_escape_string($conexion, $_POST['equip']);
     $ast            = mysqli_real_escape_string($conexion, $_POST['asistencia']); 
     
-    // CAPTURA DE FECHA Y HORA DEL FORMULARIO
+    // CAPTURA DE FECHA Y HORAS
     $fecha_reg      = mysqli_real_escape_string($conexion, $_POST['fecha_reg']);
-    $hora_reg       = mysqli_real_escape_string($conexion, $_POST['hora_reg']);
+    $hora_ingreso   = mysqli_real_escape_string($conexion, $_POST['hora_ingreso']);
+    $hora_salida    = mysqli_real_escape_string($conexion, $_POST['hora_salida']);
     
-    // Unimos ambos valores para la base de datos
-    $fecha_final    = $fecha_reg . " " . $hora_reg . ":00";
+    // Unimos para la base de datos (Entrada)
+    $fecha_final    = $fecha_reg . " " . $hora_ingreso . ":00";
 
-    $sql = "INSERT INTO carritos (nombre_responsable, telefono_responsable, nombre_carrito, descripcion, equipamiento, asistencia, created_at) 
-            VALUES ('$nombre_persona', '$telefono', '$nom_carrito', '$des', '$equ', '$ast', '$fecha_final')";
+    // Nota: Asegúrate de tener la columna 'hora_salida' en tu tabla SQL
+    $sql = "INSERT INTO carritos (nombre_responsable, telefono_responsable, nombre_carrito, descripcion, equipamiento, asistencia, created_at, hora_salida) 
+            VALUES ('$nombre_persona', '$telefono', '$nom_carrito', '$des', '$equ', '$ast', '$fecha_final', '$hora_salida')";
 
     if(mysqli_query($conexion, $sql)){
-        $mensaje = "<div class='alert success'>✅ Registro guardado con éxito a las $hora_reg</div>";
+        $mensaje = "<div class='alert success'>✅ Registro guardado con éxito (Ingreso: $hora_ingreso)</div>";
     } else {
         $mensaje = "<div class='alert error'> ❌ Error: " . mysqli_error($conexion) . "</div>";
     }
@@ -56,6 +58,7 @@ if(isset($_POST['save_car'])){
         input:focus { border-color: var(--primary); outline: none; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 15px; }
 
         .asistencia-container { display: flex; gap: 10px; margin-bottom: 20px; }
         .asistencia-btn { flex: 1; border: 2px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; font-weight: 700; transition: 0.3s; }
@@ -82,20 +85,18 @@ if(isset($_POST['save_car'])){
     <?php echo $mensaje; ?>
 
     <form method="POST">
-        <div class="grid-2">
+        <div class="grid-3">
             <div>
                 <label><i class="fas fa-calendar-alt"></i> Fecha:</label>
                 <input type="date" name="fecha_reg" value="<?php echo date('Y-m-d'); ?>" required>
             </div>
             <div>
-                <label><i class="fas fa-clock"></i> Hora ingreso:</label>
-                <input type="time" name="hora_reg" id="hora_actual" value="<?php echo date('H:i'); ?>" required>
+                <label><i class="fas fa-clock"></i> Ingreso:</label>
+                <input type="time" name="hora_ingreso" value="<?php echo date('H:i'); ?>" required>
             </div>
-        </div>
-
-        <div class="grid-2">
-                            <label><i class="fas fa-clock"></i> Hora salida:</label>
-                <input type="time" name="hora_reg" id="hora_actual" value="<?php echo date('H:i'); ?>" required>
+            <div>
+                <label><i class="fas fa-sign-out-alt"></i> Salida:</label>
+                <input type="time" name="hora_salida" value="<?php echo date('H:i', strtotime('+4 hours')); ?>">
             </div>
         </div>
 
@@ -130,7 +131,7 @@ if(isset($_POST['save_car'])){
             </div>
             <div>
                 <label>Equipamiento:</label>
-                <textarea name="equip" rows="3" placeholder="Pan, Empanadas, Queque, Jugo..."></textarea>
+                <textarea name="equip" rows="3" placeholder="Pan, Empanadas, Queque..."></textarea>
             </div>
         </div>
 
@@ -144,19 +145,6 @@ if(isset($_POST['save_car'])){
         <a href="lista_carritos.php">Ver Historial <i class="fas fa-history"></i></a>
     </div>
 </div>
-
-<script>
-    // Esto pone la hora actual si el usuario no ha tocado el campo todavía
-    function actualizarHora() {
-        const ahora = new Date();
-        const horas = String(ahora.getHours()).padStart(2, '0');
-        const minutos = String(ahora.getMinutes()).padStart(2, '0');
-        document.getElementById('hora_actual').value = `${horas}:${minutos}`;
-    }
-
-    // Si quieres que la hora se quede estática al cargar, borra la línea de abajo.
-    // actualizarHora(); 
-</script>
 
 </body>
 </html>

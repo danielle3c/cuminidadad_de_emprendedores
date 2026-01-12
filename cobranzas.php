@@ -35,7 +35,7 @@ if(isset($_POST['pay'])){
     <title><?php echo $t['titulo']; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #e11d48; --btn: #10b981; --border: #e2e8f0; --secondary: #64748b; }
+        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #41b02a; --btn: #10b981; --border: #e2e8f0; --secondary: #64748b; }
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --primary: #fb7185; --btn: #059669; --border: #334155; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 40px 20px; }
         .box { background: var(--card); padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 450px; }

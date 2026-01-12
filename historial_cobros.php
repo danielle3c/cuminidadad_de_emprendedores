@@ -15,7 +15,7 @@ $moneda = $cfg['simbolo_moneda'];
     <title>Historial de Cobranzas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #e11d48; --border: #e2e8f0; }
+        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #41b02a; --border: #e2e8f0; }
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --primary: #fb7185; --border: #334155; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
         .container { max-width: 800px; margin: auto; background: var(--card); padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }

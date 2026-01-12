@@ -7,7 +7,7 @@
         body { font-family: 'Segoe UI', sans-serif; padding: 20px; background: #f4f7f6; }
         .user-table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .user-table th, .user-table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-        .user-table th { background: #43b02a; color: white; }
+        .user-table th { background: #55b83e; color: white; }
         .btn-edit { background: #f97316; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px; }
         .btn-delete { background: #dc2626; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; }
         .status-msg { padding: 10px; background: #dcfce7; color: #166534; margin-bottom: 15px; border-radius: 5px; }

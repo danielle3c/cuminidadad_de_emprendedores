@@ -13,7 +13,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #43b02a; --border: #e0e5f2; --secondary-text: #a3aed0; }
+        :root { --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #55b83e; --border: #e0e5f2; --secondary-text: #a3aed0; }
         body { font-family: 'DM Sans', sans-serif; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
         
         /* Navegación Superior */

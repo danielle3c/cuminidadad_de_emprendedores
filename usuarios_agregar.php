@@ -46,13 +46,13 @@ if (isset($_POST['crear_usuario'])) {
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
         .form-box { max-width: 450px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .nav-bar { background: #43b02a; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 25px; }
+        .nav-bar { background: #55b83e; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 25px; }
         .nav-bar a { color: white; text-decoration: none; font-weight: bold; }
         h2 { color: #333; text-align: center; }
         label { font-weight: bold; display: block; margin-top: 15px; font-size: 0.9em; }
         input, select { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn-save { background: #43b02a; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 25px; font-size: 1em; }
-        .btn-save:hover { background: #369122; }
+        .btn-save { background: #55b83e; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 25px; font-size: 1em; }
+        .btn-save:hover { background: #55b83e; }
     </style>
 </head>
 <body>

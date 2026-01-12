@@ -18,7 +18,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
     <title>Historial - <?php echo $nombre; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f1f5f9; --text: #1e293b; --primary: #43b02a; --card: #ffffff; --border: #e2e8f0; }
+        :root { --bg: #f1f5f9; --text: #1e293b; --primary: #55b83e; --card: #ffffff; --border: #e2e8f0; }
         [data-theme="dark"] { --bg: #0f172a; --text: #f1f5f9; --primary: #2ecc71; --card: #1e293b; --border: #334155; }
         
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }

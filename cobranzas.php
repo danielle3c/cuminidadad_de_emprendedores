@@ -31,7 +31,7 @@ if(isset($_POST['pay'])){
     <title>Registrar Cobro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f3f6f9; --white: #ffffff; --primary: #4e73df; --success: #155724; --text: #333; --border: #155724; }
+        :root { --bg: #f3f6f9; --white: #ffffff; --primary: #4e73df; --success: #55b83e; --text: #333; --border: #55b83e; }
         [data-theme="dark"] { --bg: #1a202c; --white: #2d3748; --text: #edf2f7; --border: #4a5568; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto 30px; }
@@ -39,7 +39,7 @@ if(isset($_POST['pay'])){
         .card { background: var(--white); padding: 30px; border-radius: 15px; max-width: 500px; margin: auto; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
         input, select { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid var(--border); background: var(--white); color: var(--text); box-sizing: border-box; }
         .btn-submit { background: var(--success); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .alert { background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
+        .alert { background: #d4edda; color: #55b83e; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
     </style>
 </head>
 <body>

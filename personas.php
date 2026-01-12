@@ -14,7 +14,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
     <style>
         :root { 
             --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --text-light: #64748b;
-            --primary: #43b02a; --primary-hover: #389624; --border: #e2e8f0; --input-bg: #ffffff;
+            --primary: #55b83e; --primary-hover: #55b83e; --border: #e2e8f0; --input-bg: #ffffff;
         }
 
         /* Variables específicas para Modo Oscuro */

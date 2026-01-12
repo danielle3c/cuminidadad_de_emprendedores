@@ -12,7 +12,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         /* Estilos base del sistema */
-        :root { --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #43b02a; --border: #e0e5f2; --secondary-text: #a3aed0; }
+        :root { --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #55b83e; --border: #e0e5f2; --secondary-text: #a3aed0; }
         body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         
         .header-historial { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -32,7 +32,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
         .time-tag { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; margin-top: 5px; }
         .tag-green { background: #e6fffa; color: #047857; }
         
-        .status-badge { background: #dcfce7; color: #166534; padding: 5px 15px; border-radius: 10px; font-weight: 800; font-size: 0.75rem; }
+        .status-badge { background: #dcfce7; color: #55b83e; padding: 5px 15px; border-radius: 10px; font-weight: 800; font-size: 0.75rem; }
         .actions i { margin: 0 5px; cursor: pointer; }
         .fa-edit { color: #4361ee; }
         .fa-trash { color: #ef4444; }

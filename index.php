@@ -16,7 +16,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #43b02a; 
+            --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #55b83e; 
             --sidebar: #111c44; --border: #e0e5f2; --secondary-text: #a3aed0;
         }
         [data-theme="dark"] { 

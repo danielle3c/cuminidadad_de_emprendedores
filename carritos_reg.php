@@ -16,9 +16,9 @@ if(isset($_POST['reg_c'])){
             VALUES ('$nom', '$equ', '$ide', NOW())";
 
     if(mysqli_query($conexion, $sql)){
-        $mensaje = "<div class='alert success'>🎪 Carrito registrado y asignado con éxito.</div>";
+        $mensaje = "<div class='alert success'>Carrito registrado y asignado con éxito.</div>";
     } else {
-        $mensaje = "<div class='alert error'>❌ Error al registrar: " . mysqli_error($conexion) . "</div>";
+        $mensaje = "<div class='alert error'>Error al registrar: " . mysqli_error($conexion) . "</div>";
     }
 }
 ?>
@@ -29,7 +29,7 @@ if(isset($_POST['reg_c'])){
     <meta charset="UTF-8">
     <title>Gestión de Carritos - <?php echo $cfg['nombre_sistema']; ?></title>
     <style>
-        :root { --bg: #f4f7f6; --text: #333; --card: #fff; --primary: #43b02a; }
+        :root { --bg: #f4f7f6; --text: #333; --card: #fff; --primary: #55b83e; }
         [data-theme="dark"] { --bg: #1a1a1a; --text: #f0f0f0; --card: #2d2d2d; --primary: #2ecc71; }
         
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
@@ -57,7 +57,7 @@ if(isset($_POST['reg_c'])){
         button:hover { opacity: 0.9; transform: translateY(-2px); }
 
         .alert { padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-weight: bold; }
-        .success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .success { background: #dcfce7; color: #55b83e; border: 1px solid #86efac; }
         .error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
         
         .footer { text-align: center; margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; }

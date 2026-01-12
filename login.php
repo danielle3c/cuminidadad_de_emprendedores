@@ -45,11 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ingresar'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #43b02a; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #55b83e; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .login-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 320px; text-align: center; }
         h2 { color: #333; margin: 0 0 20px 0; }
         input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: #43b02a; }
+        input:focus { border-color: #55b83e; }
         
         /* Estilos para el contenedor del ojo */
         .password-wrapper { position: relative; width: 100%; }
@@ -62,11 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ingresar'])) {
             color: #777;
         }
 
-        .btn-in { width: 100%; padding: 12px; background: #43b02a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; font-size: 1rem; }
-        .btn-in:hover { background: #369622; }
+        .btn-in { width: 100%; padding: 12px; background: #55b83e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; font-size: 1rem; }
+        .btn-in:hover { background: #55b83e; }
         .error-msg { color: #d32f2f; background: #ffebee; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 0.85rem; border: 1px solid #ffcdd2; }
         .footer-links { margin-top: 20px; font-size: 0.85em; border-top: 1px solid #eee; padding-top: 15px; }
-        .btn-link { color: #43b02a; text-decoration: none; font-weight: bold; display: block; margin: 8px 0; }
+        .btn-link { color: #55b83e; text-decoration: none; font-weight: bold; display: block; margin: 8px 0; }
     </style>
 </head>
 <body>

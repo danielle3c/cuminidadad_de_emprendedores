@@ -65,7 +65,7 @@ if (isset($_POST['actualizar'])) {
     <title><?php echo $t['titulo']; ?> - <?php echo $cfg['nombre_sistema']; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f4f7f6; --text: #333; --card: #fff; --primary: #43b02a; --secondary: #6c757d; --border: #ddd; }
+        :root { --bg: #f4f7f6; --text: #333; --card: #fff; --primary: #55b83e; --secondary: #6c757d; --border: #ddd; }
         [data-theme="dark"] { --bg: #1a1a1a; --text: #f0f0f0; --card: #2d2d2d; --primary: #2ecc71; --secondary: #a0a0a0; --border: #444; }
         [data-theme="blue"] { --bg: #e0e6ed; --text: #1a2a3a; --card: #fff; --primary: #0056b3; --secondary: #5a6268; --border: #cbd5e0; }
 

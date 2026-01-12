@@ -42,10 +42,10 @@ if(isset($_POST['btn_e'])){
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #43b02a; --border: #e2e8f0; --input-bg: #ffffff;
+            --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #55b83e; --border: #e2e8f0; --input-bg: #ffffff;
         }
         [data-theme="dark"] { 
-            --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --primary: #2ecc71; --border: #334155; --input-bg: #0f172a;
+            --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --primary: #55b83e; --border: #334155; --input-bg: #0f172a;
         }
 
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; transition: 0.3s; }

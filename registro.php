@@ -25,7 +25,7 @@
 </head>
 <body>
     <div class="reg-card">
-        <h2 style="text-align:center; color: #43b02a;">Crear Cuenta</h2>
+        <h2 style="text-align:center; color: #55b83e;">Crear Cuenta</h2>
         <?php if(isset($error)) echo "<p style='color:red; font-size:0.8em;'>$error</p>"; ?>
         
         <form method="POST">

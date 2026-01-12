@@ -45,7 +45,7 @@ if(isset($_POST['save_car'])){
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #43b02a; --border: #e2e8f0; }
+        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #55b83e; --border: #e2e8f0; }
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --primary: #2ecc71; --border: #334155; }
         
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
@@ -69,7 +69,7 @@ if(isset($_POST['save_car'])){
         .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .alert { padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-weight: 600; }
-        .success { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid #22c55e; }
+        .success { background: rgba(34, 197, 94, 0.1); color: #55b83e; border: 1px solid #55b83e; }
         .error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }
         
         .footer-links { display: flex; justify-content: space-between; margin-top: 25px; }

@@ -32,7 +32,7 @@ $hoy = date('Y-m-d');
     <title>Lista de Carritos | <?php echo $cfg['nombre_sistema']; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f1f5f9; --card: #ffffff; --text: #1e293b; --primary: #43b02a; --secondary: #3b82f6; --border: #e2e8f0; }
+        :root { --bg: #f1f5f9; --card: #ffffff; --text: #1e293b; --primary: #55b83e; --secondary: #3b82f6; --border: #e2e8f0; }
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --primary: #2ecc71; --secondary: #60a5fa; --border: #334155; }
         
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 15px; margin: 0; }
@@ -55,7 +55,7 @@ $hoy = date('Y-m-d');
         .tag-salida { background: rgba(59, 130, 246, 0.1); color: var(--secondary); }
 
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; }
-        .si { background: #dcfce7; color: #15803d; }
+        .si { background: #dcfce7; color: #55b83e; }
         .no { background: #fee2e2; color: #b91c1c; }
 
         /* DISEÑO DE PAGINACIÓN */

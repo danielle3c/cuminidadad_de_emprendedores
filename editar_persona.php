@@ -57,10 +57,10 @@ if (isset($_POST['update_all'])) {
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
         .form-box { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .section-title { border-bottom: 2px solid #43b02a; color: #43b02a; margin-bottom: 15px; padding-bottom: 5px; }
+        .section-title { border-bottom: 2px solid #55b83e; color: #55b83e; margin-bottom: 15px; padding-bottom: 5px; }
         label { font-weight: bold; display: block; margin-top: 10px; font-size: 0.9em; }
         input, select { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        .btn-save { background: #43b02a; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        .btn-save { background: #55b83e; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     </style>
 </head>

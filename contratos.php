@@ -30,7 +30,7 @@ if(isset($_POST['save_con'])){
     <meta charset="UTF-8">
     <title>Generar Contrato - <?php echo $cfg['nombre_sistema']; ?></title>
     <style>
-        :root { --bg: #f4f7f6; --text: #333; --card: #fff; --primary: #43b02a; --accent: #2c3e50; }
+        :root { --bg: #f4f7f6; --text: #333; --card: #fff; --primary: #55b83e; --accent: #2c3e50; }
         [data-theme="dark"] { --bg: #1a1a1a; --text: #f0f0f0; --card: #2d2d2d; --primary: #2ecc71; --accent: #ecf0f1; }
         
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
@@ -62,7 +62,7 @@ if(isset($_POST['save_con'])){
         .btn-save:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
         .alert { padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-weight: bold; }
-        .success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .success { background: #dcfce7; color: #55b83e; border: 1px solid #86efac; }
         .error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
         
         .footer { margin-top: 25px; text-align: center; display: flex; justify-content: center; gap: 20px; }

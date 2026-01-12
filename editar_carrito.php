@@ -57,12 +57,12 @@ if(isset($_POST['update_car'])){
         body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; display: flex; justify-content: center; padding: 20px; }
         .form-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 550px; }
         h3 { color: #1e293b; text-align: center; margin-bottom: 25px; }
-        label { display: block; font-weight: bold; font-size: 0.85rem; color: #43b02a; margin-bottom: 5px; text-transform: uppercase; }
+        label { display: block; font-weight: bold; font-size: 0.85rem; color: #55b83e; margin-bottom: 5px; text-transform: uppercase; }
         input, textarea, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 15px; }
-        .btn-update { background: #43b02a; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; }
-        .btn-update:hover { background: #369622; }
+        .btn-update { background: #55b83e; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; }
+        .btn-update:hover { background: #55b83e; }
         .tag-info { font-size: 0.7rem; color: #64748b; margin-top: -10px; margin-bottom: 10px; display: block; }
     </style>
 </head>

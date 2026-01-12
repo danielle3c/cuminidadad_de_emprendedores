@@ -15,7 +15,7 @@ $buscar = isset($_GET['buscar']) ? mysqli_real_escape_string($conexion, $_GET['b
     <title>Historial</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f3f6f9; --white: #ffffff; --border: #e3e6f0; --text: #333; --blue: #448aff; --green: #4caf50; }
+        :root { --bg: #f3f6f9; --white: #ffffff; --border: #e3e6f0; --text: #333; --blue: #55b83e; --green: #4caf50; }
         [data-theme="dark"] { --bg: #1a202c; --white: #2d3748; --text: #edf2f7; --border: #4a5568; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         .container { max-width: 1000px; margin: auto; }

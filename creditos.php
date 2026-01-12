@@ -48,8 +48,8 @@ if(isset($_POST['activar'])){
     <title>Activar Créditos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f3f6f9; --white: #ffffff; --primary: #166534; --success: #2ecc71; --text: #333; --border: #e3e6f0; }
-        [data-theme="dark"] { --bg: #1a202c; --white: #166534; --text: #edf2f7; --border: #4a5568; }
+        :root { --bg: #f3f6f9; --white: #ffffff; --primary: #55b83e; --success: #2ecc71; --text: #333; --border: #e3e6f0; }
+        [data-theme="dark"] { --bg: #1a202c; --white: #55b83e; --text: #edf2f7; --border: #4a5568; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto 30px; }
         .btn-nav { background: var(--white); border: 1px solid var(--border); padding: 10px 20px; border-radius: 10px; text-decoration: none; color: #333; font-weight: bold; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
@@ -58,7 +58,7 @@ if(isset($_POST['activar'])){
         input, select { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid var(--border); background: var(--white); color: var(--text); box-sizing: border-box; }
         .btn-submit { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; }
         .alert { padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
-        .success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .success { background: #dcfce7; color: #55b83e; border: 1px solid #bbf7d0; }
         .error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
         .btn-pdf { display: inline-block; margin-top: 10px; background: #e74c3c; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-size: 0.9rem; }
     </style>
@@ -108,4 +108,4 @@ if(isset($_POST['activar'])){
     </form>
 </div>
 </body>
-</html>
+</html> 

@@ -132,6 +132,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
     <nav>
         <a href="index.php" class="nav-link active"><i class="fas fa-search"></i> Buscador</a>
         <a href="personas.php" class="nav-link"><i class="fas fa-users"></i> Personas</a>
+        <a href="talleres.php" class="nav-link"><i class="fas fa-chalkboard-teacher"></i> Talleres</a>
         <a href="lista_carritos.php" class="nav-link"><i class="fas fa-shopping-basket"></i> Carritos</a>
         <a href="creditos.php" class="nav-link"><i class="fas fa-hand-holding-dollar"></i> Créditos</a>
         <a href="cobranzas.php" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> Cobranzas</a>
@@ -166,8 +167,17 @@ $cfg = mysqli_fetch_assoc($res_conf);
             if(mysqli_num_rows($res) > 0):
                 while ($p = mysqli_fetch_assoc($res)): 
                     $nombre_p = mysqli_real_escape_string($conexion, $p['nombres']);
+                    
+                    // Conteo de Visitas (Lógica original)
                     $q_visitas = mysqli_query($conexion, "SELECT COUNT(*) as t FROM carritos WHERE nombre_responsable LIKE '%$nombre_p%' AND asistencia = 'SÍ VINO'");
                     $visitas = mysqli_fetch_assoc($q_visitas)['t'];
+
+                    // Conteo de Talleres (Nueva lógica integrada)
+                    $talleres_total = 0;
+                    if ($p['origen'] == 'persona') {
+                        $q_tallas = mysqli_query($conexion, "SELECT COUNT(*) as t FROM asistencia_talleres WHERE emprendedores_id IN (SELECT idemprendedores FROM emprendedores WHERE personas_idpersonas = {$p['id']})");
+                        $talleres_total = mysqli_fetch_assoc($q_tallas)['t'] ?? 0;
+                    }
             ?>
                 <div class="person-card">
                     <div class="card-top">
@@ -187,8 +197,8 @@ $cfg = mysqli_fetch_assoc($res_conf);
                             <span class="stat-label">Visitas</span>
                         </div>
                         <div class="stat-box">
-                            <span class="stat-num" style="color: var(--primary);"><i class="fas fa-user-check"></i></span>
-                            <span class="stat-label">Estado</span>
+                            <span class="stat-num" style="color: #3b82f6;"><?php echo $talleres_total; ?></span>
+                            <span class="stat-label">Talleres</span>
                         </div>
                         <div class="stat-box">
                             <span class="stat-num"><?php echo ($visitas > 4) ? 'Frecuente' : 'Nuevo'; ?></span>

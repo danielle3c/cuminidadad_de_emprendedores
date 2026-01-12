@@ -17,7 +17,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
     <style>
         :root { 
             --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #43b02a; 
-            --sidebar: #111c44; --border: #e0e5f2; --secondary-text: #a3aed0;
+            --sidebar: #3e414d; --border: #e0e5f2; --secondary-text: #ffffff;
         }
         [data-theme="dark"] { 
             --bg: #0b1437; --card: #111c44; --text: #ffffff; --primary: #2ecc71; --border: #1b254b; --secondary-text: #707eae;
@@ -31,7 +31,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
         
         .nav-link { 
             display: flex; align-items: center; gap: 15px; padding: 16px 20px; 
-            color: #707eae; text-decoration: none; border-radius: 15px; 
+            color: #ffffff; text-decoration: none; border-radius: 15px; 
             margin-bottom: 8px; transition: 0.3s; font-weight: 700;
         }
         .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.05); color: white; }

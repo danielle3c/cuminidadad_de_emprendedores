@@ -48,8 +48,8 @@ if(isset($_POST['activar'])){
     <title>Activar Créditos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f3f6f9; --white: #ffffff; --primary: #4e73df; --success: #2ecc71; --text: #333; --border: #e3e6f0; }
-        [data-theme="dark"] { --bg: #1a202c; --white: #2d3748; --text: #edf2f7; --border: #4a5568; }
+        :root { --bg: #f3f6f9; --white: #ffffff; --primary: #166534; --success: #2ecc71; --text: #333; --border: #e3e6f0; }
+        [data-theme="dark"] { --bg: #1a202c; --white: #166534; --text: #edf2f7; --border: #4a5568; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto 30px; }
         .btn-nav { background: var(--white); border: 1px solid var(--border); padding: 10px 20px; border-radius: 10px; text-decoration: none; color: #333; font-weight: bold; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }

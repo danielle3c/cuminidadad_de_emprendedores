@@ -57,9 +57,9 @@ if(isset($_POST['pay'])){
         
         if($check['saldo_inicial'] <= 0){
             mysqli_query($conexion, "UPDATE creditos SET estado = 2 WHERE idcreditos = '$idc'");
-            $mensaje = "<div class='alert success'>✅ Pago Total Recibido</div>";
+            $mensaje = "<div class='alert success'>Pago Total Recibido</div>";
         } else {
-            $mensaje = "<div class='alert success'>💵 Pago de $moneda".number_format($mon,2)." registrado.</div>";
+            $mensaje = "<div class='alert success'>Pago de $moneda".number_format($mon,2)." registrado.</div>";
         }
     }
 }
@@ -110,8 +110,8 @@ if(isset($_POST['pay'])){
                 <option value="">-- Seleccionar --</option>
                 <?php
                 $sql_c = "SELECT c.idcreditos, p.nombres, p.apellidos, c.saldo_inicial 
-                          FROM creditos c JOIN emprendedores e ON c.emprendedores_idemprendedores = e.idemprendedores 
-                          JOIN personas p ON e.personas_idpersonas = p.idpersonas WHERE c.estado = 1";
+                            FROM creditos c JOIN emprendedores e ON c.emprendedores_idemprendedores = e.idemprendedores 
+                            JOIN personas p ON e.personas_idpersonas = p.idpersonas WHERE c.estado = 1";
                 $res_c = mysqli_query($conexion, $sql_c);
                 while($c = mysqli_fetch_assoc($res_c)){
                     echo "<option value='{$c['idcreditos']}'>{$c['nombres']} ({$moneda}{$c['saldo_inicial']})</option>";
@@ -150,12 +150,12 @@ if(isset($_POST['pay'])){
                 <?php
                 // Consultar cobros de HOY
                 $sql_h = "SELECT cob.monto, cob.tipo_pago, cob.fecha_hora, p.nombres 
-                          FROM cobranzas cob
-                          JOIN creditos cr ON cob.creditos_idcreditos = cr.idcreditos
-                          JOIN emprendedores e ON cr.emprendedores_idemprendedores = e.idemprendedores
-                          JOIN personas p ON e.personas_idpersonas = p.idpersonas
-                          WHERE DATE(cob.fecha_hora) = CURDATE()
-                          ORDER BY cob.fecha_hora DESC LIMIT 10";
+                            FROM cobranzas cob
+                            JOIN creditos cr ON cob.creditos_idcreditos = cr.idcreditos
+                            JOIN emprendedores e ON cr.emprendedores_idemprendedores = e.idemprendedores
+                            JOIN personas p ON e.personas_idpersonas = p.idpersonas
+                            WHERE DATE(cob.fecha_hora) = CURDATE()
+                            ORDER BY cob.fecha_hora DESC LIMIT 10";
                 $res_h = mysqli_query($conexion, $sql_h);
                 
                 if(mysqli_num_rows($res_h) > 0){
@@ -166,7 +166,7 @@ if(isset($_POST['pay'])){
                                 <td><b>{$h['nombres']}</b></td>
                                 <td>{$moneda}".number_format($h['monto'], 2)."</td>
                                 <td><small>{$h['tipo_pago']}</small></td>
-                              </tr>";
+                            </tr>";
                     }
                 } else {
                     echo "<tr><td colspan='4' style='text-align:center; opacity:0.5;'>No hay cobros registrados hoy</td></tr>";

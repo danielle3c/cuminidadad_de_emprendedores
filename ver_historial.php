@@ -107,7 +107,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
         echo "<div style='text-align:center; padding: 40px; background: var(--card); border-radius: 20px; opacity:0.6;'>
                 <i class='fas fa-history' style='font-size: 2rem; margin-bottom: 10px;'></i>
                 <p>No se encontraron actividades registradas para este usuario.</p>
-              </div>";
+            </div>";
     endif; 
     ?>
 </div>

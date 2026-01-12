@@ -19,15 +19,15 @@ if(isset($_POST['btn_e'])){
     $check = mysqli_query($conexion, "SELECT idemprendedores FROM emprendedores WHERE personas_idpersonas = '$idp'");
     
     if(mysqli_num_rows($check) > 0){
-        $mensaje = "<div class='alert error'>⚠️ Esta persona ya está registrada como emprendedor.</div>";
+        $mensaje = "<div class='alert error'>Esta persona ya está registrada como emprendedor.</div>";
     } else {
         $sql = "INSERT INTO emprendedores (personas_idpersonas, tipo_negocio, rubro, producto_principal, limite_credito, fecha_registro, created_at) 
                 VALUES ('$idp', '$tipo', '$rubro', '$prod', '$lim', NOW(), NOW())";
 
         if(mysqli_query($conexion, $sql)){
-            $mensaje = "<div class='alert success'>🚀 Emprendedor vinculado exitosamente.</div>";
+            $mensaje = "<div class='alert success'>Emprendedor vinculado exitosamente.</div>";
         } else {
-            $mensaje = "<div class='alert error'>❌ Error: " . mysqli_error($conexion) . "</div>";
+            $mensaje = "<div class='alert error'>Error: " . mysqli_error($conexion) . "</div>";
         }
     }
 }

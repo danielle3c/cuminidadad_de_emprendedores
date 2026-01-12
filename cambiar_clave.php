@@ -54,8 +54,8 @@ if (isset($_POST['verificar_correo'])) {
                     <p>Has solicitado restablecer tu contraseña en el sistema de la Comunidad.</p>
                     <p>Haz clic en el botón para crear una nueva clave:</p>
                     <a href='http://localhost/comunidad/reset_final.php?email=$correo' 
-                       style='background: #43b02a; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; display: inline-block;'>
-                       Cambiar mi Contraseña
+                    style='background: #43b02a; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; display: inline-block;'>
+                    Cambiar mi Contraseña
                     </a>
                     <p>Si no fuiste tú, puedes ignorar este correo de forma segura.</p>
                 </body>
@@ -103,7 +103,7 @@ if (isset($_POST['verificar_correo'])) {
         </form>
         <?php endif; ?>
         
-        <a href="login.php">⬅️ Volver al Login</a>
+        <a href="login.php">⬅ Volver al Login</a>
     </div>
 </body>
 </html>

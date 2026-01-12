@@ -29,9 +29,9 @@ if(isset($_POST['save_car'])){
             VALUES ('$nombre_persona', '$telefono', '$nom_carrito', '$des', '$equ', '$ast', '$fecha_final', '$hora_salida')";
 
     if(mysqli_query($conexion, $sql)){
-        $mensaje = "<div class='alert success'>✅ Registro guardado con éxito (Ingreso: $hora_ingreso)</div>";
+        $mensaje = "<div class='alert success'>Registro guardado con éxito (Ingreso: $hora_ingreso)</div>";
     } else {
-        $mensaje = "<div class='alert error'> ❌ Error: " . mysqli_error($conexion) . "</div>";
+        $mensaje = "<div class='alert error'>Error: " . mysqli_error($conexion) . "</div>";
     }
 }
 ?>
@@ -92,11 +92,11 @@ if(isset($_POST['save_car'])){
             </div>
             <div>
                 <label><i class="fas fa-clock"></i> Ingreso:</label>
-                <input type="time" name="hora_ingreso" value="<?php echo date('H:i'); ?>" required>
+                <input type="time" name="hora_ingreso" value="<?php echo date('H:M'); ?>" required>
             </div>
             <div>
                 <label><i class="fas fa-sign-out-alt"></i> Salida:</label>
-                <input type="time" name="hora_salida" value="<?php echo date('H:i', strtotime('+ hours')); ?>">
+                <input type="time" name="hora_salida" value="<?php echo date('H:M', strtotime('+ hours')); ?>">
             </div>
         </div>
 

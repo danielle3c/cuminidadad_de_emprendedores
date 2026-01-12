@@ -17,9 +17,9 @@ if (isset($_POST['crear_usuario'])) {
     $check_e = mysqli_query($conexion, "SELECT idUsuarios FROM Usuarios WHERE email = '$email'");
 
     if (mysqli_num_rows($check_u) > 0) {
-        $mensaje = "<p style='color:red;'>❌ Error: El nombre de usuario '$username' ya está en uso.</p>";
+        $mensaje = "<p style='color:red;'>Error: El nombre de usuario '$username' ya está en uso.</p>";
     } elseif (mysqli_num_rows($check_e) > 0) {
-        $mensaje = "<p style='color:red;'>❌ Error: El correo '$email' ya está registrado.</p>";
+        $mensaje = "<p style='color:red;'>Error: El correo '$email' ya está registrado.</p>";
     } else {
         // Encriptar contraseña
         $pass_enc = password_hash($password, PASSWORD_DEFAULT);

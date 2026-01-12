@@ -12,7 +12,7 @@ $lang = $cfg['idioma'];
 $textos = [
     'es' => [
         'titulo' => 'Configuración del Sistema',
-        'nombre' => 'Nombre de la Aplicación',
+        'nombre' => 'Corporación de Fomento La Granja',
         'tema'   => 'Tema Visual',
         'idioma' => 'Idioma',
         'guardar'=> 'Guardar Cambios',
@@ -52,7 +52,7 @@ if (isset($_POST['actualizar'])) {
     if (mysqli_query($conexion, $sql)) {
         echo "<script>window.location.href='configuraciones.php';</script>"; 
     } else {
-        $mensaje = "<div class='alert error'>❌ Error: " . mysqli_error($conexion) . "</div>";
+        $mensaje = "<div class='alert error'>Error: " . mysqli_error($conexion) . "</div>";
     }
 }
 ?>

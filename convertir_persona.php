@@ -23,7 +23,7 @@ if (isset($_GET['id_carrito'])) {
         // 4. Crear el perfil de emprendedor vinculado
         $negocio = mysqli_real_escape_string($conexion, $car['nombre_carrito']);
         mysqli_query($conexion, "INSERT INTO emprendedores (personas_idpersonas, tipo_negocio, rubro) 
-                                 VALUES ($nuevo_id, '$negocio', 'General')");
+                                VALUES ($nuevo_id, '$negocio', 'General')");
         
         // Redirigir a editar para completar el RUT
         header("Location: editar_persona.php?id=$nuevo_id&status=convertido");

@@ -17,9 +17,9 @@ if(isset($_POST['save_con'])){
             VALUES (CURDATE(), '$monto', '$plazo', 0, '$ide', NOW(), 1)";
     
     if(mysqli_query($conexion, $sql)){
-        $mensaje = "<div class='alert success'>📜 Contrato N° ".mysqli_insert_id($conexion)." generado y firmado con éxito.</div>";
+        $mensaje = "<div class='alert success'>Contrato N° ".mysqli_insert_id($conexion)." generado y firmado con éxito.</div>";
     } else {
-        $mensaje = "<div class='alert error'>❌ Error al registrar: " . mysqli_error($conexion) . "</div>";
+        $mensaje = "<div class='alert error'>Error al registrar: " . mysqli_error($conexion) . "</div>";
     }
 }
 ?>
@@ -72,7 +72,7 @@ if(isset($_POST['save_con'])){
 <body>
 
 <div class="container">
-    <h2>📄 Contrato de Financiamiento</h2>
+    <h2>Contrato de Financiamiento</h2>
     <p class="subtitle">SISTEMA DE GESTIÓN DE CRÉDITOS</p>
     
     <?php echo $mensaje; ?>

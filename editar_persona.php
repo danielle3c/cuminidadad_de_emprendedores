@@ -27,10 +27,10 @@ if (isset($_POST['update_all'])) {
 
     // 1. Actualizar Tabla Personas
     $sql_p = "UPDATE personas SET 
-              rut='$rut', nombres='$nom', apellidos='$ape', 
-              fecha_nacimiento='$fec', email='$ema', telefono='$tel', 
-              updated_at=NOW() 
-              WHERE idpersonas='$id_persona'";
+            rut='$rut', nombres='$nom', apellidos='$ape', 
+            fecha_nacimiento='$fec', email='$ema', telefono='$tel', 
+            updated_at=NOW() 
+            WHERE idpersonas='$id_persona'";
     
     mysqli_query($conexion, $sql_p);
 
@@ -43,7 +43,7 @@ if (isset($_POST['update_all'])) {
     }
 
     if (mysqli_query($conexion, $sql_u)) {
-        echo "<p style='color:green; text-align:center;'>✅ Usuario e información personal actualizados.</p>";
+        echo "<p style='color:green; text-align:center;'>Usuario e información personal actualizados.</p>";
         header("Refresh:2; url=usuarios_lista.php");
     }
 }

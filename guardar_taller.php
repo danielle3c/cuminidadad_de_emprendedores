@@ -5,8 +5,7 @@ $user = "root"; // Usuario por defecto de XAMPP
 $pass = "";     // Contraseña por defecto (vacía)
 $db   = "nombre_de_tu_base_de_datos"; // CAMBIA ESTO por el nombre real de tu BD
 
-$conexion = mysqli_connect($host, $user, $pass, $db);
-
+$db = "comunidad_db";
 // Verificar la conexión
 if (!$conexion) {
     die("Error de conexión: " . mysqli_connect_error());

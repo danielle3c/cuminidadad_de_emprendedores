@@ -1,163 +1,244 @@
 <?php 
 include 'config.php'; 
 
-// 1. Cargar configuración
+// 1. Cargar configuración (Nombre del sistema y Tema)
 $res_conf = mysqli_query($conexion, "SELECT * FROM configuraciones WHERE id = 1");
 $cfg = mysqli_fetch_assoc($res_conf);
 ?>
+
 <!DOCTYPE html>
 <html lang="es" data-theme="<?php echo $cfg['tema_color']; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auditoría y Cobranzas | <?php echo $cfg['nombre_sistema']; ?></title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Panel de Auditoría | <?php echo $cfg['nombre_sistema']; ?></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root { 
             --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #43b02a; 
             --sidebar: #111c44; --border: #e0e5f2; --secondary-text: #a3aed0;
-            --danger: #ee5d5d; --warning: #ff9f43;
+        }
+        [data-theme="dark"] { 
+            --bg: #0b1437; --card: #111c44; --text: #ffffff; --primary: #2ecc71; --border: #1b254b; --secondary-text: #707eae;
         }
 
         body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
 
-        /* --- SIDEBAR DINÁMICO --- */
+        /* SIDEBAR */
         .sidebar { 
             width: 280px; background: var(--sidebar); color: white; 
-            display: flex; flex-direction: column; padding: 20px; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; padding: 30px 20px; 
+            box-sizing: border-box; transition: all 0.3s ease;
+            z-index: 1000;
         }
-        .sidebar.collapsed { width: 85px; padding: 20px 15px; }
-        .sidebar.collapsed .nav-text, .sidebar.collapsed .sidebar-brand span { display: none; }
-
-        .toggle-btn {
-            cursor: pointer; font-size: 1.2rem; margin-bottom: 20px;
-            display: flex; justify-content: center; color: rgba(255,255,255,0.6);
-        }
-
-        .sidebar-brand { font-size: 1.2rem; font-weight: 800; margin-bottom: 30px; text-align: center; color: var(--primary); }
-
+        .sidebar-brand { font-size: 1.2rem; font-weight: 800; margin-bottom: 50px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; color: var(--primary); line-height: 1.2; }
+        
         .nav-link { 
-            display: flex; align-items: center; gap: 15px; padding: 12px 15px; 
-            color: #707eae; text-decoration: none; border-radius: 12px; margin-bottom: 5px; transition: 0.2s;
+            display: flex; align-items: center; gap: 15px; padding: 16px 20px; 
+            color: #707eae; text-decoration: none; border-radius: 15px; 
+            margin-bottom: 8px; transition: 0.3s; font-weight: 700;
         }
         .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.05); color: white; }
-        .nav-link.active { border-right: 4px solid var(--primary); }
+        .nav-link.active { border-right: 4px solid var(--primary); color: white; }
 
-        /* --- CONTENIDO --- */
-        .main-content { flex: 1; overflow-y: auto; padding: 40px; transition: 0.3s; }
+        /* BOTÓN HAMBURGUESA (Oculto en PC) */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1100;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
 
+        /* CONTENIDO PRINCIPAL */
+        .main-content { flex: 1; overflow-y: auto; padding: 40px; position: relative; transition: 0.3s; }
+
+        /* HEADER Y BUSCADOR */
+        .header-section { margin-bottom: 40px; }
+        .header-section h1 { font-size: 2.2rem; font-weight: 800; margin: 0; letter-spacing: -1px; }
+        
         .search-container { 
             background: var(--card); border-radius: 20px; padding: 10px; 
             display: flex; align-items: center; margin-top: 25px; 
-            box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08); border: 1px solid var(--border);
+            box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+            border: 1px solid var(--border);
         }
-        .search-container input { flex: 1; border: none; padding: 12px 20px; font-size: 1.1rem; outline: none; background: transparent; color: var(--text); }
-        .btn-search { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 15px; font-weight: 700; cursor: pointer; }
-
-        /* --- CARDS CON COBRANZA --- */
-        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; margin-top: 30px; }
-        .person-card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); padding: 25px; position: relative; }
-        
-        .debt-badge { 
-            position: absolute; top: 0; right: 0; background: var(--danger); 
-            color: white; padding: 6px 12px; font-size: 0.7rem; font-weight: 800; 
-            border-bottom-left-radius: 15px;
+        .search-container input { 
+            flex: 1; border: none; padding: 15px 25px; font-size: 1.1rem; 
+            outline: none; background: transparent; color: var(--text);
+        }
+        .btn-search { 
+            background: var(--primary); color: white; border: none; padding: 12px 35px; 
+            border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s;
         }
 
-        .avatar { width: 60px; height: 60px; border-radius: 15px; margin-right: 15px; }
-        .stats-row { display: flex; justify-content: space-around; margin: 20px 0; padding: 15px; background: var(--bg); border-radius: 15px; }
-        
+        /* RESULTADOS EN GRID */
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-top: 20px; }
+        .person-card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); padding: 25px; transition: 0.3s; }
+
+        /* --- RESPONSIVE / MOBILE --- */
+        @media (max-width: 992px) {
+            .mobile-toggle { display: block; }
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                height: 100vh;
+            }
+            .sidebar.active { left: 0; }
+            .main-content { padding: 80px 20px 20px 20px; }
+            .results-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Overlay para cerrar el menú */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* Estilos de tarjetas y badges mantenidos del original */
+        .card-top { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .avatar { width: 65px; height: 65px; border-radius: 18px; object-fit: cover; }
+        .badge { font-size: 0.65rem; padding: 4px 10px; border-radius: 8px; font-weight: 800; text-transform: uppercase; }
+        .badge-base { background: #e2e8f0; color: #475569; }
+        .badge-carrito { background: #fef9c3; color: #854d0e; }
+        .stats-row { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--border); margin-bottom: 15px; }
+        .stat-num { display: block; font-weight: 800; font-size: 1.2rem; }
+        .stat-label { font-size: 0.7rem; color: var(--secondary-text); font-weight: 700; }
         .btn-action { display: block; width: 100%; text-align: center; margin-top: 10px; padding: 12px; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 0.85rem; }
-        .btn-cobranza { background: var(--danger); color: white; }
         .btn-trayectoria { background: var(--sidebar); color: white; }
-        .btn-formalizar { background: var(--primary); color: white; }
+        .btn-formalizar { background: var(--primary); color: white; border: none; }
     </style>
 </head>
 <body>
 
+<button class="mobile-toggle" id="btnToggle">
+    <i class="fas fa-bars"></i>
+</button>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
 <aside class="sidebar" id="sidebar">
-    <div class="toggle-btn" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </div>
-    <div class="sidebar-brand">
-        <i class="fas fa-leaf"></i> <span>COF La Granja</span>
-    </div>
+    <div class="sidebar-brand">Corp. La Granja</div>
     <nav>
-        <a href="index.php" class="nav-link active"><i class="fas fa-search"></i> <span class="nav-text">Buscador</span></a>
-        <a href="personas.php" class="nav-link"><i class="fas fa-users"></i> <span class="nav-text">Personas</span></a>
-        <a href="cobranzas.php" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> <span class="nav-text">Cobranzas</span></a>
-        <a href="configuraciones.php" class="nav-link"><i class="fas fa-tools"></i> <span class="nav-text">Ajustes</span></a>
+        <a href="index.php" class="nav-link active"><i class="fas fa-search"></i> Buscador</a>
+        <a href="personas.php" class="nav-link"><i class="fas fa-users"></i> Personas</a>
+        <a href="lista_carritos.php" class="nav-link"><i class="fas fa-shopping-basket"></i> Carritos</a>
+        <a href="creditos.php" class="nav-link"><i class="fas fa-hand-holding-dollar"></i> Créditos</a>
+        <a href="cobranzas.php" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> Cobranzas</a>
+        <a href="configuraciones.php" class="nav-link"><i class="fas fa-tools"></i> Ajustes</a>
     </nav>
 </aside>
 
 <main class="main-content">
-    <h1>Centro de Auditoría</h1>
-    <p style="color: var(--secondary-text);">Buscador unificado de deudas y registros.</p>
-
-    <form method="GET" class="search-container">
-        <input type="text" name="buscar" placeholder="Nombre o RUT..." value="<?php echo $_GET['buscar'] ?? ''; ?>" autofocus>
-        <button type="submit" class="btn-search">BUSCAR</button>
-    </form>
+    <div class="header-section">
+        <h1>Centro de Auditoría</h1>
+        <p style="color: var(--secondary-text);">Gestión unificada de clientes formales y registros de carritos.</p>
+        
+        <form method="GET" class="search-container">
+            <i class="fas fa-search" style="margin-left: 20px; color: var(--secondary-text);"></i>
+            <input type="text" name="buscar" placeholder="Nombre completo, RUT o Apellidos..." value="<?php echo htmlspecialchars($_GET['buscar'] ?? ''); ?>" autofocus autocomplete="off">
+            <button type="submit" class="btn-search">BUSCAR</button>
+        </form>
+    </div>
 
     <div class="results-grid">
         <?php 
-        if (!empty($_GET['buscar'])): 
-            $b = mysqli_real_escape_string($conexion, $_GET['buscar']);
+        if (isset($_GET['buscar']) && !empty(trim($_GET['buscar']))): 
+            $busqueda = mysqli_real_escape_string($conexion, $_GET['buscar']);
+            
             $sql = "SELECT idpersonas as id, nombres, apellidos, rut, 'persona' as origen FROM personas 
-                    WHERE nombres LIKE '%$b%' OR apellidos LIKE '%$b%' OR rut LIKE '%$b%'
+                    WHERE nombres LIKE '%$busqueda%' OR apellidos LIKE '%$busqueda%' OR rut LIKE '%$busqueda%'
                     UNION
-                    SELECT id, nombre_responsable, '', '', 'carrito' FROM carritos 
-                    WHERE nombre_responsable LIKE '%$b%' GROUP BY nombre_responsable";
+                    SELECT id as id, nombre_responsable as nombres, '' as apellidos, '' as rut, 'carrito' as origen FROM carritos 
+                    WHERE nombre_responsable LIKE '%$busqueda%' GROUP BY nombre_responsable";
             
             $res = mysqli_query($conexion, $sql);
-            while ($p = mysqli_fetch_assoc($res)):
-                $rut = $p['rut'];
-                $nom = $p['nombres'];
 
-                // 2. VERIFICAR COBRANZA
-                $q_deuda = mysqli_query($conexion, "SELECT SUM(monto_pendiente) as total FROM cobranzas WHERE rut_cliente = '$rut' OR nombre_cliente LIKE '%$nom%'");
-                $deuda = mysqli_fetch_assoc($q_deuda)['total'] ?? 0;
-        ?>
-            <div class="person-card">
-                <?php if($deuda > 0): ?>
-                    <div class="debt-badge"><i class="fas fa-exclamation-circle"></i> DEUDA: $<?php echo number_format($deuda,0,',','.'); ?></div>
-                <?php endif; ?>
-
-                <div style="display: flex; align-items: center;">
-                    <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($nom); ?>&background=random" class="avatar">
-                    <div>
-                        <h4 style="margin:0;"><?php echo $nom." ".$p['apellidos']; ?></h4>
-                        <small><?php echo $rut ?: 'Sin RUT'; ?></small>
+            if(mysqli_num_rows($res) > 0):
+                while ($p = mysqli_fetch_assoc($res)): 
+                    $nombre_p = mysqli_real_escape_string($conexion, $p['nombres']);
+                    $q_visitas = mysqli_query($conexion, "SELECT COUNT(*) as t FROM carritos WHERE nombre_responsable LIKE '%$nombre_p%' AND asistencia = 'SÍ VINO'");
+                    $visitas = mysqli_fetch_assoc($q_visitas)['t'];
+            ?>
+                <div class="person-card">
+                    <div class="card-top">
+                        <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($p['nombres']); ?>&background=random&bold=true" class="avatar">
+                        <div>
+                            <span class="badge <?php echo ($p['origen'] == 'persona') ? 'badge-base' : 'badge-carrito'; ?>">
+                                <?php echo ($p['origen'] == 'persona') ? 'Cliente Formal' : 'Registro Informal'; ?>
+                            </span>
+                            <h3 style="margin: 5px 0; font-size: 1.1rem;"><?php echo htmlspecialchars($p['nombres']." ".$p['apellidos']); ?></h3>
+                            <small style="color: var(--secondary-text); font-weight: 600;"><i class="far fa-id-card"></i> <?php echo $p['rut'] ?: 'Sin ID'; ?></small>
+                        </div>
                     </div>
-                </div>
-
-                <div class="stats-row">
-                    <div style="text-align:center;">
-                        <span style="font-weight:800; display:block; color: <?php echo ($deuda > 0) ? 'var(--danger)' : 'var(--primary)'; ?>">
-                            <?php echo ($deuda > 0) ? 'MOROSO' : 'AL DÍA'; ?>
-                        </span>
-                        <small class="stat-label">FINANZAS</small>
+                    
+                    <div class="stats-row">
+                        <div class="stat-box">
+                            <span class="stat-num"><?php echo $visitas; ?></span>
+                            <span class="stat-label">Visitas</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-num" style="color: var(--primary);"><i class="fas fa-user-check"></i></span>
+                            <span class="stat-label">Estado</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-num"><?php echo ($visitas > 4) ? 'Frecuente' : 'Nuevo'; ?></span>
+                            <span class="stat-label">Rango</span>
+                        </div>
                     </div>
-                </div>
 
-                <a href="ver_historial.php?id=<?php echo $p['id']; ?>" class="btn-action btn-trayectoria">Ver Trayectoria</a>
-                
-                <?php if($deuda > 0): ?>
-                    <a href="cobranzas.php?buscar=<?php echo urlencode($rut ?: $nom); ?>" class="btn-action btn-cobranza">Gestionar Cobro</a>
-                <?php elseif($p['origen'] == 'carrito'): ?>
-                    <a href="personas.php?formalizar=<?php echo urlencode($nom); ?>" class="btn-action btn-formalizar">Formalizar (Contrato)</a>
-                <?php endif; ?>
-            </div>
-        <?php endwhile; endif; ?>
+                    <a href="ver_historial.php?nombre=<?php echo urlencode($p['nombres']); ?>&id=<?php echo $p['id']; ?>" class="btn-action btn-trayectoria">
+                        <i class="fas fa-history"></i> TRAYECTORIA
+                    </a>
+
+                    <?php if($p['origen'] == 'carrito'): ?>
+                        <a href="personas.php?formalizar_nombre=<?php echo urlencode($p['nombres']); ?>" class="btn-action btn-formalizar">
+                            <i class="fas fa-user-plus"></i> REGISTRAR
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endwhile; 
+            else: ?>
+                <div style="grid-column: 1 / -1; text-align:center; padding: 80px; opacity:0.3;">
+                    <i class="fas fa-search fa-4x"></i>
+                    <p style="font-size: 1.2rem; font-weight: 700; margin-top: 20px;">Sin resultados.</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
     </div>
 </main>
 
 <script>
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('collapsed');
+    const btnToggle = document.getElementById('btnToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function toggleMenu() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        
+        const icon = btnToggle.querySelector('i');
+        if (sidebar.classList.contains('active')) {
+            icon.classList.replace('fa-bars', 'fa-times');
+        } else {
+            icon.classList.replace('fa-times', 'fa-bars');
+        }
     }
+
+    btnToggle.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
 </script>
 
 </body>

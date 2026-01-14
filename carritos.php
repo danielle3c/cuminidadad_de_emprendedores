@@ -57,17 +57,17 @@ if(isset($_POST['save_car'])){
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 15px; }
 
-        /* Estilo para los botones de fecha rápida */
-        .date-helpers { display: flex; gap: 5px; margin-top: -10px; margin-bottom: 15px; }
-        .btn-date { background: var(--border); border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; cursor: pointer; font-weight: 600; color: var(--text); }
-        .btn-date:hover { background: var(--primary); color: white; }
-
+        /* Contenedor de Asistencia */
         .asistencia-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .asistencia-btn { flex: 1; border: 2px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        .asistencia-btn { flex: 1; border: 2px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 0.85rem; }
         .asistencia-btn input { display: none; }
-        .asistencia-btn:has(input:checked) { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        /* Colores dinámicos para los botones de opción */
+        .asistencia-btn:has(input[value="SÍ VINO"]:checked) { background: #55b83e; color: white; border-color: #55b83e; }
+        .asistencia-btn:has(input[value="TAL VEZ"]:checked) { background: #f39c12; color: white; border-color: #f39c12; }
+        .asistencia-btn:has(input[value="NO VINO"]:checked) { background: #e74c3c; color: white; border-color: #e74c3c; }
 
-        .btn-save { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 1.1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-save { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 1.1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 10px; }
         .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .alert { padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-weight: 600; }
@@ -90,11 +90,7 @@ if(isset($_POST['save_car'])){
         <div class="grid-3">
             <div>
                 <label><i class="fas fa-calendar-alt"></i> Fecha:</label>
-                <input type="date" name="fecha_reg" id="fecha_reg" value="<?php echo date('Y-m-d'); ?>" required>
-                <div class="date-helpers">
-                    <button type="button" class="btn-date" onclick="setFecha(0)">Hoy</button>
-                    <button type="button" class="btn-date" onclick="setFecha(-7)">-1 Sem</button>
-                </div>
+                <input type="date" name="fecha_reg" value="<?php echo date('Y-m-d'); ?>" required>
             </div>
             <div>
                 <label><i class="fas fa-clock"></i> Ingreso:</label>
@@ -117,10 +113,13 @@ if(isset($_POST['save_car'])){
             </div>
         </div>
 
-        <label><i class="fas fa-check-circle"></i> ¿Asistió hoy?</label>
+        <label><i class="fas fa-question-circle"></i> Estado de Asistencia:</label>
         <div class="asistencia-container">
             <label class="asistencia-btn">
                 <input type="radio" name="asistencia" value="SÍ VINO" checked>SÍ VINO
+            </label>
+            <label class="asistencia-btn">
+                <input type="radio" name="asistencia" value="TAL VEZ">TAL VEZ
             </label>
             <label class="asistencia-btn">
                 <input type="radio" name="asistencia" value="NO VINO">NO VINO
@@ -137,7 +136,7 @@ if(isset($_POST['save_car'])){
             </div>
             <div>
                 <label>Equipamiento:</label>
-                <textarea name="equip" rows="3" placeholder="Pan, Empanadas, Queque..."></textarea>
+                <textarea name="equip" rows="3" placeholder="Stock inicial..."></textarea>
             </div>
         </div>
 
@@ -151,22 +150,6 @@ if(isset($_POST['save_car'])){
         <a href="lista_carritos.php">Ver Historial <i class="fas fa-history"></i></a>
     </div>
 </div>
-
-<script>
-    // Función para cambiar la fecha dinámicamente
-    function setFecha(dias) {
-        const fechaInput = document.getElementById('fecha_reg');
-        let fecha = new Date();
-        fecha.setDate(fecha.getDate() + dias);
-        
-        // Formato YYYY-MM-DD
-        const yyyy = fecha.getFullYear();
-        const mm = String(fecha.getMonth() + 1).padStart(2, '0');
-        const dd = String(fecha.getDate()).padStart(2, '0');
-        
-        fechaInput.value = `${yyyy}-${mm}-${dd}`;
-    }
-</script>
 
 </body>
 </html>

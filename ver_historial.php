@@ -17,6 +17,10 @@ $cfg = mysqli_fetch_assoc($res_conf);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial - <?php echo $nombre; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
         :root { --bg: #f1f5f9; --text: #1e293b; --primary: #55b83e; --card: #ffffff; --border: #e2e8f0; }
         [data-theme="dark"] { --bg: #0f172a; --text: #f1f5f9; --primary: #2ecc71; --card: #1e293b; --border: #334155; }
@@ -25,6 +29,13 @@ $cfg = mysqli_fetch_assoc($res_conf);
         .header { max-width: 800px; margin: 20px auto 40px; display: flex; align-items: center; gap: 20px; }
         .btn-back { text-decoration: none; color: var(--text); font-size: 1.2rem; background: var(--card); width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--border); transition: 0.3s; }
         .btn-back:hover { background: var(--primary); color: white; }
+
+        /* Botones de Exportación */
+        .export-tools { max-width: 800px; margin: -20px auto 20px; display: flex; gap: 10px; justify-content: flex-end; }
+        .btn-export { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.2s; font-size: 0.9rem; }
+        .btn-excel { background: #1d6f42; color: white; }
+        .btn-pdf { background: #e74c3c; color: white; }
+        .btn-export:hover { opacity: 0.9; transform: translateY(-2px); }
 
         /* Estilo del Timeline */
         .timeline { max-width: 800px; margin: auto; position: relative; padding-bottom: 50px; }
@@ -59,16 +70,23 @@ $cfg = mysqli_fetch_assoc($res_conf);
     </div>
 </div>
 
-<div class="timeline">
+<div class="export-tools">
+    <button onclick="exportarExcel()" class="btn-export btn-excel">
+        <i class="fas fa-file-excel"></i> Exportar Excel
+    </button>
+    <button onclick="exportarPDF()" class="btn-export btn-pdf">
+        <i class="fas fa-file-pdf"></i> Exportar PDF
+    </button>
+</div>
+
+<div class="timeline" id="contenido-historial">
     <?php
     $nom_sql = mysqli_real_escape_string($conexion, $nombre);
     
-    // 1. Obtener ID de emprendedor para cruzar con créditos
     $q_emp = mysqli_query($conexion, "SELECT idemprendedores FROM emprendedores WHERE personas_idpersonas = $id_ref LIMIT 1");
     $emp_data = mysqli_fetch_assoc($q_emp);
     $id_emp = $emp_data['idemprendedores'] ?? 0;
 
-    // 2. Consulta Unificada (UNION) usando los nombres reales de tus columnas
     $sql = "SELECT 'asistencia' as tipo, nombre_carrito as titulo, asistencia as detalle, created_at as fecha 
             FROM carritos WHERE nombre_responsable LIKE '%$nom_sql%'
             UNION
@@ -96,7 +114,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
                         <?php echo htmlspecialchars($ev['detalle']); ?>
                     </span>
                     <?php if(!$es_carrito): ?>
-                        <span class="badge-info" style="color: #f59e0b;">Ver detalles del crédito</span>
+                        <span class="badge-info" style="color: #f59e0b;">Detalles del crédito</span>
                     <?php endif; ?>
                 </div>
             </div>
@@ -111,6 +129,55 @@ $cfg = mysqli_fetch_assoc($res_conf);
     endif; 
     ?>
 </div>
+
+<script>
+// FUNCION EXCEL
+function exportarExcel() {
+    const items = document.querySelectorAll('.timeline-item');
+    const data = [['Fecha y Hora', 'Tipo de Actividad', 'Título/Carrito', 'Detalle del Registro']];
+
+    items.forEach(item => {
+        const fecha = item.querySelector('.timeline-date').innerText.trim();
+        const titulo = item.querySelector('.timeline-title').innerText.trim();
+        const detalle = item.querySelector('.badge-info').innerText.trim();
+        const tipo = item.querySelector('.timeline-icon').classList.contains('icon-carrito') ? 'Asistencia' : 'Crédito';
+        data.push([fecha, tipo, titulo, detalle]);
+    });
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    
+    // Ajuste básico de ancho de columnas
+    ws['!cols'] = [{wch:25}, {wch:15}, {wch:30}, {wch:40}];
+    
+    XLSX.utils.book_append_sheet(wb, ws, "Historial");
+    XLSX.writeFile(wb, "Historial_<?php echo $nombre; ?>.xlsx");
+}
+
+// FUNCION PDF
+function exportarPDF() {
+    const elemento = document.body;
+    const opciones = {
+        margin: [0.5, 0.5],
+        filename: 'Historial_<?php echo $nombre; ?>.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    // Ocultar elementos que no queremos en el PDF
+    const botones = document.querySelector('.export-tools');
+    const backBtn = document.querySelector('.btn-back');
+    
+    botones.style.display = 'none';
+    backBtn.style.visibility = 'hidden';
+
+    html2pdf().set(opciones).from(elemento).save().then(() => {
+        botones.style.display = 'flex';
+        backBtn.style.visibility = 'visible';
+    });
+}
+</script>
 
 </body>
 </html>

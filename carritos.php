@@ -16,20 +16,17 @@ if(isset($_POST['save_car'])){
     $equ            = mysqli_real_escape_string($conexion, $_POST['equip']);
     $ast            = mysqli_real_escape_string($conexion, $_POST['asistencia']); 
     
-    // CAPTURA DE FECHA Y HORAS
     $fecha_reg      = mysqli_real_escape_string($conexion, $_POST['fecha_reg']);
     $hora_ingreso   = mysqli_real_escape_string($conexion, $_POST['hora_ingreso']);
     $hora_salida    = mysqli_real_escape_string($conexion, $_POST['hora_salida']);
     
-    // Unimos para la base de datos (Entrada)
     $fecha_final    = $fecha_reg . " " . $hora_ingreso . ":00";
 
-    // Nota: Asegúrate de tener la columna 'hora_salida' en tu tabla SQL
     $sql = "INSERT INTO carritos (nombre_responsable, telefono_responsable, nombre_carrito, descripcion, equipamiento, asistencia, created_at, hora_salida) 
             VALUES ('$nombre_persona', '$telefono', '$nom_carrito', '$des', '$equ', '$ast', '$fecha_final', '$hora_salida')";
 
     if(mysqli_query($conexion, $sql)){
-        $mensaje = "<div class='alert success'>Registro guardado con éxito (Ingreso: $hora_ingreso)</div>";
+        $mensaje = "<div class='alert success'><i class='fas fa-check-circle'></i> Registro guardado con éxito</div>";
     } else {
         $mensaje = "<div class='alert error'>Error: " . mysqli_error($conexion) . "</div>";
     }
@@ -60,6 +57,11 @@ if(isset($_POST['save_car'])){
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 15px; }
 
+        /* Estilo para los botones de fecha rápida */
+        .date-helpers { display: flex; gap: 5px; margin-top: -10px; margin-bottom: 15px; }
+        .btn-date { background: var(--border); border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; cursor: pointer; font-weight: 600; color: var(--text); }
+        .btn-date:hover { background: var(--primary); color: white; }
+
         .asistencia-container { display: flex; gap: 10px; margin-bottom: 20px; }
         .asistencia-btn { flex: 1; border: 2px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; font-weight: 700; transition: 0.3s; }
         .asistencia-btn input { display: none; }
@@ -88,15 +90,19 @@ if(isset($_POST['save_car'])){
         <div class="grid-3">
             <div>
                 <label><i class="fas fa-calendar-alt"></i> Fecha:</label>
-                <input type="date" name="fecha_reg" value="<?php echo date('Y-m-d'); ?>" required>
+                <input type="date" name="fecha_reg" id="fecha_reg" value="<?php echo date('Y-m-d'); ?>" required>
+                <div class="date-helpers">
+                    <button type="button" class="btn-date" onclick="setFecha(0)">Hoy</button>
+                    <button type="button" class="btn-date" onclick="setFecha(-7)">-1 Sem</button>
+                </div>
             </div>
             <div>
                 <label><i class="fas fa-clock"></i> Ingreso:</label>
-                <input type="time" name="hora_ingreso" value="<?php echo date('H:M'); ?>" required>
+                <input type="time" name="hora_ingreso" value="<?php echo date('H:i'); ?>" required>
             </div>
             <div>
                 <label><i class="fas fa-sign-out-alt"></i> Salida:</label>
-                <input type="time" name="hora_salida" value="<?php echo date('H:M', strtotime('+ hours')); ?>">
+                <input type="time" name="hora_salida" value="<?php echo date('H:i', strtotime('+4 hours')); ?>">
             </div>
         </div>
 
@@ -145,6 +151,22 @@ if(isset($_POST['save_car'])){
         <a href="lista_carritos.php">Ver Historial <i class="fas fa-history"></i></a>
     </div>
 </div>
+
+<script>
+    // Función para cambiar la fecha dinámicamente
+    function setFecha(dias) {
+        const fechaInput = document.getElementById('fecha_reg');
+        let fecha = new Date();
+        fecha.setDate(fecha.getDate() + dias);
+        
+        // Formato YYYY-MM-DD
+        const yyyy = fecha.getFullYear();
+        const mm = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dd = String(fecha.getDate()).padStart(2, '0');
+        
+        fechaInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+</script>
 
 </body>
 </html>

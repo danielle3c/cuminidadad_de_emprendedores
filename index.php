@@ -45,29 +45,28 @@ $cfg = mysqli_fetch_assoc($res_conf);
         /* BOTÓN HAMBURGUESA */
         .mobile-toggle {
             display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 1100;
-            background: var(--sidebar);
-            color: white;
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            align-items: center;
-            justify-content: center;
+            position: fixed; top: 15px; left: 15px; z-index: 1100;
+            background: var(--sidebar); color: white; border: none;
+            width: 45px; height: 45px; border-radius: 12px; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); align-items: center; justify-content: center;
         }
 
         /* CONTENIDO PRINCIPAL */
         .main-content { flex: 1; overflow-y: auto; padding: 40px; position: relative; }
 
-        /* HEADER Y BUSCADOR */
-        .header-section { margin-bottom: 40px; }
+        /* HEADER */
+        .header-flex { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
         .header-section h1 { font-size: 2.2rem; font-weight: 800; margin: 0; letter-spacing: -1px; }
         
+        /* BOTÓN ENCUESTA NUEVA */
+        .btn-new-encuesta {
+            background: var(--primary); color: white; text-decoration: none;
+            padding: 12px 20px; border-radius: 12px; font-weight: 700;
+            display: flex; align-items: center; gap: 10px; transition: 0.3s;
+            box-shadow: 0 10px 20px -5px rgba(85, 184, 62, 0.4);
+        }
+        .btn-new-encuesta:hover { transform: translateY(-2px); opacity: 0.9; }
+
         .search-container { 
             background: var(--card); border-radius: 20px; padding: 10px; 
             display: flex; align-items: center; margin-top: 25px; 
@@ -81,31 +80,22 @@ $cfg = mysqli_fetch_assoc($res_conf);
         .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-top: 20px; }
         .person-card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); padding: 25px; transition: 0.3s; }
 
-        /* --- MÓVIL --- */
+        /* MÓVIL */
         @media (max-width: 992px) {
             .mobile-toggle { display: flex; }
-            .sidebar {
-                position: fixed;
-                transform: translateX(-100%);
-                height: 100vh;
-            }
+            .sidebar { position: fixed; transform: translateX(-100%); height: 100vh; }
             .sidebar.active { transform: translateX(0); }
             .main-content { padding: 80px 20px 20px 20px; }
+            .header-flex { flex-direction: column; gap: 20px; }
             .results-grid { grid-template-columns: 1fr; }
         }
 
-        /* Overlay */
         .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 20, 55, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 999;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 20, 55, 0.5); backdrop-filter: blur(4px); z-index: 999;
         }
         .sidebar-overlay.active { display: block; }
 
-        /* Detalles Estéticos */
         .card-top { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .avatar { width: 60px; height: 60px; border-radius: 15px; object-fit: cover; }
         .badge { font-size: 0.65rem; padding: 4px 10px; border-radius: 8px; font-weight: 800; text-transform: uppercase; }
@@ -134,6 +124,8 @@ $cfg = mysqli_fetch_assoc($res_conf);
         <a href="personas.php" class="nav-link"><i class="fas fa-users"></i> Personas</a>
         <a href="talleres.php" class="nav-link"><i class="fas fa-chalkboard-teacher"></i> Talleres</a>
         <a href="lista_carritos.php" class="nav-link"><i class="fas fa-shopping-basket"></i> Carritos</a>
+        <a href="encuesta.php" class="nav-link"><i class="fas fa-clipboard-list"></i> Encuestas 2026</a>
+        
         <a href="creditos.php" class="nav-link"><i class="fas fa-hand-holding-dollar"></i> Créditos</a>
         <a href="cobranzas.php" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> Cobranzas</a>
         <a href="configuraciones.php" class="nav-link"><i class="fas fa-tools"></i> Ajustes</a>
@@ -142,8 +134,15 @@ $cfg = mysqli_fetch_assoc($res_conf);
 
 <main class="main-content">
     <div class="header-section">
-        <h1>Centro de Auditoría</h1>
-        <p style="color: var(--secondary-text);">Gestión unificada de clientes y registros.</p>
+        <div class="header-flex">
+            <div>
+                <h1>Centro de Auditoría</h1>
+                <p style="color: var(--secondary-text); margin-top: 5px;">Gestión unificada de clientes y registros.</p>
+            </div>
+            <a href="encuesta.php" class="btn-new-encuesta">
+                <i class="fas fa-plus"></i> NUEVA ENCUESTA
+            </a>
+        </div>
         
         <form method="GET" class="search-container">
             <i class="fas fa-search" style="margin-left: 20px; color: var(--secondary-text);"></i>
@@ -167,12 +166,9 @@ $cfg = mysqli_fetch_assoc($res_conf);
             if(mysqli_num_rows($res) > 0):
                 while ($p = mysqli_fetch_assoc($res)): 
                     $nombre_p = mysqli_real_escape_string($conexion, $p['nombres']);
-                    
-                    // Conteo de Visitas (Lógica original)
                     $q_visitas = mysqli_query($conexion, "SELECT COUNT(*) as t FROM carritos WHERE nombre_responsable LIKE '%$nombre_p%' AND asistencia = 'SÍ VINO'");
                     $visitas = mysqli_fetch_assoc($q_visitas)['t'];
 
-                    // Conteo de Talleres (Nueva lógica integrada)
                     $talleres_total = 0;
                     if ($p['origen'] == 'persona') {
                         $q_tallas = mysqli_query($conexion, "SELECT COUNT(*) as t FROM asistencia_talleres WHERE emprendedores_id IN (SELECT idemprendedores FROM emprendedores WHERE personas_idpersonas = {$p['id']})");

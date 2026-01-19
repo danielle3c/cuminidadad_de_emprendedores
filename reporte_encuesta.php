@@ -1,18 +1,16 @@
 <?php
 include 'config.php';
 
-// 1. Cargar configuración visual
+// Cargar configuración
 $res_conf = mysqli_query($conexion, "SELECT * FROM configuraciones WHERE id = 1");
 $cfg = mysqli_fetch_assoc($res_conf);
 
-// 2. Función para contar respuestas rápidamente
 function contarRespuesta($columna, $valor, $con) {
     $res = mysqli_query($con, "SELECT COUNT(*) as total FROM encuesta_2026 WHERE $columna = '$valor'");
     $data = mysqli_fetch_assoc($res);
-    return $data['total'];
+    return $data['total'] ?? 0;
 }
 
-// Obtener totales
 $preguntas = [
     'conoce_corporacion' => '¿Conoce la Corporación?',
     'contacto_municipalidad' => '¿Contacto con Municipalidad?',
@@ -25,50 +23,74 @@ $preguntas = [
 <html lang="es" data-theme="<?php echo $cfg['tema_color']; ?>">
 <head>
     <meta charset="UTF-8">
-    <title>Estadísticas Encuesta 2026</title>
+    <title>Estadísticas Pro 2026</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #55b83e; --border: #e0e5f2; }
-        [data-theme="dark"] { --bg: #0b1437; --card: #111c44; --text: #ffffff; --primary: #2ecc71; --border: #1b254b; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); padding: 30px; }
-        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .stat-card { background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid var(--border); text-align: center; }
-        .bar-container { background: #eee; border-radius: 10px; height: 25px; margin: 10px 0; overflow: hidden; display: flex; }
-        .bar-si { background: #55b83e; height: 100%; color: white; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; }
-        .bar-no { background: #ef4444; height: 100%; color: white; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; }
-        .legend { display: flex; justify-content: center; gap: 15px; font-size: 0.8rem; margin-top: 5px; }
+        :root { --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #4318FF; --success: #05CD99; --danger: #EE5D50; --border: #e0e5f2; }
+        [data-theme="dark"] { --bg: #0b1437; --card: #111c44; --text: #ffffff; --border: #1b254b; }
+        
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); padding: 40px; margin: 0; }
+        .header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-back { padding: 10px 20px; background: var(--card); border-radius: 12px; text-decoration: none; color: var(--text); font-weight: bold; border: 1px solid var(--border); transition: 0.3s; }
+        .btn-back:hover { background: var(--primary); color: white; }
+
+        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .stat-card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--border); transition: transform 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        
+        .chart-container { position: relative; height: 200px; margin-top: 20px; }
+        .total-badge { background: var(--bg); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; color: var(--primary); }
     </style>
 </head>
 <body>
 
-    <a href="index.php" style="text-decoration: none; color: var(--text); font-weight: bold;">
-        <i class="fas fa-arrow-left"></i> Volver al Panel
-    </a>
-
-    <h1 style="margin-top: 20px;">Estadísticas Encuesta 2026</h1>
-    <p>Resumen de indicadores basados en las planillas físicas.</p>
+    <div class="header">
+        <div>
+            <h1>Dashboard de Encuestas 2026</h1>
+            <p style="color: #a3aed0;">Análisis visual de participación y conocimiento.</p>
+        </div>
+        <a href="index.php" class="btn-back"><i class="fas fa-arrow-left"></i> Panel Principal</a>
+    </div>
 
     <div class="grid-stats">
         <?php foreach ($preguntas as $columna => $titulo): 
             $si = contarRespuesta($columna, 'SI', $conexion);
             $no = contarRespuesta($columna, 'NO', $conexion);
-            $total = $si + $no;
-            $porc_si = ($total > 0) ? ($si / $total) * 100 : 0;
-            $porc_no = ($total > 0) ? ($no / $total) * 100 : 0;
+            $id_canvas = "chart_" . $columna;
         ?>
             <div class="stat-card">
-                <h4 style="margin-bottom: 15px;"><?php echo $titulo; ?></h4>
-                <div style="font-size: 1.5rem; font-weight: 800;"><?php echo $total; ?> <small style="font-size: 0.8rem; color: gray;">respuestas</small></div>
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <h3 style="margin: 0; font-size: 1.1rem; max-width: 70%;"><?php echo $titulo; ?></h3>
+                    <span class="total-badge"><?php echo ($si + $no); ?> Total</span>
+                </div>
                 
-                <div class="bar-container">
-                    <div class="bar-si" style="width: <?php echo $porc_si; ?>%"><?php echo round($porc_si); ?>%</div>
-                    <div class="bar-no" style="width: <?php echo $porc_no; ?>%"><?php echo round($porc_no); ?>%</div>
+                <div class="chart-container">
+                    <canvas id="<?php echo $id_canvas; ?>"></canvas>
                 </div>
 
-                <div class="legend">
-                    <span><i class="fas fa-circle" style="color: #55b83e;"></i> SÍ (<?php echo $si; ?>)</span>
-                    <span><i class="fas fa-circle" style="color: #ef4444;"></i> NO (<?php echo $no; ?>)</span>
-                </div>
+                <script>
+                    new Chart(document.getElementById('<?php echo $id_canvas; ?>'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['SÍ', 'NO'],
+                            datasets: [{
+                                data: [<?php echo $si; ?>, <?php echo $no; ?>],
+                                backgroundColor: ['#05CD99', '#EE5D50'],
+                                borderWidth: 0,
+                                hoverOffset: 10
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom', labels: { usePointStyle: true, color: '<?php echo ($cfg['tema_color'] == 'dark' ? '#fff' : '#2b3674'); ?>' } }
+                            },
+                            cutout: '70%'
+                        }
+                    });
+                </script>
             </div>
         <?php endforeach; ?>
     </div>

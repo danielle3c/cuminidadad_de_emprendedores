@@ -4,10 +4,11 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 $mensaje = "";
 if (isset($_POST['guardar'])) {
-    // Escapar todos los campos para seguridad
     $datos = array_map(function($val) use ($conexion) {
         return mysqli_real_escape_string($conexion, $val);
     }, $_POST);
+
+    $usuario_id  = $_SESSION['usuario_id'] ?? 1;
 
     $sql = "INSERT INTO encuesta_2026 (
         fecha_encuesta, nombre_local, direccion, representante, cargo, telefono,
@@ -18,48 +19,187 @@ if (isset($_POST['guardar'])) {
         '{$datos['fecha']}', '{$datos['local']}', '{$datos['direccion']}', '{$datos['rep']}', '{$datos['cargo']}', '{$datos['tel']}',
         '{$datos['necesidades']}', '{$datos['participa']}', '{$datos['beneficio']}',
         '{$datos['obs']}', '{$datos['conoce_corp']}', '{$datos['cont_muni']}', '{$datos['interes']}', '{$datos['video']}',
-        NOW(), '{$_SESSION['usuario_id']}'
+        NOW(), '$usuario_id'
     )";
 
     if (mysqli_query($conexion, $sql)) {
-        $mensaje = "<div style='background:#def7ec; color:#03543f; padding:15px; border-radius:10px;'>✅ Datos de la planilla guardados con éxito.</div>";
+        $mensaje = "<div class='alert-success'><i class='fas fa-check-circle'></i> ¡Registro guardado con éxito en la base de datos!</div>";
     }
 }
+
+$res_conf = mysqli_query($conexion, "SELECT * FROM configuraciones WHERE id = 1");
+$cfg = mysqli_fetch_assoc($res_conf);
 ?>
 
-<form method="POST" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-    <div style="grid-column: 1 / -1;">
-        <h3>Datos de Identificación (Foto 2)</h3>
-    </div>
-    <input type="date" name="fecha" value="2026-01-15" required>
-    <input type="text" name="local" placeholder="Barrio/Local (Ej: Joaquin Edwards Bello)" required>
-    <input type="text" name="direccion" placeholder="Dirección Exacta" required>
-    <input type="text" name="rep" placeholder="Representante (Ej: Jaime Vergara)" required>
-    <input type="text" name="cargo" placeholder="Cargo (Ej: Dueño / Administrador)">
-    <input type="text" name="tel" placeholder="Teléfono / Fono">
+<!DOCTYPE html>
+<html lang="es" data-theme="<?php echo $cfg['tema_color']; ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuesta 2026 | Digitalización</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #4318FF; 
+            --border: #e0e5f2; --secondary-text: #a3aed0;
+            --blue-icon: #4318FF; --green-icon: #05CD99; --orange-icon: #FFB547;
+        }
+        [data-theme="dark"] { 
+            --bg: #0b1437; --card: #111c44; --text: #ffffff; --border: #1b254b; --secondary-text: #707eae;
+        }
 
-    <div style="grid-column: 1 / -1;">
-        <h3>Necesidades y Beneficios (Foto 1)</h3>
-    </div>
-    <textarea name="necesidades" placeholder="¿Qué necesidades tiene su local?" style="grid-column: 1 / -1;"></textarea>
-    <select name="participa">
-        <option value="">¿Participaría en programa de beneficios?</option>
-        <option value="SI">SÍ</option>
-        <option value="NO">NO</option>
-        <option value="EVALUACION">EN EVALUACIÓN</option>
-    </select>
-    <textarea name="beneficio" placeholder="¿Qué beneficio podría entregar su local?"></textarea>
-    <textarea name="obs" placeholder="¿Cómo podría la Corporación ayudar? / Sugerencias" style="grid-column: 1 / -1;"></textarea>
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); padding: 40px; margin: 0; }
+        
+        .form-container { 
+            max-width: 850px; margin: 0 auto; background: var(--card); 
+            padding: 40px; border-radius: 30px; border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
 
-    <div style="grid-column: 1 / -1;">
-        <h3>Indicadores Sí/No (Foto 3)</h3>
-    </div>
-    <select name="conoce_corp"><option value="">¿Conoce la Corporación?</option><option value="SI">SI</option><option value="NO">NO</option></select>
-    <select name="cont_muni"><option value="">¿Contacto con Municipalidad?</option><option value="SI">SI</option><option value="NO">NO</option></select>
-    <select name="interes"><option value="">¿Interés en Iniciativas?</option><option value="SI">SI</option><option value="NO">NO</option></select>
-    <select name="video"><option value="">¿Participar en Video?</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        .header-title { margin-bottom: 30px; text-align: center; }
+        .header-title h2 { font-size: 2rem; font-weight: 800; margin: 0; color: var(--text); }
 
-    <button name="guardar" style="grid-column: 1 / -1; background: #55b83e; color: white; padding: 20px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">
-        GUARDAR REGISTRO DE PLANILLA
-    </button>
-</form>
+        /* Estilo de Secciones */
+        .section-header { 
+            grid-column: 1 / -1; display: flex; align-items: center; gap: 15px; 
+            margin-top: 35px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+        }
+        .section-header i { 
+            color: white; width: 40px; height: 40px; display: flex; 
+            align-items: center; justify-content: center; border-radius: 12px; font-size: 1rem; 
+        }
+        .section-header h3 { margin: 0; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .section-subtitle { grid-column: 1 / -1; color: var(--secondary-text); font-size: 0.85rem; margin-bottom: 25px; }
+
+        /* Colores por Sección */
+        .sc-azul i { background: var(--blue-icon); box-shadow: 0 4px 12px rgba(67, 24, 255, 0.3); }
+        .sc-verde i { background: var(--green-icon); box-shadow: 0 4px 12px rgba(5, 205, 153, 0.3); }
+        .sc-naranja i { background: var(--orange-icon); box-shadow: 0 4px 12px rgba(255, 181, 71, 0.3); }
+
+        /* Inputs */
+        .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.85rem; color: var(--secondary-text); }
+        input, textarea, select { 
+            width: 100%; padding: 14px 18px; border-radius: 15px; border: 1px solid var(--border);
+            background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.95rem; box-sizing: border-box; transition: 0.3s;
+        }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.1); }
+        .full-width { grid-column: 1 / -1; }
+
+        .btn-save { 
+            grid-column: 1 / -1; background: var(--primary); color: white; border: none; 
+            padding: 18px; border-radius: 18px; font-weight: 800; font-size: 1rem; 
+            cursor: pointer; margin-top: 40px; transition: 0.3s; box-shadow: 0 10px 20px rgba(67, 24, 255, 0.2);
+        }
+        .btn-save:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(67, 24, 255, 0.3); }
+
+        .alert-success { background: #def7ec; color: #03543f; padding: 20px; border-radius: 15px; margin-bottom: 30px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <a href="index.php" style="text-decoration: none; color: var(--secondary-text); font-weight: 700; font-size: 0.9rem;">
+        <i class="fas fa-chevron-left"></i> VOLVER AL BUSCADOR
+    </a>
+
+    <div class="header-title">
+        <h2>Ingreso de Encuesta 2026</h2>
+        <p style="color: var(--secondary-text);">Digitalización de planillas físicas del programa.</p>
+    </div>
+
+    <?php echo $mensaje; ?>
+
+    <form method="POST" class="grid-form">
+        
+        <div class="section-header sc-azul">
+            <i class="fas fa-id-card"></i>
+            <h3>Identificación del Local</h3>
+        </div>
+        <p class="section-subtitle">Complete los datos de contacto y ubicación detallados en la Foto 2 de la planilla.</p>
+
+        <div>
+            <label>Fecha de Registro</label>
+            <input type="date" name="fecha" value="2026-01-15" required>
+        </div>
+        <div>
+            <label>Barrio / Local</label>
+            <input type="text" name="local" placeholder="Ej: Joaquin Edwards Bello" required>
+        </div>
+        <div class="full-width">
+            <label>Dirección</label>
+            <input type="text" name="direccion" placeholder="Calle, número y local" required>
+        </div>
+        <div>
+            <label>Nombre Representante</label>
+            <input type="text" name="rep" placeholder="Nombre completo" required>
+        </div>
+        <div>
+            <label>Cargo</label>
+            <input type="text" name="cargo" placeholder="Dueño, Administrador, etc.">
+        </div>
+        <div class="full-width">
+            <label>Teléfono / Fono</label>
+            <input type="text" name="tel" placeholder="+56 9 ...">
+        </div>
+
+        <div class="section-header sc-verde">
+            <i class="fas fa-briefcase"></i>
+            <h3>Necesidades y Beneficios</h3>
+        </div>
+        <p class="section-subtitle">Información sobre requerimientos productivos extraída de la Foto 1.</p>
+
+        <div class="full-width">
+            <label>¿Qué necesidades tiene su local?</label>
+            <textarea name="necesidades" rows="3" placeholder="Publicidad, maquinaria, capacitación..."></textarea>
+        </div>
+        <div>
+            <label>¿Participaría en beneficios?</label>
+            <select name="participa">
+                <option value="SI">SÍ</option>
+                <option value="NO">NO</option>
+                <option value="EVALUACION">EN EVALUACIÓN</option>
+            </select>
+        </div>
+        <div>
+            <label>Beneficio que podría entregar</label>
+            <input type="text" name="beneficio" placeholder="Descuentos, convenios, etc.">
+        </div>
+        <div class="full-width">
+            <label>Observaciones y Sugerencias</label>
+            <textarea name="obs" rows="3" placeholder="¿Cómo podría ayudar la Corporación?"></textarea>
+        </div>
+
+        <div class="section-header sc-naranja">
+            <i class="fas fa-check-double"></i>
+            <h3>Indicadores de Percepción</h3>
+        </div>
+        <p class="section-subtitle">Respuestas rápidas Sí/No recopiladas en la Foto 3.</p>
+
+        <div>
+            <label>¿Conoce la Corporación?</label>
+            <select name="conoce_corp"><option value="SI">SÍ</option><option value="NO">NO</option></select>
+        </div>
+        <div>
+            <label>¿Contacto con Municipalidad?</label>
+            <select name="cont_muni"><option value="SI">SÍ</option><option value="NO">NO</option></select>
+        </div>
+        <div>
+            <label>¿Interés en Iniciativas?</label>
+            <select name="interes"><option value="SI">SÍ</option><option value="NO">NO</option><option value="NO SABE">NO SABE</option></select>
+        </div>
+        <div>
+            <label>¿Participar en Video?</label>
+            <select name="video"><option value="SI">SÍ</option><option value="NO">NO</option></select>
+        </div>
+
+        <button name="guardar" class="btn-save">
+            <i class="fas fa-save"></i> FINALIZAR Y GUARDAR PLANILLA
+        </button>
+
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,6 +1,9 @@
 <?php
 include 'config.php';
 
+// Variable para manejar el ID recién guardado y mostrar el botón de ver reporte
+$ultimo_id = isset($_GET['ultimo_id']) ? $_GET['ultimo_id'] : null;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = mysqli_real_escape_string($conexion, $_POST['id_emprendedor']);
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
@@ -14,16 +17,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES ('$id', '$nombre', '$negocio', NOW()) 
             ON DUPLICATE KEY UPDATE nombre='$nombre', emprendimiento='$negocio'");
 
-        // Hoja 2: Evaluaciones (Escala 1 a 5)
+        // Hoja 2: Evaluaciones
         mysqli_query($conexion, "INSERT INTO evaluaciones_notas (id_emprendedor, evaluacion_general, evaluacion_modulos, evaluacion_funcionarios, evaluacion_espacio) 
             VALUES ('$id', '{$_POST['n1']}', '{$_POST['n2']}', '{$_POST['n3']}', '{$_POST['n4']}')");
 
-        // Hoja 3 y 4: Opiniones y Comentarios
+        // Hoja 3 y 4: Opiniones
         mysqli_query($conexion, "INSERT INTO opiniones (id_emprendedor, opinion_general, mejoras, capacitacion_deseada, critica_adicional) 
             VALUES ('$id', '{$_POST['opinion']}', '{$_POST['mejoras']}', '{$_POST['interes']}', '{$_POST['critica']}')");
 
         mysqli_commit($conexion);
-        echo "<script>alert('Encuesta digitalizada correctamente'); window.location='index.php';</script>";
+        
+        // Redirigir a la misma página pero pasando el ID para mostrar el botón de "Ver Reporte"
+        echo "<script>alert('Encuesta digitalizada correctamente'); window.location='digitalizar_escuela.php?ultimo_id=$id';</script>";
     } catch (Exception $e) {
         mysqli_rollback($conexion);
         echo "Error: " . $e->getMessage();
@@ -44,13 +49,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .input-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
         input[type="text"], textarea, select { width: 100%; padding: 10px; border: 1px solid #e0e5f2; border-radius: 10px; box-sizing: border-box; }
+        
+        /* Estilos de botones */
+        .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-nav { text-decoration: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-size: 0.8rem; }
+        .btn-back { background: #707eae; color: white; }
+        .btn-view { background: #f1c40f; color: #000; }
         .btn-save { background: #55b83e; color: white; border: none; padding: 15px 30px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; }
+        
+        /* Banner de éxito */
+        .success-banner { background: #e6fffa; border: 1px solid #b2f5ea; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
 
 <div class="form-container">
+    <div class="header-actions">
+        <a href="index.php" class="btn-nav btn-back"><i class="fas fa-arrow-left"></i> VOLVER AL BUSCADOR</a>
+        <?php if($ultimo_id): ?>
+            <a href="ver_historial_escuela.php?id=<?php echo $ultimo_id; ?>" class="btn-nav btn-view"><i class="fas fa-file-pdf"></i> VER REPORTE CREADO</a>
+        <?php endif; ?>
+    </div>
+
+    <?php if($ultimo_id): ?>
+        <div class="success-banner">
+            <span><i class="fas fa-check-circle" style="color: #38a169;"></i> ¡Registro guardado con éxito!</span>
+            <a href="ver_historial_escuela.php?id=<?php echo $ultimo_id; ?>" style="color: #2c7a7b; font-weight: bold;">Click aquí para ver el Historial</a>
+        </div>
+    <?php endif; ?>
+
     <h1>Digitalizar Encuesta</h1>
+    
     <form method="POST">
         <div class="section-title">1. Identificación (Hoja 1)</div>
         <div class="grid" style="display: grid; grid-template-columns: 1fr 3fr; gap: 10px; margin-top: 15px;">
@@ -73,19 +102,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
             <div class="input-group">
                 <label>Evaluación General</label>
-                <select name="n1"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select>
+                <select name="n1">
+                    <?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?>
+                </select>
             </div>
             <div class="input-group">
                 <label>Evaluación Módulos</label>
-                <select name="n2"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select>
+                <select name="n2">
+                    <?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?>
+                </select>
             </div>
             <div class="input-group">
                 <label>Evaluación Funcionarios</label>
-                <select name="n3"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select>
+                <select name="n3">
+                    <?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?>
+                </select>
             </div>
             <div class="input-group">
                 <label>Evaluación Espacio</label>
-                <select name="n4"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select>
+                <select name="n4">
+                    <?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?>
+                </select>
             </div>
         </div>
 
@@ -107,8 +144,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <textarea name="critica" rows="2"></textarea>
         </div>
 
-        <button type="submit" class="btn-save">GUARDAR REGISTRO</button>
+        <button type="submit" class="btn-save"><i class="fas fa-save"></i> GUARDAR Y FINALIZAR</button>
     </form>
 </div>
+
 </body>
 </html>

@@ -18,6 +18,7 @@ $cfg = mysqli_fetch_assoc($res_conf);
         :root { 
             --bg: #f4f7fe; --card: #ffffff; --text: #2b3674; --primary: #55b83e; 
             --sidebar: #111c44; --border: #e0e5f2; --secondary-text: #a3aed0;
+            --escuela: #f1c40f; /* Color para Escuela de Verano */
         }
         [data-theme="dark"] { 
             --bg: #0b1437; --card: #111c44; --text: #ffffff; --primary: #2ecc71; --border: #1b254b; --secondary-text: #707eae;
@@ -42,19 +43,10 @@ $cfg = mysqli_fetch_assoc($res_conf);
         .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.05); color: white; }
         .nav-link.active { border-right: 4px solid var(--primary); color: white; }
 
-        /* BOTÓN HAMBURGUESA */
-        .mobile-toggle {
-            display: none;
-            position: fixed; top: 15px; left: 15px; z-index: 1100;
-            background: var(--sidebar); color: white; border: none;
-            width: 45px; height: 45px; border-radius: 12px; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); align-items: center; justify-content: center;
-        }
-
         /* CONTENIDO PRINCIPAL */
         .main-content { flex: 1; overflow-y: auto; padding: 40px; position: relative; }
 
-        /* HEADER Y BUSCADOR */
+        /* BUSCADOR */
         .header-section { margin-bottom: 40px; }
         .header-section h1 { font-size: 2.2rem; font-weight: 800; margin: 0; letter-spacing: -1px; }
         
@@ -67,57 +59,38 @@ $cfg = mysqli_fetch_assoc($res_conf);
         .search-container input { flex: 1; border: none; padding: 15px 25px; font-size: 1.1rem; outline: none; background: transparent; color: var(--text); }
         .btn-search { background: var(--primary); color: white; border: none; padding: 12px 35px; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; }
 
-        /* RESULTADOS */
+        /* CARDS */
         .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-top: 20px; }
         .person-card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); padding: 25px; transition: 0.3s; }
+        .card-escuela { border-top: 5px solid var(--escuela); } /* Estilo especial Escuela */
 
-        /* --- MÓVIL --- */
-        @media (max-width: 992px) {
-            .mobile-toggle { display: flex; }
-            .sidebar { position: fixed; transform: translateX(-100%); height: 100vh; }
-            .sidebar.active { transform: translateX(0); }
-            .main-content { padding: 80px 20px 20px 20px; }
-            .results-grid { grid-template-columns: 1fr; }
-        }
-
-        /* Overlay */
-        .sidebar-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 20, 55, 0.5); backdrop-filter: blur(4px); z-index: 999;
-        }
-        .sidebar-overlay.active { display: block; }
-
-        /* Detalles Estéticos */
         .card-top { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .avatar { width: 60px; height: 60px; border-radius: 15px; object-fit: cover; }
+        
         .badge { font-size: 0.65rem; padding: 4px 10px; border-radius: 8px; font-weight: 800; text-transform: uppercase; }
         .badge-base { background: #e2e8f0; color: #475569; }
         .badge-carrito { background: #fef9c3; color: #854d0e; }
+        .badge-escuela { background: #fef9c3; color: #92400e; border: 1px solid #fde047; }
+
         .stats-row { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--border); margin-bottom: 15px; }
         .stat-num { display: block; font-weight: 800; font-size: 1.2rem; }
         .stat-label { font-size: 0.7rem; color: var(--secondary-text); font-weight: 700; }
         
-        /* BOTONES DE ACCIÓN */
+        /* BOTONES */
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .btn-action { display: block; width: 100%; text-align: center; padding: 12px; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 0.85rem; box-sizing: border-box; transition: 0.2s; }
         .btn-trayectoria { background: var(--sidebar); color: white; }
         .btn-editar { background: #f3f4f6; color: #1f2937; border: 1px solid #d1d5db; }
-        .btn-editar:hover { background: #e5e7eb; }
-        .btn-formalizar { background: var(--primary); color: white; border: none; grid-column: 1 / -1; }
+        .btn-escuela { background: var(--escuela) !important; color: #000 !important; }
     </style>
 </head>
 <body>
 
-<button class="mobile-toggle" id="btnToggle">
-    <i class="fas fa-bars"></i>
-</button>
-
-<div class="sidebar-overlay" id="overlay"></div>
-
-<aside class="sidebar" id="sidebar">
+<aside class="sidebar">
     <div class="sidebar-brand">Corp. La Granja</div>
     <nav>
         <a href="index.php" class="nav-link active"><i class="fas fa-search"></i> Buscador</a>
+        <a href="digitalizar_escuela.php" class="nav-link" style="color: var(--escuela);"><i class="fas fa-sun"></i> Escuela de Verano</a>
         <a href="personas.php" class="nav-link"><i class="fas fa-users"></i> Personas</a>
         <a href="talleres.php" class="nav-link"><i class="fas fa-chalkboard-teacher"></i> Talleres</a>
         <a href="lista_carritos.php" class="nav-link"><i class="fas fa-shopping-basket"></i> Carritos</a>
@@ -131,11 +104,11 @@ $cfg = mysqli_fetch_assoc($res_conf);
 <main class="main-content">
     <div class="header-section">
         <h1>Centro de Auditoría</h1>
-        <p style="color: var(--secondary-text);">Gestión unificada de clientes y registros.</p>
+        <p style="color: var(--secondary-text);">Gestión unificada de clientes y Escuela de Verano.</p>
         
         <form method="GET" class="search-container">
             <i class="fas fa-search" style="margin-left: 20px; color: var(--secondary-text);"></i>
-            <input type="text" name="buscar" placeholder="Nombre, RUT o Apellidos..." value="<?php echo htmlspecialchars($_GET['buscar'] ?? ''); ?>" autofocus autocomplete="off">
+            <input type="text" name="buscar" placeholder="Nombre, RUT o Negocio..." value="<?php echo htmlspecialchars($_GET['buscar'] ?? ''); ?>" autofocus autocomplete="off">
             <button type="submit" class="btn-search">BUSCAR</button>
         </form>
     </div>
@@ -145,102 +118,66 @@ $cfg = mysqli_fetch_assoc($res_conf);
         if (isset($_GET['buscar']) && !empty(trim($_GET['buscar']))): 
             $busqueda = mysqli_real_escape_string($conexion, $_GET['buscar']);
             
-            // Query unificada
+            // Query unificada: Personas + Carritos + Escuela de Verano
             $sql = "SELECT idpersonas as id, nombres, apellidos, rut, 'persona' as origen FROM personas 
                     WHERE nombres LIKE '%$busqueda%' OR apellidos LIKE '%$busqueda%' OR rut LIKE '%$busqueda%'
                     UNION
                     SELECT id as id, nombre_responsable as nombres, '' as apellidos, '' as rut, 'carrito' as origen FROM carritos 
-                    WHERE nombre_responsable LIKE '%$busqueda%' GROUP BY nombre_responsable";
+                    WHERE nombre_responsable LIKE '%$busqueda%'
+                    UNION
+                    SELECT id_escuela as id, nombre_emprendedor as nombres, '' as apellidos, '' as rut, 'escuela' as origen FROM escuela_verano 
+                    WHERE nombre_emprendedor LIKE '%$busqueda%' OR nombre_negocio LIKE '%$busqueda%'";
             
             $res = mysqli_query($conexion, $sql);
 
-            if(mysqli_num_rows($res) > 0):
-                while ($p = mysqli_fetch_assoc($res)): 
-                    $nombre_p = mysqli_real_escape_string($conexion, $p['nombres']);
-                    
-                    // Lógica de visitas
-                    $q_visitas = mysqli_query($conexion, "SELECT COUNT(*) as t FROM carritos WHERE nombre_responsable LIKE '%$nombre_p%' AND asistencia = 'SÍ VINO'");
-                    $visitas = mysqli_fetch_assoc($q_visitas)['t'];
-
-                    // Lógica de talleres
-                    $talleres_total = 0;
-                    if ($p['origen'] == 'persona') {
-                        $q_tallas = mysqli_query($conexion, "SELECT COUNT(*) as t FROM asistencia_talleres WHERE emprendedores_id IN (SELECT idemprendedores FROM emprendedores WHERE personas_idpersonas = {$p['id']})");
-                        $talleres_total = mysqli_fetch_assoc($q_tallas)['t'] ?? 0;
-                    }
-
-                    // Buscar si tiene encuesta para habilitar botón editar
-                    $q_encuesta = mysqli_query($conexion, "SELECT id FROM encuesta_2026 WHERE representante LIKE '%$nombre_p%' LIMIT 1");
-                    $datos_encuesta = mysqli_fetch_assoc($q_encuesta);
-            ?>
-                <div class="person-card">
-                    <div class="card-top">
-                        <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($p['nombres']); ?>&background=random&bold=true" class="avatar">
-                        <div>
-                            <span class="badge <?php echo ($p['origen'] == 'persona') ? 'badge-base' : 'badge-carrito'; ?>">
-                                <?php echo ($p['origen'] == 'persona') ? 'Formal' : 'Informal'; ?>
-                            </span>
-                            <h3 style="margin: 5px 0; font-size: 1.1rem;"><?php echo htmlspecialchars($p['nombres']." ".$p['apellidos']); ?></h3>
-                            <small style="color: var(--secondary-text); font-weight: 600;"><i class="far fa-id-card"></i> <?php echo $p['rut'] ?: 'Sin ID'; ?></small>
-                        </div>
-                    </div>
-                    
-                    <div class="stats-row">
-                        <div class="stat-box">
-                            <span class="stat-num"><?php echo $visitas; ?></span>
-                            <span class="stat-label">Visitas</span>
-                        </div>
-                        <div class="stat-box">
-                            <span class="stat-num" style="color: #3b82f6;"><?php echo $talleres_total; ?></span>
-                            <span class="stat-label">Talleres</span>
-                        </div>
-                        <div class="stat-box">
-                            <span class="stat-num"><?php echo ($visitas > 4) ? 'Frecuente' : 'Nuevo'; ?></span>
-                            <span class="stat-label">Rango</span>
-                        </div>
-                    </div>
-
-                    <div class="btn-group">
-                        <a href="ver_historial.php?nombre=<?php echo urlencode($p['nombres']); ?>&id=<?php echo $p['id']; ?>" class="btn-action btn-trayectoria">TRAYECTORIA</a>
-                        
-                        <?php if($datos_encuesta): ?>
-                            <a href="editar_encuesta_2026.php?id=<?php echo $datos_encuesta['id']; ?>" class="btn-action btn-editar"><i class="fas fa-edit"></i> EDITAR</a>
-                        <?php else: ?>
-                            <a href="encuesta.php?nombre=<?php echo urlencode($p['nombres']); ?>" class="btn-action btn-editar" style="opacity: 0.5;"><i class="fas fa-plus"></i> ENCUESTA</a>
-                        <?php endif; ?>
-
-                        <?php if($p['origen'] == 'carrito'): ?>
-                            <a href="personas.php?formalizar_nombre=<?php echo urlencode($p['nombres']); ?>" class="btn-action btn-formalizar">REGISTRAR</a>
-                        <?php endif; ?>
+            while ($p = mysqli_fetch_assoc($res)): 
+                $id_ref = $p['id'];
+                $origen = $p['origen'];
+                
+                if ($origen == 'escuela') {
+                    $q_e = mysqli_query($conexion, "SELECT * FROM escuela_verano WHERE id_escuela = $id_ref");
+                    $d = mysqli_fetch_assoc($q_e);
+                    $n1 = $d['nota_general']; $lab1 = "Nota Gral";
+                    $n2 = $d['nota_modulos']; $lab2 = "Módulos";
+                    $sub = $d['nombre_negocio'];
+                    $badge_class = "badge-escuela";
+                } else {
+                    $q_v = mysqli_query($conexion, "SELECT COUNT(*) as t FROM carritos WHERE nombre_responsable LIKE '%{$p['nombres']}%' AND asistencia = 'SÍ VINO'");
+                    $n1 = mysqli_fetch_assoc($q_v)['t']; $lab1 = "Visitas";
+                    $n2 = "N/A"; $lab2 = "Talleres";
+                    $sub = $p['rut'] ?: 'Sin ID';
+                    $badge_class = ($origen == 'persona') ? 'badge-base' : 'badge-carrito';
+                }
+        ?>
+            <div class="person-card <?php echo ($origen == 'escuela') ? 'card-escuela' : ''; ?>">
+                <div class="card-top">
+                    <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($p['nombres']); ?>&background=<?php echo ($origen == 'escuela') ? 'f1c40f' : 'random'; ?>&bold=true" class="avatar">
+                    <div>
+                        <span class="badge <?php echo $badge_class; ?>"><?php echo strtoupper($origen); ?></span>
+                        <h3 style="margin: 5px 0; font-size: 1.1rem;"><?php echo htmlspecialchars($p['nombres']); ?></h3>
+                        <small style="color: var(--secondary-text); font-weight: 600;"><i class="fas fa-id-card"></i> <?php echo $sub; ?></small>
                     </div>
                 </div>
-            <?php endwhile; 
-            else: ?>
-                <div style="grid-column: 1 / -1; text-align:center; padding: 60px; opacity:0.3;">
-                    <i class="fas fa-search fa-3x"></i>
-                    <p>No hay resultados.</p>
+                
+                <div class="stats-row">
+                    <div class="stat-box"><span class="stat-num"><?php echo $n1; ?></span><span class="stat-label"><?php echo $lab1; ?></span></div>
+                    <div class="stat-box"><span class="stat-num"><?php echo $n2; ?></span><span class="stat-label"><?php echo $lab2; ?></span></div>
+                    <div class="stat-box"><span class="stat-num">#<?php echo $id_ref; ?></span><span class="stat-label">ID</span></div>
                 </div>
-            <?php endif; ?>
-        <?php endif; ?>
+
+                <div class="btn-group">
+                    <?php if($origen == 'escuela'): ?>
+                        <a href="ver_historial_escuela.php?id=<?php echo $id_ref; ?>" class="btn-action btn-escuela">REPORTE PDF</a>
+                        <a href="digitalizar_escuela.php?id=<?php echo $id_ref; ?>" class="btn-action btn-editar">EDITAR</a>
+                    <?php else: ?>
+                        <a href="ver_historial.php?id=<?php echo $id_ref; ?>" class="btn-action btn-trayectoria">TRAYECTORIA</a>
+                        <a href="editar.php?id=<?php echo $id_ref; ?>" class="btn-action btn-editar">EDITAR</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endwhile; endif; ?>
     </div>
 </main>
-
-<script>
-    const btnToggle = document.getElementById('btnToggle');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-
-    function toggleMenu() {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-        const icon = btnToggle.querySelector('i');
-        icon.classList.toggle('fa-bars');
-        icon.classList.toggle('fa-times');
-    }
-
-    btnToggle.addEventListener('click', toggleMenu);
-    overlay.addEventListener('click', toggleMenu);
-</script>
 
 </body>
 </html>

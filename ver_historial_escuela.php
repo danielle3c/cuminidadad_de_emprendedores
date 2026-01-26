@@ -1,94 +1,94 @@
 <?php 
 include 'config.php'; 
 
-// 1. Validar la conexión y el ID
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    // Si no hay ID, redirigir al buscador para evitar el error de pantalla blanca
-    header("Location: index.php");
-    exit();
+// Lógica para guardar los datos al presionar "Guardar"
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Limpiamos los datos para evitar errores de MySQL
+    $id = mysqli_real_escape_string($conexion, $_POST['id_escuela']);
+    $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
+    $negocio = mysqli_real_escape_string($conexion, $_POST['negocio']);
+    $n1 = $_POST['n1']; 
+    $n2 = $_POST['n2']; 
+    $n3 = $_POST['n3']; 
+    $n4 = $_POST['n4'];
+    $opinion = mysqli_real_escape_string($conexion, $_POST['opinion']);
+    $mejoras = mysqli_real_escape_string($conexion, $_POST['mejoras']);
+    $interes = mysqli_real_escape_string($conexion, $_POST['interes']);
+    $critica = mysqli_real_escape_string($conexion, $_POST['critica']);
+
+    // Insertar o actualizar si el ID ya existe
+    $insertar = "INSERT INTO escuela_verano (id_escuela, nombre_emprendedor, nombre_negocio, nota_general, nota_modulos, nota_funcionarios, nota_espacio, opinion_texto, mejoras_texto, capacitacion_interes, critica_adicional) 
+                 VALUES ('$id', '$nombre', '$negocio', '$n1', '$n2', '$n3', '$n4', '$opinion', '$mejoras', '$interes', '$critica')
+                 ON DUPLICATE KEY UPDATE 
+                 nombre_emprendedor='$nombre', nombre_negocio='$negocio', nota_general='$n1', nota_modulos='$n2', opinion_texto='$opinion'";
+
+    if (mysqli_query($conexion, $insertar)) {
+        echo "<script>alert('Registro guardado correctamente'); window.location='index.php';</script>";
+    } else {
+        echo "Error al guardar: " . mysqli_error($conexion);
+    }
 }
-
-$id = mysqli_real_escape_string($conexion, $_GET['id']);
-
-// 2. Consulta a la tabla correcta (escuela_verano)
-$sql = "SELECT * FROM escuela_verano WHERE id_escuela = '$id'";
-$res = mysqli_query($conexion, $sql);
-
-// 3. Verificar si MySQL encontró el registro
-if (mysqli_num_rows($res) == 0) {
-    die("<div style='text-align:center; padding:50px; font-family:sans-serif;'>
-            <h2>⚠️ Error de Registro</h2>
-            <p>El ID #$id no existe en la base de datos de la Escuela de Verano.</p>
-            <a href='index.php'>Volver al Buscador</a>
-         </div>");
-}
-
-$datos = mysqli_fetch_assoc($res);
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte PDF - <?php echo htmlspecialchars($datos['nombre_emprendedor']); ?></title>
+    <title>Digitalizar Escuela de Verano</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'DM Sans', sans-serif; background: #f4f7fe; padding: 30px; color: #2b3674; }
-        .report-container { max-width: 800px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1c40f; padding-bottom: 20px; }
-        .section { margin-top: 30px; }
-        .section-title { font-weight: 800; text-transform: uppercase; font-size: 0.8rem; color: #55b83e; border-left: 4px solid #55b83e; padding-left: 10px; margin-bottom: 15px; }
-        .info-card { background: #f8fafd; padding: 20px; border-radius: 15px; }
-        .nota-box { display: inline-block; background: #2b3674; color: white; padding: 15px; border-radius: 12px; text-align: center; margin-right: 10px; min-width: 60px; }
-        .btn-print { background: #55b83e; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin-bottom: 20px; }
-        
-        @media print { .no-print { display: none; } body { padding: 0; background: white; } .report-container { box-shadow: none; border: none; } }
+        body { font-family: sans-serif; background: #f4f7fe; color: #2b3674; padding: 20px; }
+        .form-container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .header-form { text-align: center; margin-bottom: 25px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #e0e5f2; border-radius: 12px; margin-bottom: 15px; box-sizing: border-box; }
+        .grid-notas { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+        .btn-guardar { background: #55b83e; color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        .btn-volver { display: block; text-align: center; margin-top: 15px; color: #a3aed0; text-decoration: none; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-<div class="no-print" style="max-width: 800px; margin: auto; display: flex; justify-content: space-between;">
-    <a href="index.php" style="text-decoration:none; color: #a3aed0;"><i class="fas fa-arrow-left"></i> Volver al Buscador</a>
-    <button class="btn-print" onclick="window.print()"><i class="fas fa-print"></i> IMPRIMIR REPORTE</button>
-</div>
+<div class="form-container">
+    <div class="header-form">
+        <i class="fas fa-edit" style="font-size: 2rem; color: #55b83e;"></i>
+        <h1>Nueva Encuesta</h1>
+        <p>Escuela de Verano 2026</p>
+    </div>
 
-<div class="report-container">
-    <div class="header">
-        <div>
-            <h1 style="margin:0;">Ficha de Evaluación</h1>
-            <p style="margin:0; color:#707eae;">Escuela de Verano 2026</p>
+    <form method="POST">
+        <label>ID Participante (Excel)</label>
+        <input type="number" name="id_escuela" required placeholder="Ej: 45">
+
+        <label>Nombre del Emprendedor</label>
+        <input type="text" name="nombre" required>
+
+        <label>Nombre del Negocio</label>
+        <input type="text" name="negocio">
+
+        <label>Calificaciones (1 a 5)</label>
+        <div class="grid-notas">
+            <div><small>Gral</small><select name="n1"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select></div>
+            <div><small>Mod</small><select name="n2"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select></div>
+            <div><small>Func</small><select name="n3"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select></div>
+            <div><small>Esp</small><select name="n4"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select></div>
         </div>
-        <div style="text-align: right;">
-            <span style="font-weight: 800; color: #f1c40f; font-size: 1.5rem;">ID #<?php echo $datos['id_escuela']; ?></span>
-        </div>
-    </div>
 
-    <div class="section">
-        <div class="section-title">Datos Generales</div>
-        <div class="info-card">
-            <p><strong>Emprendedor:</strong> <?php echo htmlspecialchars($datos['nombre_emprendedor']); ?></p>
-            <p><strong>Negocio:</strong> <?php echo htmlspecialchars($datos['nombre_negocio']); ?></p>
-        </div>
-    </div>
+        <label>Opinión General</label>
+        <textarea name="opinion" rows="2"></textarea>
 
-    <div class="section">
-        <div class="section-title">Evaluación Cuantitativa</div>
-        <div class="nota-box"><small>GENERAL</small><br><big><strong><?php echo $datos['nota_general']; ?></strong></big></div>
-        <div class="nota-box"><small>MÓDULOS</small><br><big><strong><?php echo $datos['nota_modulos']; ?></strong></big></div>
-        <div class="nota-box"><small>EQUIPO</small><br><big><strong><?php echo $datos['nota_funcionarios']; ?></strong></big></div>
-        <div class="nota-box"><small>ESPACIO</small><br><big><strong><?php echo $datos['nota_espacio']; ?></strong></big></div>
-    </div>
+        <label>¿Qué mejoraría?</label>
+        <textarea name="mejoras" rows="2"></textarea>
 
-    <div class="section">
-        <div class="section-title">Comentarios y Sugerencias</div>
-        <p><strong>Opinión General:</strong><br> <em>"<?php echo nl2br(htmlspecialchars($datos['opinion_texto'])); ?>"</em></p>
-        <p><strong>Mejoras sugeridas:</strong><br> <?php echo nl2br(htmlspecialchars($datos['mejoras_texto'])); ?></p>
-        <p><strong>Interés en capacitaciones:</strong><br> <span style="color:#55b83e; font-weight:bold;"><?php echo htmlspecialchars($datos['capacitacion_interes']); ?></span></p>
-    </div>
+        <label>Capacitación de Interés</label>
+        <input type="text" name="interes">
 
-    <div style="margin-top: 50px; text-align: center; font-size: 0.7rem; color: #a3aed0; border-top: 1px solid #eee; padding-top: 20px;">
-        Documento oficial generado por Comunidad de Emprendedores - Municipalidad de La Granja
-    </div>
+        <label>Crítica Adicional</label>
+        <textarea name="critica" rows="2"></textarea>
+
+        <button type="submit" class="btn-guardar">GUARDAR REGISTRO</button>
+        <a href="index.php" class="btn-volver">Volver al Buscador</a>
+    </form>
 </div>
 
 </body>

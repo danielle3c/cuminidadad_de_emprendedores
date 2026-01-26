@@ -1,20 +1,33 @@
-<?php 
-include 'config.php'; 
+<?php
+include 'config.php';
 
-// 1. Validar que llegue el ID para evitar el "Undefined array key"
-if (!isset($_GET['id'])) {
-    die("Error: ID no especificado. <a href='index.php'>Volver al buscador</a>");
-}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $id = mysqli_real_escape_string($conexion, $_POST['id_emprendedor']);
+    $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
+    $negocio = mysqli_real_escape_string($conexion, $_POST['negocio']);
+    
+    mysqli_begin_transaction($conexion);
 
-$id = mysqli_real_escape_string($conexion, $_GET['id']);
+    try {
+        // Hoja 1: Datos básicos
+        mysqli_query($conexion, "INSERT INTO emprendedores (id_emprendedor, nombre, emprendimiento, fecha_registro) 
+            VALUES ('$id', '$nombre', '$negocio', NOW()) 
+            ON DUPLICATE KEY UPDATE nombre='$nombre', emprendimiento='$negocio'");
 
-// 2. Consulta corregida a la tabla 'escuela_verano'
-$sql = "SELECT * FROM escuela_verano WHERE id_escuela = '$id'";
-$res = mysqli_query($conexion, $sql);
-$datos = mysqli_fetch_assoc($res);
+        // Hoja 2: Evaluaciones (Escala 1 a 5)
+        mysqli_query($conexion, "INSERT INTO evaluaciones_notas (id_emprendedor, evaluacion_general, evaluacion_modulos, evaluacion_funcionarios, evaluacion_espacio) 
+            VALUES ('$id', '{$_POST['n1']}', '{$_POST['n2']}', '{$_POST['n3']}', '{$_POST['n4']}')");
 
-if (!$datos) {
-    die("Error: No se encontraron datos para este participante.");
+        // Hoja 3 y 4: Opiniones y Comentarios
+        mysqli_query($conexion, "INSERT INTO opiniones (id_emprendedor, opinion_general, mejoras, capacitacion_deseada, critica_adicional) 
+            VALUES ('$id', '{$_POST['opinion']}', '{$_POST['mejoras']}', '{$_POST['interes']}', '{$_POST['critica']}')");
+
+        mysqli_commit($conexion);
+        echo "<script>alert('Encuesta digitalizada correctamente'); window.location='index.php';</script>";
+    } catch (Exception $e) {
+        mysqli_rollback($conexion);
+        echo "Error: " . $e->getMessage();
+    }
 }
 ?>
 
@@ -22,96 +35,80 @@ if (!$datos) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte Individual - Escuela de Verano</title>
+    <title>Digitalización Escuela de Verano</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7fe; color: #2b3674; padding: 40px; }
-        .report-card { background: white; max-width: 800px; margin: auto; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .header { border-bottom: 2px solid #f1c40f; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .badge { background: #f1c40f; color: #000; padding: 5px 15px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; }
-        
-        .section-title { font-size: 1.1rem; font-weight: 800; margin-top: 25px; margin-bottom: 15px; color: #55b83e; text-transform: uppercase; border-left: 4px solid #55b83e; padding-left: 10px; }
-        
-        .grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .info-box { background: #f8fafd; padding: 15px; border-radius: 12px; }
-        .info-box label { display: block; font-size: 0.75rem; color: #a3aed0; font-weight: bold; }
-        .info-box span { font-size: 1rem; font-weight: 600; }
-
-        .notas-container { display: flex; gap: 10px; margin-top: 10px; }
-        .nota-circle { background: #2b3674; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .nota-circle small { font-size: 0.5rem; }
-
-        .comentario-box { background: #fffdf0; border: 1px solid #f1c40f; padding: 20px; border-radius: 15px; margin-top: 10px; line-height: 1.6; }
-        
-        @media print {
-            .no-print { display: none; }
-            body { padding: 0; background: white; }
-            .report-card { box-shadow: none; border: none; }
-        }
+        body { font-family: 'DM Sans', sans-serif; background: #f4f7fe; padding: 20px; color: #2b3674; }
+        .form-container { background: white; max-width: 800px; margin: auto; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .section-title { color: #55b83e; border-bottom: 2px solid #f1c40f; padding-bottom: 10px; margin-top: 30px; font-weight: bold; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
+        input[type="text"], textarea, select { width: 100%; padding: 10px; border: 1px solid #e0e5f2; border-radius: 10px; box-sizing: border-box; }
+        .btn-save { background: #55b83e; color: white; border: none; padding: 15px 30px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="no-print" style="max-width: 800px; margin: 0 auto 20px; display: flex; gap: 10px;">
-    <a href="index.php" style="text-decoration:none; color: #707eae;"><i class="fas fa-arrow-left"></i> Volver</a>
-    <button onclick="window.print()" style="margin-left:auto; background:#55b83e; color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer;">
-        <i class="fas fa-print"></i> Imprimir Reporte
-    </button>
+<div class="form-container">
+    <h1>Digitalizar Encuesta</h1>
+    <form method="POST">
+        <div class="section-title">1. Identificación (Hoja 1)</div>
+        <div class="grid" style="display: grid; grid-template-columns: 1fr 3fr; gap: 10px; margin-top: 15px;">
+            <div class="input-group">
+                <label>ID Excel</label>
+                <input type="text" name="id_emprendedor" required placeholder="Ej: 1">
+            </div>
+            <div class="input-group">
+                <label>Nombre Completo</label>
+                <input type="text" name="nombre" required placeholder="Nombre del emprendedor">
+            </div>
+        </div>
+        <div class="input-group">
+            <label>Emprendimiento / Rubro</label>
+            <input type="text" name="negocio" placeholder="Ej: Repostería">
+        </div>
+
+        <div class="section-title">2. Evaluaciones Cuantitativas (Hoja 2)</div>
+        <p><small>Escala: 1 (Muy Malo) al 5 (Excelente)</small></p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="input-group">
+                <label>Evaluación General</label>
+                <select name="n1"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select>
+            </div>
+            <div class="input-group">
+                <label>Evaluación Módulos</label>
+                <select name="n2"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select>
+            </div>
+            <div class="input-group">
+                <label>Evaluación Funcionarios</label>
+                <select name="n3"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select>
+            </div>
+            <div class="input-group">
+                <label>Evaluación Espacio</label>
+                <select name="n4"><?php for($i=5;$i>=1;$i--) echo "<option value='$i'>$i</option>"; ?></select>
+            </div>
+        </div>
+
+        <div class="section-title">3. Comentarios y Sugerencias (Hoja 3 y 4)</div>
+        <div class="input-group">
+            <label>¿Cuál es su opinión de la actividad?</label>
+            <textarea name="opinion" rows="3"></textarea>
+        </div>
+        <div class="input-group">
+            <label>¿Qué mejoraría o corregiría?</label>
+            <textarea name="mejoras" rows="3"></textarea>
+        </div>
+        <div class="input-group">
+            <label>¿Qué capacitación le gustaría recibir?</label>
+            <input type="text" name="interes">
+        </div>
+        <div class="input-group">
+            <label>Crítica o comentario adicional</label>
+            <textarea name="critica" rows="2"></textarea>
+        </div>
+
+        <button type="submit" class="btn-save">GUARDAR REGISTRO</button>
+    </form>
 </div>
-
-<div class="report-card">
-    <div class="header">
-        <div>
-            <h1 style="margin:0;">Reporte de Evaluación</h1>
-            <p style="margin:0; color:#707eae;">Escuela de Verano 2026</p>
-        </div>
-        <span class="badge">PARTICIPANTE #<?php echo $datos['id_escuela']; ?></span>
-    </div>
-
-    <div class="section-title">Datos del Emprendedor</div>
-    <div class="grid-info">
-        <div class="info-box">
-            <label>Nombre Completo</label>
-            <span><?php echo htmlspecialchars($datos['nombre_emprendedor']); ?></span>
-        </div>
-        <div class="info-box">
-            <label>Negocio / Rubro</label>
-            <span><?php echo htmlspecialchars($datos['nombre_negocio']); ?></span>
-        </div>
-    </div>
-
-    <div class="section-title">Calificaciones (Escala 1 a 5)</div>
-    <div class="notas-container">
-        <div class="nota-circle"><span><?php echo $datos['nota_general']; ?></span><small>Gral.</small></div>
-        <div class="nota-circle"><span><?php echo $datos['nota_modulos']; ?></span><small>Módulos</small></div>
-        <div class="nota-circle"><span><?php echo $datos['nota_funcionarios']; ?></span><small>Equipo</small></div>
-        <div class="nota-circle"><span><?php echo $datos['nota_espacio']; ?></span><small>Espacio</small></div>
-    </div>
-
-    <div class="section-title">Opinión General</div>
-    <div class="comentario-box italic">
-        "<?php echo nl2br(htmlspecialchars($datos['opinion_texto'])); ?>"
-    </div>
-
-    <div class="section-title">Mejoras Sugeridas</div>
-    <div class="comentario-box">
-        <?php echo nl2br(htmlspecialchars($datos['mejoras_texto'])); ?>
-    </div>
-
-    <div class="section-title">Interés en Capacitaciones</div>
-    <div class="info-box" style="border-left: 5px solid #f1c40f;">
-        <span><?php echo htmlspecialchars($datos['capacitacion_interes']); ?></span>
-    </div>
-
-    <div class="section-title">Críticas o Comentarios Adicionales</div>
-    <p style="font-size: 0.9rem; color: #4a5568;">
-        <?php echo nl2br(htmlspecialchars($datos['critica_adicional'])); ?>
-    </p>
-
-    <div style="margin-top: 50px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
-        <small style="color: #a3aed0;">Documento generado por el Sistema de Auditoría - Comunidad de Emprendedores</small>
-    </div>
-</div>
-
 </body>
 </html>
